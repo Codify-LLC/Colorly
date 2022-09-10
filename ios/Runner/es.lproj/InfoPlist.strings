@@ -1,0 +1,4 @@
+NSLocationWhenInUseUsageDescription = "Para poder mostrarte los restaurantes que están cerca, esta aplicación requiere permiso para acceder a tu ubicación.";
+NSCameraUsageDescription = "Si desea grabar un video para enviarlo como reseña de un restaurante, esta aplicación requiere permiso para acceder a su cámara.";
+NSMicrophoneUsageDescription = "Para grabar su mensaje de audio para la reseña de su restaurante, esta aplicación requiere permiso para acceder a su micrófono.";
+NSPhotoLibraryUsageDescription = "Para cargar medios para la personalización del perfil o reseñas de restaurantes, esta aplicación requiere permiso para acceder a su biblioteca de fotos.";

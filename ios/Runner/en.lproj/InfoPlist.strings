@@ -1,0 +1,4 @@
+NSLocationWhenInUseUsageDescription = "In order to show you restaurants that are nearby, this application requires permission to access your location.";
+NSCameraUsageDescription = "If you want to record a video to submit as a restaurant review, this application requires permission to access your camera.";
+NSMicrophoneUsageDescription = "In order to record your audio message for your restaurant review, this application requires permission to access your microphone.";
+NSPhotoLibraryUsageDescription = "In order to upload media for profile customization or restaurant reviews, this application requires permission to access your photo library.";
