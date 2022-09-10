@@ -94,10 +94,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
   },
   // homePage
   {
-    '1n2x30vk': {
-      'en': 'Reply',
-      'es': '',
-    },
     '1t2uo9tm': {
       'en': 'Home',
       'es': '',
@@ -3501,6 +3497,13 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
   {
     'vfm304kp': {
       'en': 'Answer below',
+      'es': '',
+    },
+  },
+  // pageViewOverlay
+  {
+    'y7wj3vhv': {
+      'en': 'Reply',
       'es': '',
     },
   },
