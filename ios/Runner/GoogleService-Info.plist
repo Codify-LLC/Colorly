@@ -32,5 +32,7 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:883261131668:ios:6c66299e248519bcb5dd81</string>
+	<key>DATABASE_URL</key>
+	<string>https://flutter-flow-colorly-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

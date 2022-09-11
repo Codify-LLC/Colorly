@@ -79,8 +79,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 child: custom_widgets.PreloadVideoPlayerCopy(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 1,
-                  itemCount: 3,
-                  preLoadPagesCount: 3,
+                  itemCount: preloadVideoPlayerCopyPostsRecordList.length,
+                  preLoadPagesCount: 4,
                   autoplay: true,
                   looping: true,
                   allowFullScreen: true,

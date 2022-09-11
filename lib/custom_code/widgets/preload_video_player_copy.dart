@@ -11,7 +11,7 @@ import 'package:preload_page_view/preload_page_view.dart';
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/services.dart';
-import '../components/page_view_overlay_widget.dart';
+import '/components/page_view_overlay_widget.dart';
 
 class PreloadVideoPlayerCopy extends StatefulWidget {
   const PreloadVideoPlayerCopy({
@@ -21,11 +21,11 @@ class PreloadVideoPlayerCopy extends StatefulWidget {
     required this.itemCount,
     this.preLoadPagesCount,
     required this.post,
-    required this.autoplay,
-    required this.looping,
-    required this.showControls,
-    required this.allowFullScreen,
-    required this.allowPlaybackSpeedMenu,
+    this.autoplay = false,
+    this.looping = false,
+    this.showControls = false,
+    this.allowFullScreen = false,
+    this.allowPlaybackSpeedMenu = false,
   }) : super(key: key);
 
   final double? width;
@@ -49,6 +49,7 @@ class _PreloadVideoPlayerCopyState extends State<PreloadVideoPlayerCopy> {
     return PreloadPageView.builder(
       pageSnapping: true,
       itemCount: widget.itemCount,
+      scrollDirection: Axis.vertical,
       itemBuilder: (BuildContext context, int position) => Stack(children: [
         FlutterFlowVideoPlayer(
           path: widget.post[position].videoUrl ??
@@ -60,6 +61,7 @@ class _PreloadVideoPlayerCopyState extends State<PreloadVideoPlayerCopy> {
           allowFullScreen: widget.allowFullScreen,
           allowPlaybackSpeedMenu: widget.allowPlaybackSpeedMenu,
         ),
+        PageViewOverlayWidget(posts: widget.post[position])
       ]),
       onPageChanged: (int position) {
         print('page changed. current: $position');
