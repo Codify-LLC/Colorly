@@ -44,26 +44,39 @@ class PreloadVideoPlayerCopy extends StatefulWidget {
 }
 
 class _PreloadVideoPlayerCopyState extends State<PreloadVideoPlayerCopy> {
+  List<bool> foregroundFlagList = [];
+  @override
+  void initState() {
+    super.initState();
+    foregroundFlagList = List.filled(widget.itemCount, false, growable: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return PreloadPageView.builder(
       pageSnapping: true,
       itemCount: widget.itemCount,
       scrollDirection: Axis.vertical,
-      itemBuilder: (BuildContext context, int position) => Stack(children: [
-        FlutterFlowVideoPlayer(
-          path: widget.post[position].videoUrl ??
-              "http://colorly.app/wp-content/uploads/2022/05/Orange-Minimalist-Tea-Mobile-Video.mp4",
-          videoType: VideoType.network,
-          autoPlay: widget.autoplay,
-          looping: widget.looping,
-          showControls: widget.showControls,
-          allowFullScreen: widget.allowFullScreen,
-          allowPlaybackSpeedMenu: widget.allowPlaybackSpeedMenu,
-        ),
-        PageViewOverlayWidget(posts: widget.post[position])
-      ]),
+      itemBuilder: (BuildContext context, int position) {
+        return Stack(children: [
+          FlutterFlowVideoPlayer(
+            path: widget.post[position].videoUrl ??
+                "http://colorly.app/wp-content/uploads/2022/05/Orange-Minimalist-Tea-Mobile-Video.mp4",
+            videoType: VideoType.network,
+            autoPlay: widget.autoplay,
+            looping: widget.looping,
+            showControls: widget.showControls,
+            allowFullScreen: widget.allowFullScreen,
+            allowPlaybackSpeedMenu: widget.allowPlaybackSpeedMenu,
+            foreground: foregroundFlagList[position],
+          ),
+          PageViewOverlayWidget(posts: widget.post[position])
+        ]);
+      },
       onPageChanged: (int position) {
+        setState(() {
+          foregroundFlagList[position] = true;
+        });
         print('page changed. current: $position');
       },
       preloadPagesCount: widget.preLoadPagesCount ?? 3,
@@ -91,6 +104,7 @@ class FlutterFlowVideoPlayer extends StatefulWidget {
     this.showControls = true,
     this.allowFullScreen = true,
     this.allowPlaybackSpeedMenu = false,
+    this.foreground = false,
   });
 
   final String path;
@@ -103,6 +117,7 @@ class FlutterFlowVideoPlayer extends StatefulWidget {
   final bool showControls;
   final bool allowFullScreen;
   final bool allowPlaybackSpeedMenu;
+  final bool foreground;
 
   @override
   State<StatefulWidget> createState() => _FlutterFlowVideoPlayerState();
@@ -161,22 +176,30 @@ class _FlutterFlowVideoPlayerState extends State<FlutterFlowVideoPlayer> {
   }
 
   @override
-  Widget build(BuildContext context) => FittedBox(
-        fit: BoxFit.cover,
-        child: Container(
-          height: height,
-          width: width,
-          child: _chewieController != null &&
-                  _chewieController!.videoPlayerController.value.isInitialized
-              ? Chewie(controller: _chewieController!)
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    CircularProgressIndicator(),
-                    SizedBox(height: 20),
-                    Text('Loading'),
-                  ],
-                ),
-        ),
-      );
+  Widget build(BuildContext context) {
+    if (_chewieController != null &&
+        _chewieController!.videoPlayerController.value.isInitialized) {
+      widget.foreground
+          ? _videoPlayerController!.play
+          : _videoPlayerController!.pause;
+    }
+    return FittedBox(
+      fit: BoxFit.cover,
+      child: SizedBox(
+        height: height,
+        width: width,
+        child: _chewieController != null &&
+                _chewieController!.videoPlayerController.value.isInitialized
+            ? Chewie(controller: _chewieController!)
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 20),
+                  Text('Loading'),
+                ],
+              ),
+      ),
+    );
+  }
 }
