@@ -1004,7 +1004,9 @@ class _BookmarkedWidgetState extends State<BookmarkedWidget> {
                                                                           ),
                                                                         );
                                                                       },
-                                                                    );
+                                                                    ).then((value) =>
+                                                                        setState(
+                                                                            () {}));
                                                                   },
                                                                 ),
                                                               ],

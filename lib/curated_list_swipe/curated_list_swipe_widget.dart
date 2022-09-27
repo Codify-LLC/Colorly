@@ -1005,7 +1005,9 @@ class _CuratedListSwipeWidgetState extends State<CuratedListSwipeWidget>
                                                                             ),
                                                                           );
                                                                         },
-                                                                      );
+                                                                      ).then((value) =>
+                                                                          setState(
+                                                                              () {}));
                                                                     },
                                                                   ),
                                                                 ],

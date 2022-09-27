@@ -32,14 +32,11 @@ class AddStoryPageWidget extends StatefulWidget {
 
 class _AddStoryPageWidgetState extends State<AddStoryPageWidget>
     with TickerProviderStateMixin {
-  TextEditingController? campaignNameController;
-
-  TextEditingController? websiteController;
-
-  TextEditingController? storyDescriptionController;
-
   StoriesRecord? restStory;
   String uploadedFileUrl = '';
+  TextEditingController? campaignNameController;
+  TextEditingController? websiteController;
+  TextEditingController? storyDescriptionController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final animationsMap = {
     'buttonOnActionTriggerAnimation': AnimationInfo(
@@ -77,6 +74,14 @@ class _AddStoryPageWidgetState extends State<AddStoryPageWidget>
             's2xl4pxv' /* https:// */,
           );
         }));
+  }
+
+  @override
+  void dispose() {
+    campaignNameController?.dispose();
+    websiteController?.dispose();
+    storyDescriptionController?.dispose();
+    super.dispose();
   }
 
   @override

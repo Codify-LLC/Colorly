@@ -18,15 +18,12 @@ class CreateAccountWidget extends StatefulWidget {
 
 class _CreateAccountWidgetState extends State<CreateAccountWidget> {
   TextEditingController? emailController;
-
   TextEditingController? passwordController;
 
   late bool passwordVisibility;
-
   TextEditingController? passwordConfirmController;
 
   late bool passwordConfirmVisibility;
-
   bool? checkboxListTileValue;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -40,6 +37,14 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
     passwordConfirmVisibility = false;
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'createAccount'});
+  }
+
+  @override
+  void dispose() {
+    emailController?.dispose();
+    passwordController?.dispose();
+    passwordConfirmController?.dispose();
+    super.dispose();
   }
 
   @override

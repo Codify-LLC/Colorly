@@ -489,7 +489,7 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                             ),
                                           );
                                         },
-                                      );
+                                      ).then((value) => setState(() {}));
                                     },
                                   ),
                                 ],

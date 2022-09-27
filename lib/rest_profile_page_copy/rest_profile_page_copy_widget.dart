@@ -429,7 +429,8 @@ class _RestProfilePageCopyWidgetState extends State<RestProfilePageCopyWidget>
                                                           ),
                                                         );
                                                       },
-                                                    );
+                                                    ).then((value) =>
+                                                        setState(() {}));
                                                   },
                                                   child: Text(
                                                     FFLocalizations.of(context)
@@ -770,7 +771,8 @@ class _RestProfilePageCopyWidgetState extends State<RestProfilePageCopyWidget>
                                                                 ),
                                                               );
                                                             },
-                                                          );
+                                                          ).then((value) =>
+                                                              setState(() {}));
                                                         },
                                                       ),
                                                     ),
@@ -1769,7 +1771,8 @@ class _RestProfilePageCopyWidgetState extends State<RestProfilePageCopyWidget>
                                                     ),
                                                   );
                                                 },
-                                              );
+                                              ).then(
+                                                  (value) => setState(() {}));
                                             },
                                             child: Stack(
                                               alignment:
@@ -1806,7 +1809,8 @@ class _RestProfilePageCopyWidgetState extends State<RestProfilePageCopyWidget>
                                                             ),
                                                           );
                                                         },
-                                                      );
+                                                      ).then((value) =>
+                                                          setState(() {}));
                                                     },
                                                     child: Container(
                                                       width:

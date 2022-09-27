@@ -447,7 +447,8 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                     ),
                                                   );
                                                 },
-                                              );
+                                              ).then(
+                                                  (value) => setState(() {}));
                                             },
                                             child: FlutterFlowVideoPlayer(
                                               path: stackPostsRecord
@@ -650,7 +651,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                   ),
                                                 );
                                               },
-                                            );
+                                            ).then((value) => setState(() {}));
                                           },
                                           child: Container(
                                             width: 54,
@@ -699,7 +700,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                           ),
                                         );
                                       },
-                                    );
+                                    ).then((value) => setState(() {}));
                                   },
                                 ),
                               ),
@@ -963,7 +964,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                     ),
                                   );
                                 },
-                              );
+                              ).then((value) => setState(() {}));
                             },
                             child: Text(
                               widget.posts!.description!.maybeHandleOverflow(
@@ -1158,7 +1159,8 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                     ),
                                                   );
                                                 },
-                                              );
+                                              ).then(
+                                                  (value) => setState(() {}));
                                             },
                                             child: Row(
                                               mainAxisSize: MainAxisSize.max,
@@ -1209,7 +1211,8 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                           ),
                                                         );
                                                       },
-                                                    );
+                                                    ).then((value) =>
+                                                        setState(() {}));
                                                   },
                                                   child: Icon(
                                                     Icons.fastfood_rounded,
@@ -1274,7 +1277,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                 ),
                                               );
                                             },
-                                          );
+                                          ).then((value) => setState(() {}));
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
@@ -1302,7 +1305,8 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                       ),
                                                     );
                                                   },
-                                                );
+                                                ).then(
+                                                    (value) => setState(() {}));
                                               },
                                               child: Icon(
                                                 Icons.mode_comment_outlined,

@@ -24,12 +24,11 @@ class VideoFindSearchWidget extends StatefulWidget {
 }
 
 class _VideoFindSearchWidgetState extends State<VideoFindSearchWidget> {
-  TextEditingController? textController;
-
-  List<PostsRecord>? algoliaSearchResults1 = [];
-  List<PostsRecord>? algoliaSearchResults2 = [];
   LatLng? currentUserLocationValue;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  List<PostsRecord>? algoliaSearchResults1 = [];
+  TextEditingController? textController;
+  List<PostsRecord>? algoliaSearchResults2 = [];
 
   @override
   void initState() {
@@ -39,6 +38,12 @@ class _VideoFindSearchWidgetState extends State<VideoFindSearchWidget> {
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'videoFindSearch'});
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override

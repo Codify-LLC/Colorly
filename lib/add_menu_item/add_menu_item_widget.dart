@@ -35,15 +35,11 @@ class AddMenuItemWidget extends StatefulWidget {
 }
 
 class _AddMenuItemWidgetState extends State<AddMenuItemWidget> {
-  TextEditingController? textController1;
-
   String uploadedFileUrl = '';
   bool? checkboxListTileValue;
-
+  TextEditingController? textController1;
   TextEditingController? textController2;
-
   TextEditingController? textController3;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -53,6 +49,14 @@ class _AddMenuItemWidgetState extends State<AddMenuItemWidget> {
     textController1 = TextEditingController();
     textController2 = TextEditingController();
     textController3 = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController1?.dispose();
+    textController2?.dispose();
+    textController3?.dispose();
+    super.dispose();
   }
 
   @override

@@ -35,6 +35,12 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
   }
 
   @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,

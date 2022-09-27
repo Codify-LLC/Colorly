@@ -122,7 +122,7 @@ class _AnswerPollWidgetState extends State<AnswerPollWidget> {
                                 ),
                               );
                             },
-                          );
+                          ).then((value) => setState(() {}));
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.9,
@@ -175,7 +175,7 @@ class _AnswerPollWidgetState extends State<AnswerPollWidget> {
                                 ),
                               );
                             },
-                          );
+                          ).then((value) => setState(() {}));
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.9,
@@ -228,7 +228,7 @@ class _AnswerPollWidgetState extends State<AnswerPollWidget> {
                                 ),
                               );
                             },
-                          );
+                          ).then((value) => setState(() {}));
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.9,
@@ -281,7 +281,7 @@ class _AnswerPollWidgetState extends State<AnswerPollWidget> {
                                 ),
                               );
                             },
-                          );
+                          ).then((value) => setState(() {}));
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.9,

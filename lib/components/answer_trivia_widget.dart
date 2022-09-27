@@ -111,7 +111,7 @@ class _AnswerTriviaWidgetState extends State<AnswerTriviaWidget> {
                                 ),
                               );
                             },
-                          );
+                          ).then((value) => setState(() {}));
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.9,
@@ -155,7 +155,7 @@ class _AnswerTriviaWidgetState extends State<AnswerTriviaWidget> {
                                 ),
                               );
                             },
-                          );
+                          ).then((value) => setState(() {}));
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.9,
@@ -199,7 +199,7 @@ class _AnswerTriviaWidgetState extends State<AnswerTriviaWidget> {
                                 ),
                               );
                             },
-                          );
+                          ).then((value) => setState(() {}));
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.9,
@@ -243,7 +243,7 @@ class _AnswerTriviaWidgetState extends State<AnswerTriviaWidget> {
                                 ),
                               );
                             },
-                          );
+                          ).then((value) => setState(() {}));
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.9,

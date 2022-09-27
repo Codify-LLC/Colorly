@@ -26,10 +26,9 @@ class LiveVideoPageWidget extends StatefulWidget {
 }
 
 class _LiveVideoPageWidgetState extends State<LiveVideoPageWidget> {
-  TextEditingController? textController;
-
   LatLng? currentUserLocationValue;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController? textController;
 
   @override
   void initState() {
@@ -39,6 +38,12 @@ class _LiveVideoPageWidgetState extends State<LiveVideoPageWidget> {
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'LiveVideoPage'});
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -723,7 +728,9 @@ class _LiveVideoPageWidgetState extends State<LiveVideoPageWidget> {
                                                                         ),
                                                                       );
                                                                     },
-                                                                  );
+                                                                  ).then((value) =>
+                                                                      setState(
+                                                                          () {}));
                                                                 },
                                                                 child: Icon(
                                                                   Icons

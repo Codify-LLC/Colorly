@@ -30,13 +30,10 @@ class AddStoryWidget extends StatefulWidget {
 
 class _AddStoryWidgetState extends State<AddStoryWidget>
     with TickerProviderStateMixin {
-  TextEditingController? campaignNameController;
-
-  TextEditingController? websiteController;
-
-  TextEditingController? storyDescriptionController;
-
   String uploadedFileUrl = '';
+  TextEditingController? campaignNameController;
+  TextEditingController? websiteController;
+  TextEditingController? storyDescriptionController;
   final animationsMap = {
     'buttonOnActionTriggerAnimation': AnimationInfo(
       curve: Curves.elasticOut,
@@ -71,6 +68,14 @@ class _AddStoryWidgetState extends State<AddStoryWidget>
             '0kw8gcba' /* https:// */,
           );
         }));
+  }
+
+  @override
+  void dispose() {
+    campaignNameController?.dispose();
+    websiteController?.dispose();
+    storyDescriptionController?.dispose();
+    super.dispose();
   }
 
   @override

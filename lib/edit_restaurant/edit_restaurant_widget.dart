@@ -33,30 +33,19 @@ class EditRestaurantWidget extends StatefulWidget {
 }
 
 class _EditRestaurantWidgetState extends State<EditRestaurantWidget> {
-  TextEditingController? categoriesController;
-
-  TextEditingController? restAdressController;
-
-  TextEditingController? restNameController;
-
-  TextEditingController? textFieldnumController;
-
   String uploadedFileUrl1 = '';
   String uploadedFileUrl2 = '';
   var placePickerValue = FFPlace();
-
+  TextEditingController? restNameController;
+  TextEditingController? textFieldnumController;
+  TextEditingController? restAdressController;
+  TextEditingController? categoriesController;
   TextEditingController? textController5;
-
   TextEditingController? websiteController;
-
   TextEditingController? textController7;
-
   String? choiceChipsValue;
-
   TextEditingController? videoTouController;
-
   TextEditingController? onlineOrderLinkController;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -82,6 +71,20 @@ class _EditRestaurantWidgetState extends State<EditRestaurantWidget> {
         TextEditingController(text: widget.restaurant!.onlineOrderLink);
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'editRestaurant'});
+  }
+
+  @override
+  void dispose() {
+    categoriesController?.dispose();
+    restAdressController?.dispose();
+    restNameController?.dispose();
+    textFieldnumController?.dispose();
+    textController5?.dispose();
+    websiteController?.dispose();
+    textController7?.dispose();
+    videoTouController?.dispose();
+    onlineOrderLinkController?.dispose();
+    super.dispose();
   }
 
   @override

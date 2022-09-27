@@ -178,7 +178,7 @@ class _StorySuccessWidgetState extends State<StorySuccessWidget>
                       ),
                     );
                   },
-                );
+                ).then((value) => setState(() {}));
               },
               text: FFLocalizations.of(context).getText(
                 'bb817vi2' /* Add Deal */,

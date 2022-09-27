@@ -450,7 +450,7 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                     ),
                                   );
                                 },
-                              );
+                              ).then((value) => setState(() {}));
                             } else {
                               logFirebaseEvent('Button_Bottom-Sheet');
                               await showModalBottomSheet(
@@ -468,7 +468,7 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                     ),
                                   );
                                 },
-                              );
+                              ).then((value) => setState(() {}));
                             }
                           },
                           text: FFLocalizations.of(context).getText(

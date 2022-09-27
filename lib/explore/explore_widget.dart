@@ -1451,7 +1451,7 @@ class _ExploreWidgetState extends State<ExploreWidget>
                                                                                       ),
                                                                                     );
                                                                                   },
-                                                                                );
+                                                                                ).then((value) => setState(() {}));
                                                                               },
                                                                             ),
                                                                           ],
@@ -2062,7 +2062,8 @@ class _ExploreWidgetState extends State<ExploreWidget>
                                                             ),
                                                           );
                                                         },
-                                                      );
+                                                      ).then((value) =>
+                                                          setState(() {}));
                                                     },
                                                     child: Container(
                                                       width: 350,
@@ -3169,7 +3170,7 @@ class _ExploreWidgetState extends State<ExploreWidget>
                                                                                     ),
                                                                                   );
                                                                                 },
-                                                                              );
+                                                                              ).then((value) => setState(() {}));
                                                                             },
                                                                           ),
                                                                         ],
@@ -4247,7 +4248,7 @@ class _ExploreWidgetState extends State<ExploreWidget>
                                                                                             ),
                                                                                           );
                                                                                         },
-                                                                                      );
+                                                                                      ).then((value) => setState(() {}));
                                                                                     },
                                                                                   ),
                                                                                 ],

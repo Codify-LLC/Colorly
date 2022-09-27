@@ -18,11 +18,9 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   TextEditingController? emailController;
-
   TextEditingController? passwordController;
 
   late bool passwordVisibility;
-
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -33,6 +31,13 @@ class _LoginWidgetState extends State<LoginWidget> {
     passwordController = TextEditingController();
     passwordVisibility = false;
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'login'});
+  }
+
+  @override
+  void dispose() {
+    emailController?.dispose();
+    passwordController?.dispose();
+    super.dispose();
   }
 
   @override

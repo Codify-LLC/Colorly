@@ -23,13 +23,12 @@ class MapResultsPageWidget extends StatefulWidget {
 }
 
 class _MapResultsPageWidgetState extends State<MapResultsPageWidget> {
-  TextEditingController? courtSearchFieldController;
-
-  List<RestaurantsRecord>? algoliaSearchResults = [];
-  LatLng? googleMapsCenter;
-  final googleMapsController = Completer<GoogleMapController>();
   LatLng? currentUserLocationValue;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  LatLng? googleMapsCenter;
+  final googleMapsController = Completer<GoogleMapController>();
+  List<RestaurantsRecord>? algoliaSearchResults = [];
+  TextEditingController? courtSearchFieldController;
 
   @override
   void initState() {
@@ -39,6 +38,12 @@ class _MapResultsPageWidgetState extends State<MapResultsPageWidget> {
         .then((loc) => setState(() => currentUserLocationValue = loc));
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'mapResultsPage'});
+  }
+
+  @override
+  void dispose() {
+    courtSearchFieldController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -108,7 +113,7 @@ class _MapResultsPageWidgetState extends State<MapResultsPageWidget> {
                                   ),
                                 );
                               },
-                            );
+                            ).then((value) => setState(() {}));
                           },
                         ),
                       )

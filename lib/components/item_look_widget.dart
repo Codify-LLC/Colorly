@@ -30,14 +30,19 @@ class _ItemLookWidgetState extends State<ItemLookWidget> {
           .map((e) => e.key)
           .toList();
 
-  TextEditingController? textController;
-
   InCartItemRecord? shoppingBagItem3;
+  TextEditingController? textController;
 
   @override
   void initState() {
     super.initState();
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override

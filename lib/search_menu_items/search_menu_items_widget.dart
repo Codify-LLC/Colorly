@@ -28,9 +28,8 @@ class SearchMenuItemsWidget extends StatefulWidget {
 }
 
 class _SearchMenuItemsWidgetState extends State<SearchMenuItemsWidget> {
-  TextEditingController? textController;
-
   List<MenuItemRecord> simpleSearchResults = [];
+  TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -39,6 +38,12 @@ class _SearchMenuItemsWidgetState extends State<SearchMenuItemsWidget> {
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'searchMenuItems'});
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -294,7 +299,7 @@ offers digital... */
                                       ),
                                     );
                                   },
-                                );
+                                ).then((value) => setState(() {}));
                               },
                               text: FFLocalizations.of(context).getText(
                                 'dbhlutpa' /* ORDER NOW */,

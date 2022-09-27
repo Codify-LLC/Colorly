@@ -18,7 +18,6 @@ class PhoneVerificationWidget extends StatefulWidget {
 
 class _PhoneVerificationWidgetState extends State<PhoneVerificationWidget> {
   TextEditingController? phoneNumberController;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -27,6 +26,12 @@ class _PhoneVerificationWidgetState extends State<PhoneVerificationWidget> {
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'phoneVerification'});
     phoneNumberController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    phoneNumberController?.dispose();
+    super.dispose();
   }
 
   @override

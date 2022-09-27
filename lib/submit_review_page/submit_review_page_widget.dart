@@ -29,11 +29,10 @@ class SubmitReviewPageWidget extends StatefulWidget {
 }
 
 class _SubmitReviewPageWidgetState extends State<SubmitReviewPageWidget> {
-  TextEditingController? textController;
-
   ApiCallResponse? videoUrlMux;
   String uploadedFileUrl1 = '';
   String uploadedFileUrl2 = '';
+  TextEditingController? textController;
   double? ratingBarValue;
   String? choiceChipsValue1;
   String? choiceChipsValue2;
@@ -46,6 +45,12 @@ class _SubmitReviewPageWidgetState extends State<SubmitReviewPageWidget> {
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'submitReviewPage'});
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override

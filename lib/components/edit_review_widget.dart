@@ -30,16 +30,21 @@ class EditReviewWidget extends StatefulWidget {
 }
 
 class _EditReviewWidgetState extends State<EditReviewWidget> {
-  TextEditingController? textController;
-
   String uploadedFileUrl1 = '';
   String uploadedFileUrl2 = '';
+  TextEditingController? textController;
   double? ratingBarValue;
 
   @override
   void initState() {
     super.initState();
     textController = TextEditingController(text: widget.posts!.description);
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override

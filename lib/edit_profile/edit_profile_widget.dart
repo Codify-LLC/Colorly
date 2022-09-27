@@ -28,32 +28,19 @@ class EditProfileWidget extends StatefulWidget {
 }
 
 class _EditProfileWidgetState extends State<EditProfileWidget> {
-  TextEditingController? textController1;
-
   String uploadedFileUrl = '';
-
+  TextEditingController? textController1;
   TextEditingController? textController2;
-
   TextEditingController? textController3;
-
   TextEditingController? textController4;
-
   var placePickerValue = FFPlace();
-
   TextEditingController? textController5;
-
   bool? switchListTileValue1;
-
   TextEditingController? textController6;
-
   bool? switchListTileValue2;
-
   TextEditingController? textController7;
-
   bool? switchListTileValue3;
-
   TextEditingController? textController8;
-
   bool? switchListTileValue4;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -69,6 +56,19 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     textController6 = TextEditingController(text: widget.user!.instagramUrl);
     textController7 = TextEditingController(text: widget.user!.tiktokUrl);
     textController8 = TextEditingController(text: widget.user!.website);
+  }
+
+  @override
+  void dispose() {
+    textController1?.dispose();
+    textController2?.dispose();
+    textController3?.dispose();
+    textController4?.dispose();
+    textController5?.dispose();
+    textController6?.dispose();
+    textController7?.dispose();
+    textController8?.dispose();
+    super.dispose();
   }
 
   @override

@@ -412,33 +412,48 @@ class _RestaurantDetailsWidgetState extends State<RestaurantDetailsWidget>
                                                                                 galleryIndex) {
                                                                           final galleryItem =
                                                                               gallery[galleryIndex];
-                                                                          return FlutterFlowMediaDisplay(
-                                                                            path:
-                                                                                galleryItem,
-                                                                            imageBuilder: (path) =>
-                                                                                ClipRRect(
-                                                                              borderRadius: BorderRadius.only(
-                                                                                bottomLeft: Radius.circular(20),
-                                                                                bottomRight: Radius.circular(20),
-                                                                                topLeft: Radius.circular(0),
-                                                                                topRight: Radius.circular(0),
+                                                                          return InkWell(
+                                                                            onTap:
+                                                                                () async {
+                                                                              logFirebaseEvent('RESTAURANT_DETAILS_MediaDisplay_x4q6c6gf');
+                                                                              logFirebaseEvent('MediaDisplay_Navigate-To');
+
+                                                                              context.pushNamed(
+                                                                                'gallery',
+                                                                                queryParams: {
+                                                                                  'restaurant': serializeParam(column1RestaurantsRecord, ParamType.Document),
+                                                                                }.withoutNulls,
+                                                                                extra: <String, dynamic>{
+                                                                                  'restaurant': column1RestaurantsRecord,
+                                                                                },
+                                                                              );
+                                                                            },
+                                                                            child:
+                                                                                FlutterFlowMediaDisplay(
+                                                                              path: galleryItem,
+                                                                              imageBuilder: (path) => ClipRRect(
+                                                                                borderRadius: BorderRadius.only(
+                                                                                  bottomLeft: Radius.circular(20),
+                                                                                  bottomRight: Radius.circular(20),
+                                                                                  topLeft: Radius.circular(0),
+                                                                                  topRight: Radius.circular(0),
+                                                                                ),
+                                                                                child: CachedNetworkImage(
+                                                                                  imageUrl: path,
+                                                                                  width: 300,
+                                                                                  height: 300,
+                                                                                  fit: BoxFit.cover,
+                                                                                ),
                                                                               ),
-                                                                              child: CachedNetworkImage(
-                                                                                imageUrl: path,
+                                                                              videoPlayerBuilder: (path) => FlutterFlowVideoPlayer(
+                                                                                path: path,
                                                                                 width: 300,
-                                                                                height: 300,
-                                                                                fit: BoxFit.cover,
+                                                                                autoPlay: true,
+                                                                                looping: true,
+                                                                                showControls: false,
+                                                                                allowFullScreen: false,
+                                                                                allowPlaybackSpeedMenu: false,
                                                                               ),
-                                                                            ),
-                                                                            videoPlayerBuilder: (path) =>
-                                                                                FlutterFlowVideoPlayer(
-                                                                              path: path,
-                                                                              width: 300,
-                                                                              autoPlay: true,
-                                                                              looping: true,
-                                                                              showControls: false,
-                                                                              allowFullScreen: false,
-                                                                              allowPlaybackSpeedMenu: false,
                                                                             ),
                                                                           );
                                                                         },
@@ -1293,7 +1308,9 @@ class _RestaurantDetailsWidgetState extends State<RestaurantDetailsWidget>
                                                                           ),
                                                                         );
                                                                       },
-                                                                    );
+                                                                    ).then((value) =>
+                                                                        setState(
+                                                                            () {}));
                                                                   },
                                                                 ),
                                                               ],
@@ -4224,7 +4241,9 @@ class _RestaurantDetailsWidgetState extends State<RestaurantDetailsWidget>
                                                                           ),
                                                                         );
                                                                       },
-                                                                    );
+                                                                    ).then((value) =>
+                                                                        setState(
+                                                                            () {}));
                                                                   },
                                                                   text: FFLocalizations.of(
                                                                           context)
@@ -4513,7 +4532,8 @@ class _RestaurantDetailsWidgetState extends State<RestaurantDetailsWidget>
                                                                               ),
                                                                             );
                                                                           },
-                                                                        );
+                                                                        ).then((value) =>
+                                                                            setState(() {}));
                                                                       },
                                                                       onLongPress:
                                                                           () async {
@@ -4792,7 +4812,9 @@ class _RestaurantDetailsWidgetState extends State<RestaurantDetailsWidget>
                                                                             ),
                                                                           );
                                                                         },
-                                                                      );
+                                                                      ).then((value) =>
+                                                                          setState(
+                                                                              () {}));
                                                                     },
                                                                     text: FFLocalizations.of(
                                                                             context)
@@ -4978,7 +5000,7 @@ class _RestaurantDetailsWidgetState extends State<RestaurantDetailsWidget>
                                                                                         ),
                                                                                       );
                                                                                     },
-                                                                                  );
+                                                                                  ).then((value) => setState(() {}));
                                                                                 }
                                                                               },
                                                                               child: Stack(
@@ -5006,7 +5028,7 @@ class _RestaurantDetailsWidgetState extends State<RestaurantDetailsWidget>
                                                                                               ),
                                                                                             );
                                                                                           },
-                                                                                        );
+                                                                                        ).then((value) => setState(() {}));
                                                                                       },
                                                                                       child: Container(
                                                                                         width: MediaQuery.of(context).size.width * 0.86,
@@ -5040,7 +5062,7 @@ class _RestaurantDetailsWidgetState extends State<RestaurantDetailsWidget>
                                                                                                   ),
                                                                                                 );
                                                                                               },
-                                                                                            );
+                                                                                            ).then((value) => setState(() {}));
                                                                                           },
                                                                                           child: Row(
                                                                                             mainAxisSize: MainAxisSize.max,

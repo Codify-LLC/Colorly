@@ -33,16 +33,15 @@ class InAppStartOrderWidget extends StatefulWidget {
 
 class _InAppStartOrderWidgetState extends State<InAppStartOrderWidget>
     with TickerProviderStateMixin {
-  TextEditingController? textController;
-
+  InCartItemRecord? shoppingBagItem2;
+  InCartItemRecord? shoppingBagItem5;
   List<MenuItemRecord> simpleSearchResults = [];
+  TextEditingController? textController;
   PagingController<DocumentSnapshot?, DealsRecord>? _pagingController;
   Query? _pagingQuery;
 
   String? choiceChipsValue;
-  InCartItemRecord? shoppingBagItem5;
   InCartItemRecord? shoppingBagItem;
-  InCartItemRecord? shoppingBagItem2;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final animationsMap = {
     'iconButtonOnActionTriggerAnimation1': AnimationInfo(
@@ -104,6 +103,12 @@ class _InAppStartOrderWidgetState extends State<InAppStartOrderWidget>
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'inAppStartOrder'});
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -786,7 +791,9 @@ class _InAppStartOrderWidgetState extends State<InAppStartOrderWidget>
                                                                   ),
                                                                 );
                                                               },
-                                                            );
+                                                            ).then((value) =>
+                                                                setState(
+                                                                    () {}));
                                                           },
                                                           child: Row(
                                                             mainAxisSize:

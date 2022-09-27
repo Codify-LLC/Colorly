@@ -274,7 +274,7 @@ class _BroadcastPageWidgetState extends State<BroadcastPageWidget> {
                                     ),
                                   );
                                 },
-                              );
+                              ).then((value) => setState(() {}));
                             },
                           ),
                           FlutterFlowIconButton(
@@ -306,7 +306,7 @@ class _BroadcastPageWidgetState extends State<BroadcastPageWidget> {
                                     ),
                                   );
                                 },
-                              );
+                              ).then((value) => setState(() {}));
                             },
                           ),
                           FlutterFlowIconButton(
@@ -338,7 +338,7 @@ class _BroadcastPageWidgetState extends State<BroadcastPageWidget> {
                                     ),
                                   );
                                 },
-                              );
+                              ).then((value) => setState(() {}));
                             },
                           ),
                         ],

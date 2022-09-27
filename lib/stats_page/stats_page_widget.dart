@@ -581,7 +581,8 @@ class _StatsPageWidgetState extends State<StatsPageWidget>
                                                                 ),
                                                               );
                                                             },
-                                                          );
+                                                          ).then((value) =>
+                                                              setState(() {}));
                                                         },
                                                       ),
                                                     ),
@@ -1537,7 +1538,7 @@ class _StatsPageWidgetState extends State<StatsPageWidget>
                                                                                                                   ),
                                                                                                                 );
                                                                                                               },
-                                                                                                            );
+                                                                                                            ).then((value) => setState(() {}));
                                                                                                           },
                                                                                                         ).animated([
                                                                                                           animationsMap['iconButtonOnActionTriggerAnimation']!
@@ -1709,7 +1710,8 @@ class _StatsPageWidgetState extends State<StatsPageWidget>
                                                     ),
                                                   );
                                                 },
-                                              );
+                                              ).then(
+                                                  (value) => setState(() {}));
                                             },
                                             child: Stack(
                                               alignment:
@@ -1746,7 +1748,8 @@ class _StatsPageWidgetState extends State<StatsPageWidget>
                                                             ),
                                                           );
                                                         },
-                                                      );
+                                                      ).then((value) =>
+                                                          setState(() {}));
                                                     },
                                                     child: Container(
                                                       width:

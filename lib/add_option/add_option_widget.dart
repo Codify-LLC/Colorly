@@ -32,12 +32,9 @@ class _AddOptionWidgetState extends State<AddOptionWidget> {
           .map((e) => e.key)
           .toList();
 
-  TextEditingController? textController1;
-
   String? dropDownValue;
-
+  TextEditingController? textController1;
   TextEditingController? textController2;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -46,6 +43,13 @@ class _AddOptionWidgetState extends State<AddOptionWidget> {
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'addOption'});
     textController1 = TextEditingController();
     textController2 = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController1?.dispose();
+    textController2?.dispose();
+    super.dispose();
   }
 
   @override

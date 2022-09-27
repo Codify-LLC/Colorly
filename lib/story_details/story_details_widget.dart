@@ -359,7 +359,10 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                                           ),
                                                                         );
                                                                       },
-                                                                    );
+                                                                    ).then((value) =>
+                                                                        setState(
+                                                                            () {}));
+
                                                                     logFirebaseEvent(
                                                                         'IconButton_Alert-Dialog');
                                                                     var confirmDialogResponse =
@@ -589,7 +592,7 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                                                       ),
                                                                                     );
                                                                                   },
-                                                                                );
+                                                                                ).then((value) => setState(() {}));
                                                                               },
                                                                               child: Material(
                                                                                 color: Colors.transparent,
@@ -818,7 +821,7 @@ class _StoryDetailsWidgetState extends State<StoryDetailsWidget> {
                                                 ),
                                               );
                                             },
-                                          );
+                                          ).then((value) => setState(() {}));
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,

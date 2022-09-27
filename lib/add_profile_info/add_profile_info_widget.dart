@@ -20,14 +20,11 @@ class AddProfileInfoWidget extends StatefulWidget {
 }
 
 class _AddProfileInfoWidgetState extends State<AddProfileInfoWidget> {
-  TextEditingController? bioController;
-
-  TextEditingController? userNameController;
-
-  TextEditingController? yourNameController;
-
   String uploadedFileUrl1 = '';
   String uploadedFileUrl2 = '';
+  TextEditingController? yourNameController;
+  TextEditingController? userNameController;
+  TextEditingController? bioController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -38,6 +35,14 @@ class _AddProfileInfoWidgetState extends State<AddProfileInfoWidget> {
     yourNameController = TextEditingController();
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'addProfileInfo'});
+  }
+
+  @override
+  void dispose() {
+    bioController?.dispose();
+    userNameController?.dispose();
+    yourNameController?.dispose();
+    super.dispose();
   }
 
   @override

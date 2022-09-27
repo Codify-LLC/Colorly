@@ -33,13 +33,10 @@ class EditMenuItemWidget extends StatefulWidget {
 }
 
 class _EditMenuItemWidgetState extends State<EditMenuItemWidget> {
-  TextEditingController? textController1;
-
   String uploadedFileUrl = '';
   bool? checkboxListTileValue;
-
+  TextEditingController? textController1;
   TextEditingController? textController2;
-
   TextEditingController? textController3;
 
   @override
@@ -50,6 +47,14 @@ class _EditMenuItemWidgetState extends State<EditMenuItemWidget> {
         TextEditingController(text: widget.menuItem!.itemDescription);
     textController3 =
         TextEditingController(text: widget.menuItem!.itemPrice?.toString());
+  }
+
+  @override
+  void dispose() {
+    textController1?.dispose();
+    textController2?.dispose();
+    textController3?.dispose();
+    super.dispose();
   }
 
   @override

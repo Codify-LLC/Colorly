@@ -85,7 +85,7 @@ class _AddDealStoryWidgetState extends State<AddDealStoryWidget> {
                                     ),
                                   );
                                 },
-                              );
+                              ).then((value) => setState(() {}));
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.86,

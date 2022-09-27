@@ -20,9 +20,8 @@ class CuratedListPageWidget extends StatefulWidget {
 
 class _CuratedListPageWidgetState extends State<CuratedListPageWidget>
     with TickerProviderStateMixin {
-  TextEditingController? textController;
-
   List<CuratedListsRecord> simpleSearchResults = [];
+  TextEditingController? textController;
   PagingController<DocumentSnapshot?, CuratedListsRecord>? _pagingController;
   Query? _pagingQuery;
   List<StreamSubscription?> _streamSubscriptions = [];
@@ -160,6 +159,7 @@ class _CuratedListPageWidgetState extends State<CuratedListPageWidget>
   @override
   void dispose() {
     _streamSubscriptions.forEach((s) => s?.cancel());
+    textController?.dispose();
     super.dispose();
   }
 

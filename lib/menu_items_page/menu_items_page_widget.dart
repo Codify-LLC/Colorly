@@ -213,7 +213,7 @@ offers online ... */
                                       ),
                                     );
                                   },
-                                );
+                                ).then((value) => setState(() {}));
                               },
                               text: FFLocalizations.of(context).getText(
                                 'jlnexwfz' /* ORDER NOW */,

@@ -24,12 +24,11 @@ class SearchResultsWidget extends StatefulWidget {
 }
 
 class _SearchResultsWidgetState extends State<SearchResultsWidget> {
-  TextEditingController? textController;
-
-  List<RestaurantsRecord>? algoliaSearchResults = [];
   LatLng? currentUserLocationValue;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  List<RestaurantsRecord>? algoliaSearchResults = [];
+  TextEditingController? textController;
 
   @override
   void initState() {
@@ -39,6 +38,12 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'searchResults'});
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -990,7 +995,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                                         ),
                                                                                       );
                                                                                     },
-                                                                                  );
+                                                                                  ).then((value) => setState(() {}));
                                                                                 },
                                                                               ),
                                                                             ),

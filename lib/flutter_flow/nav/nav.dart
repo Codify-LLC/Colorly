@@ -86,6 +86,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => LoginWidget(),
             ),
             FFRoute(
+              name: 'createAccount',
+              path: 'createAccount',
+              builder: (context, params) => CreateAccountWidget(),
+            ),
+            FFRoute(
               name: 'homePage',
               path: 'homePage',
               requireAuth: true,
@@ -107,7 +112,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'searchResults',
               path: 'searchResults',
               requireAuth: true,
-              builder: (context, params) => SearchResultsWidget(),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: SearchResultsWidget(),
+              ),
             ),
             FFRoute(
               name: 'explore',
@@ -131,9 +139,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     ),
             ),
             FFRoute(
-              name: 'createAccount',
-              path: 'createAccount',
-              builder: (context, params) => CreateAccountWidget(),
+              name: 'addStoryPage',
+              path: 'addStoryPage',
+              requireAuth: true,
+              asyncParams: {
+                'user': getDoc('users', UsersRecord.serializer),
+                'restaurant':
+                    getDoc('restaurants', RestaurantsRecord.serializer),
+              },
+              builder: (context, params) => AddStoryPageWidget(
+                user: params.getParam('user', ParamType.Document),
+                restaurant: params.getParam('restaurant', ParamType.Document),
+              ),
             ),
             FFRoute(
               name: 'restaurantDetails',
@@ -147,35 +164,24 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 'restaurantrec':
                     getDoc('restaurants', RestaurantsRecord.serializer),
               },
-              builder: (context, params) => RestaurantDetailsWidget(
-                restaurant: params.getParam(
-                    'restaurant', ParamType.DocumentReference, 'restaurants'),
-                posts: params.getParam('posts', ParamType.Document),
-                user: params.getParam('user', ParamType.Document),
-                menuitems: params.getParam('menuitems', ParamType.Document),
-                authUser: params.getParam(
-                    'authUser', ParamType.DocumentReference, 'users'),
-                menuCourse: params.getParam('menuCourse', ParamType.Document),
-                menuCourses: params.getParam(
-                    'menuCourses', ParamType.DocumentReference, 'menuCourse'),
-                restaurantrec:
-                    params.getParam('restaurantrec', ParamType.Document),
-                integer: params.getParam('integer', ParamType.int),
-                initialIndex: params.getParam('initialIndex', ParamType.int),
-              ),
-            ),
-            FFRoute(
-              name: 'addStoryPage',
-              path: 'addStoryPage',
-              requireAuth: true,
-              asyncParams: {
-                'user': getDoc('users', UsersRecord.serializer),
-                'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-              },
-              builder: (context, params) => AddStoryPageWidget(
-                user: params.getParam('user', ParamType.Document),
-                restaurant: params.getParam('restaurant', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: RestaurantDetailsWidget(
+                  restaurant: params.getParam(
+                      'restaurant', ParamType.DocumentReference, 'restaurants'),
+                  posts: params.getParam('posts', ParamType.Document),
+                  user: params.getParam('user', ParamType.Document),
+                  menuitems: params.getParam('menuitems', ParamType.Document),
+                  authUser: params.getParam(
+                      'authUser', ParamType.DocumentReference, 'users'),
+                  menuCourse: params.getParam('menuCourse', ParamType.Document),
+                  menuCourses: params.getParam(
+                      'menuCourses', ParamType.DocumentReference, 'menuCourse'),
+                  restaurantrec:
+                      params.getParam('restaurantrec', ParamType.Document),
+                  integer: params.getParam('integer', ParamType.int),
+                  initialIndex: params.getParam('initialIndex', ParamType.int),
+                ),
               ),
             ),
             FFRoute(
@@ -207,11 +213,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 'user': getDoc('users', UsersRecord.serializer),
                 'friends': getDoc('friends', FriendsRecord.serializer),
               },
-              builder: (context, params) => ViewProfileOtherWidget(
-                otherUser: params.getParam(
-                    'otherUser', ParamType.DocumentReference, 'users'),
-                user: params.getParam('user', ParamType.Document),
-                friends: params.getParam('friends', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: ViewProfileOtherWidget(
+                  otherUser: params.getParam(
+                      'otherUser', ParamType.DocumentReference, 'users'),
+                  user: params.getParam('user', ParamType.Document),
+                  friends: params.getParam('friends', ParamType.Document),
+                ),
               ),
             ),
             FFRoute(
@@ -221,8 +230,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               asyncParams: {
                 'user': getDoc('users', UsersRecord.serializer),
               },
-              builder: (context, params) => EditProfileWidget(
-                user: params.getParam('user', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: EditProfileWidget(
+                  user: params.getParam('user', ParamType.Document),
+                ),
               ),
             ),
             FFRoute(
@@ -240,13 +252,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     getDoc('restaurants', RestaurantsRecord.serializer),
                 'user': getDoc('users', UsersRecord.serializer),
               },
-              builder: (context, params) => VideoScreenWidget(
-                initialStoryIndex:
-                    params.getParam('initialStoryIndex', ParamType.int),
-                restaurant: params.getParam('restaurant', ParamType.Document),
-                user: params.getParam('user', ParamType.Document),
-                post: params.getParam(
-                    'post', ParamType.DocumentReference, 'posts'),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: VideoScreenWidget(
+                  initialStoryIndex:
+                      params.getParam('initialStoryIndex', ParamType.int),
+                  restaurant: params.getParam('restaurant', ParamType.Document),
+                  user: params.getParam('user', ParamType.Document),
+                  post: params.getParam(
+                      'post', ParamType.DocumentReference, 'posts'),
+                ),
               ),
             ),
             FFRoute(
@@ -317,9 +332,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 'friends': getDoc('friends', FriendsRecord.serializer),
                 'user': getDoc('users', UsersRecord.serializer),
               },
-              builder: (context, params) => FollowingWidget(
-                friends: params.getParam('friends', ParamType.Document),
-                user: params.getParam('user', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: FollowingWidget(
+                  friends: params.getParam('friends', ParamType.Document),
+                  user: params.getParam('user', ParamType.Document),
+                ),
               ),
             ),
             FFRoute(
@@ -354,15 +372,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     getDoc('restaurants', RestaurantsRecord.serializer),
                 'user': getDoc('users', UsersRecord.serializer),
               },
-              builder: (context, params) => RestaurantReviewsListWidget(
-                initialStoryIndex:
-                    params.getParam('initialStoryIndex', ParamType.int),
-                restaurant: params.getParam('restaurant', ParamType.Document),
-                user: params.getParam('user', ParamType.Document),
-                post: params.getParam(
-                    'post', ParamType.DocumentReference, 'posts'),
-                hgcvk: params.getParam('hgcvk', ParamType.String),
-                share: params.getParam('share', ParamType.String),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: RestaurantReviewsListWidget(
+                  initialStoryIndex:
+                      params.getParam('initialStoryIndex', ParamType.int),
+                  restaurant: params.getParam('restaurant', ParamType.Document),
+                  user: params.getParam('user', ParamType.Document),
+                  post: params.getParam(
+                      'post', ParamType.DocumentReference, 'posts'),
+                  hgcvk: params.getParam('hgcvk', ParamType.String),
+                  share: params.getParam('share', ParamType.String),
+                ),
               ),
             ),
             FFRoute(
@@ -400,9 +421,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 'friends': getDoc('friends', FriendsRecord.serializer),
                 'user': getDoc('users', UsersRecord.serializer),
               },
-              builder: (context, params) => BlockedUsersWidget(
-                friends: params.getParam('friends', ParamType.Document),
-                user: params.getParam('user', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: BlockedUsersWidget(
+                  friends: params.getParam('friends', ParamType.Document),
+                  user: params.getParam('user', ParamType.Document),
+                ),
               ),
             ),
             FFRoute(
@@ -432,9 +456,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     getDoc('restaurants', RestaurantsRecord.serializer),
                 'user': getDoc('users', UsersRecord.serializer),
               },
-              builder: (context, params) => BookmarkedWidget(
-                restaurants: params.getParam('restaurants', ParamType.Document),
-                user: params.getParam('user', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: BookmarkedWidget(
+                  restaurants:
+                      params.getParam('restaurants', ParamType.Document),
+                  user: params.getParam('user', ParamType.Document),
+                ),
               ),
             ),
             FFRoute(
@@ -444,9 +472,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               asyncParams: {
                 'posts': getDoc('posts', PostsRecord.serializer),
               },
-              builder: (context, params) => VideoFindWidget(
-                posts: params.getParam('posts', ParamType.Document),
-                index: params.getParam('index', ParamType.int),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: VideoFindWidget(
+                  posts: params.getParam('posts', ParamType.Document),
+                  index: params.getParam('index', ParamType.int),
+                ),
               ),
             ),
             FFRoute(
@@ -470,12 +501,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 'user': getDoc('users', UsersRecord.serializer),
                 'post': getDoc('posts', PostsRecord.serializer),
               },
-              builder: (context, params) => SingleVideoPageWidget(
-                initialStoryIndex:
-                    params.getParam('initialStoryIndex', ParamType.int),
-                restaurant: params.getParam('restaurant', ParamType.Document),
-                user: params.getParam('user', ParamType.Document),
-                post: params.getParam('post', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: SingleVideoPageWidget(
+                  initialStoryIndex:
+                      params.getParam('initialStoryIndex', ParamType.int),
+                  restaurant: params.getParam('restaurant', ParamType.Document),
+                  user: params.getParam('user', ParamType.Document),
+                  post: params.getParam('post', ParamType.Document),
+                ),
               ),
             ),
             FFRoute(
@@ -578,15 +612,21 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 'restaurant':
                     getDoc('restaurants', RestaurantsRecord.serializer),
               },
-              builder: (context, params) => StatsPageWidget(
-                restaurant: params.getParam('restaurant', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: StatsPageWidget(
+                  restaurant: params.getParam('restaurant', ParamType.Document),
+                ),
               ),
             ),
             FFRoute(
               name: 'shoppingCart',
               path: 'shoppingCart',
               requireAuth: true,
-              builder: (context, params) => ShoppingCartWidget(),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: ShoppingCartWidget(),
+              ),
             ),
             FFRoute(
               name: 'addMenuItem',
@@ -650,7 +690,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'dealPage',
               path: 'dealPage',
               requireAuth: true,
-              builder: (context, params) => DealPageWidget(),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: DealPageWidget(),
+              ),
             ),
             FFRoute(
               name: 'restDealPage',
@@ -688,12 +731,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 'user': getDoc('users', UsersRecord.serializer),
                 'post': getDoc('posts', PostsRecord.serializer),
               },
-              builder: (context, params) => NearbyVideoPageWidget(
-                initialStoryIndex:
-                    params.getParam('initialStoryIndex', ParamType.int),
-                restaurant: params.getParam('restaurant', ParamType.Document),
-                user: params.getParam('user', ParamType.Document),
-                post: params.getParam('post', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: NearbyVideoPageWidget(
+                  initialStoryIndex:
+                      params.getParam('initialStoryIndex', ParamType.int),
+                  restaurant: params.getParam('restaurant', ParamType.Document),
+                  user: params.getParam('user', ParamType.Document),
+                  post: params.getParam('post', ParamType.Document),
+                ),
               ),
             ),
             FFRoute(
@@ -727,7 +773,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'likedVideos',
               path: 'likedVideos',
               requireAuth: true,
-              builder: (context, params) => LikedVideosWidget(),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: LikedVideosWidget(),
+              ),
             ),
             FFRoute(
               name: 'createRestaurant',
@@ -757,21 +806,31 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 'curatedList':
                     getDoc('curatedLists', CuratedListsRecord.serializer),
               },
-              builder: (context, params) => CuratedListSwipeWidget(
-                curatedList: params.getParam('curatedList', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: CuratedListSwipeWidget(
+                  curatedList:
+                      params.getParam('curatedList', ParamType.Document),
+                ),
               ),
             ),
             FFRoute(
               name: 'curatedListPage',
               path: 'curatedListPage',
               requireAuth: true,
-              builder: (context, params) => CuratedListPageWidget(),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: CuratedListPageWidget(),
+              ),
             ),
             FFRoute(
               name: 'nearbyRestaurants',
               path: 'nearbyRestaurants',
               requireAuth: true,
-              builder: (context, params) => NearbyRestaurantsWidget(),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: NearbyRestaurantsWidget(),
+              ),
             ),
             FFRoute(
               name: 'restaurantOrders',
@@ -786,12 +845,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'wallet',
-              path: 'wallet',
-              requireAuth: true,
-              builder: (context, params) => WalletWidget(),
-            ),
-            FFRoute(
               name: 'draftVideos',
               path: 'draftVideos',
               requireAuth: true,
@@ -801,7 +854,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'orderTransactions',
               path: 'orderTransactions',
               requireAuth: true,
-              builder: (context, params) => OrderTransactionsWidget(),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: OrderTransactionsWidget(),
+              ),
+            ),
+            FFRoute(
+              name: 'wallet',
+              path: 'wallet',
+              requireAuth: true,
+              builder: (context, params) => WalletWidget(),
             ),
             FFRoute(
               name: 'orderStatus',
@@ -810,8 +872,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               asyncParams: {
                 'order': getDoc('order', OrderRecord.serializer),
               },
-              builder: (context, params) => OrderStatusWidget(
-                order: params.getParam('order', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: OrderStatusWidget(
+                  order: params.getParam('order', ParamType.Document),
+                ),
               ),
             ),
             FFRoute(
@@ -824,7 +889,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'StreamsPage',
               path: 'streamsPage',
               requireAuth: true,
-              builder: (context, params) => StreamsPageWidget(),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: StreamsPageWidget(),
+              ),
             ),
             FFRoute(
               name: 'BroadcastPage',
@@ -850,8 +918,25 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               asyncParams: {
                 'user': getDoc('users', UsersRecord.serializer),
               },
-              builder: (context, params) => PostCollageWidget(
-                user: params.getParam('user', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: PostCollageWidget(
+                  user: params.getParam('user', ParamType.Document),
+                ),
+              ),
+            ),
+            FFRoute(
+              name: 'gallery',
+              path: 'gallery',
+              requireAuth: true,
+              asyncParams: {
+                'restaurant':
+                    getDoc('restaurants', RestaurantsRecord.serializer),
+              },
+              builder: (context, params) => GalleryWidget(
+                restaurant: params.getParam('restaurant', ParamType.Document),
+                restaurantRef: params.getParam('restaurantRef',
+                    ParamType.DocumentReference, 'restaurants'),
               ),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
@@ -1026,11 +1111,9 @@ class FFRoute {
           final child = appStateNotifier.loading
               ? Container(
                   color: Colors.transparent,
-                  child: Builder(
-                    builder: (context) => Image.asset(
-                      'assets/images/login_screen_1.png',
-                      fit: BoxFit.cover,
-                    ),
+                  child: Image.asset(
+                    'assets/images/login_screen_1.png',
+                    fit: BoxFit.cover,
                   ),
                 )
               : PushNotificationsHandler(

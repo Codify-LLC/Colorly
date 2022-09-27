@@ -22,15 +22,10 @@ class AddTriviaWidget extends StatefulWidget {
 
 class _AddTriviaWidgetState extends State<AddTriviaWidget> {
   TextEditingController? textController1;
-
   TextEditingController? textField1Controller;
-
   TextEditingController? textField2Controller;
-
   TextEditingController? textField3Controller;
-
   TextEditingController? textField4Controller;
-
   TriviaRecord? triviaOutput;
 
   @override
@@ -41,6 +36,16 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
     textField2Controller = TextEditingController();
     textField3Controller = TextEditingController();
     textField4Controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController1?.dispose();
+    textField1Controller?.dispose();
+    textField2Controller?.dispose();
+    textField3Controller?.dispose();
+    textField4Controller?.dispose();
+    super.dispose();
   }
 
   @override

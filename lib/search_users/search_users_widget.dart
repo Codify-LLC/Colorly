@@ -22,12 +22,11 @@ class SearchUsersWidget extends StatefulWidget {
 
 class _SearchUsersWidgetState extends State<SearchUsersWidget>
     with TickerProviderStateMixin {
-  TextEditingController? textController;
-
   PagingController<DocumentSnapshot?, UsersRecord>? _pagingController;
   Query? _pagingQuery;
   List<StreamSubscription?> _streamSubscriptions = [];
 
+  TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final animationsMap = {
     'circleImageOnPageLoadAnimation': AnimationInfo(
@@ -60,6 +59,7 @@ class _SearchUsersWidgetState extends State<SearchUsersWidget>
   @override
   void dispose() {
     _streamSubscriptions.forEach((s) => s?.cancel());
+    textController?.dispose();
     super.dispose();
   }
 

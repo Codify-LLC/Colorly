@@ -68,11 +68,9 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
   Widget build(BuildContext context) => _loading
       ? Container(
           color: Colors.transparent,
-          child: Builder(
-            builder: (context) => Image.asset(
-              'assets/images/login_screen_1.png',
-              fit: BoxFit.cover,
-            ),
+          child: Image.asset(
+            'assets/images/login_screen_1.png',
+            fit: BoxFit.cover,
           ),
         )
       : widget.child;
@@ -80,6 +78,7 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
 
 final pageBuilderMap = <String, Future<Widget> Function(Map<String, dynamic>)>{
   'login': (data) async => LoginWidget(),
+  'createAccount': (data) async => CreateAccountWidget(),
   'searchResults': (data) async => SearchResultsWidget(),
   'explore': (data) async => hasMatchingParameters(
           data, {'restaurants', 'posts', 'addNumber', 'addNumberRef'})
@@ -93,7 +92,11 @@ final pageBuilderMap = <String, Future<Widget> Function(Map<String, dynamic>)>{
           addNumberRef: getParameter(data, 'addNumberRef'),
         )
       : NavBarPage(initialPage: 'explore'),
-  'createAccount': (data) async => CreateAccountWidget(),
+  'addStoryPage': (data) async => AddStoryPageWidget(
+        user: await getDocumentParameter(data, 'user', UsersRecord.serializer),
+        restaurant: await getDocumentParameter(
+            data, 'restaurant', RestaurantsRecord.serializer),
+      ),
   'restaurantDetails': (data) async => RestaurantDetailsWidget(
         restaurant: getParameter(data, 'restaurant'),
         posts:
@@ -109,11 +112,6 @@ final pageBuilderMap = <String, Future<Widget> Function(Map<String, dynamic>)>{
             data, 'restaurantrec', RestaurantsRecord.serializer),
         integer: getParameter(data, 'integer'),
         initialIndex: getParameter(data, 'initialIndex'),
-      ),
-  'addStoryPage': (data) async => AddStoryPageWidget(
-        user: await getDocumentParameter(data, 'user', UsersRecord.serializer),
-        restaurant: await getDocumentParameter(
-            data, 'restaurant', RestaurantsRecord.serializer),
       ),
   'userProfile': (data) async => hasMatchingParameters(
           data, {'posts', 'user', 'friends', 'post', 'likes'})
@@ -348,9 +346,9 @@ final pageBuilderMap = <String, Future<Widget> Function(Map<String, dynamic>)>{
         restaurant: await getDocumentParameter(
             data, 'restaurant', RestaurantsRecord.serializer),
       ),
-  'wallet': (data) async => WalletWidget(),
   'draftVideos': (data) async => DraftVideosWidget(),
   'orderTransactions': (data) async => OrderTransactionsWidget(),
+  'wallet': (data) async => WalletWidget(),
   'orderStatus': (data) async => OrderStatusWidget(
         order:
             await getDocumentParameter(data, 'order', OrderRecord.serializer),
@@ -364,6 +362,11 @@ final pageBuilderMap = <String, Future<Widget> Function(Map<String, dynamic>)>{
       ),
   'postCollage': (data) async => PostCollageWidget(
         user: await getDocumentParameter(data, 'user', UsersRecord.serializer),
+      ),
+  'gallery': (data) async => GalleryWidget(
+        restaurant: await getDocumentParameter(
+            data, 'restaurant', RestaurantsRecord.serializer),
+        restaurantRef: getParameter(data, 'restaurantRef'),
       ),
 };
 

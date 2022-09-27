@@ -925,7 +925,9 @@ class _NearbyRestaurantsWidgetState extends State<NearbyRestaurantsWidget> {
                                                                     ),
                                                                   );
                                                                 },
-                                                              );
+                                                              ).then((value) =>
+                                                                  setState(
+                                                                      () {}));
                                                             },
                                                           ),
                                                         ),

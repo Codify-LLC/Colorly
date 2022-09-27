@@ -27,6 +27,12 @@ class _GiftFizzzCopyWidgetState extends State<GiftFizzzCopyWidget> {
   }
 
   @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),

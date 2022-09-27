@@ -25,10 +25,9 @@ class ChooseRestaurantWidget extends StatefulWidget {
 }
 
 class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
-  TextEditingController? textController;
-
-  List<RestaurantsRecord> simpleSearchResults = [];
   LatLng? currentUserLocationValue;
+  List<RestaurantsRecord> simpleSearchResults = [];
+  TextEditingController? textController;
 
   @override
   void initState() {
@@ -36,6 +35,12 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
         .then((loc) => setState(() => currentUserLocationValue = loc));
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override

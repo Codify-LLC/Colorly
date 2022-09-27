@@ -117,7 +117,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget>
                           ),
                         );
                       },
-                    );
+                    ).then((value) => setState(() {}));
                   },
                   text: FFLocalizations.of(context).getText(
                     'q3634yci' /* Button */,
@@ -598,7 +598,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget>
                                 child: DeleteAccountWidget(),
                               );
                             },
-                          );
+                          ).then((value) => setState(() {}));
                         },
                       ),
                     ],
@@ -1418,7 +1418,9 @@ class _UserProfileWidgetState extends State<UserProfileWidget>
                                                                       ),
                                                                     );
                                                                   },
-                                                                );
+                                                                ).then((value) =>
+                                                                    setState(
+                                                                        () {}));
                                                               },
                                                               onLongPress:
                                                                   () async {
@@ -1444,7 +1446,9 @@ class _UserProfileWidgetState extends State<UserProfileWidget>
                                                                       ),
                                                                     );
                                                                   },
-                                                                );
+                                                                ).then((value) =>
+                                                                    setState(
+                                                                        () {}));
                                                               },
                                                               child: ClipRRect(
                                                                 borderRadius:
@@ -2106,7 +2110,9 @@ class _UserProfileWidgetState extends State<UserProfileWidget>
                                                                   ),
                                                                 );
                                                               },
-                                                            );
+                                                            ).then((value) =>
+                                                                setState(
+                                                                    () {}));
                                                           },
                                                           child: Container(
                                                             width: MediaQuery.of(

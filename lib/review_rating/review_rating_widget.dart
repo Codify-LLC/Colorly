@@ -185,7 +185,7 @@ class _ReviewRatingWidgetState extends State<ReviewRatingWidget> {
                                                   ),
                                                 );
                                               },
-                                            );
+                                            ).then((value) => setState(() {}));
                                           },
                                           text: FFLocalizations.of(context)
                                               .getText(

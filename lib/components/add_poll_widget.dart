@@ -21,17 +21,12 @@ class AddPollWidget extends StatefulWidget {
 }
 
 class _AddPollWidgetState extends State<AddPollWidget> {
-  TextEditingController? textController1;
-
-  TextEditingController? textField1Controller;
-
-  TextEditingController? textField2Controller;
-
-  TextEditingController? textField3Controller;
-
-  TextEditingController? textField4Controller;
-
   PollRecord? pollOutput;
+  TextEditingController? textController1;
+  TextEditingController? textField1Controller;
+  TextEditingController? textField2Controller;
+  TextEditingController? textField3Controller;
+  TextEditingController? textField4Controller;
 
   @override
   void initState() {
@@ -41,6 +36,16 @@ class _AddPollWidgetState extends State<AddPollWidget> {
     textField2Controller = TextEditingController();
     textField3Controller = TextEditingController();
     textField4Controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController1?.dispose();
+    textField1Controller?.dispose();
+    textField2Controller?.dispose();
+    textField3Controller?.dispose();
+    textField4Controller?.dispose();
+    super.dispose();
   }
 
   @override

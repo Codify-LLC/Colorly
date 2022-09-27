@@ -586,7 +586,8 @@ class _VideoScreenWidgetState extends State<VideoScreenWidget>
                                                                                 ),
                                                                               );
                                                                             },
-                                                                          );
+                                                                          ).then((value) =>
+                                                                              setState(() {}));
                                                                         },
                                                                         child:
                                                                             FlutterFlowVideoPlayer(
@@ -759,7 +760,8 @@ class _VideoScreenWidgetState extends State<VideoScreenWidget>
                                                                               ),
                                                                             );
                                                                           },
-                                                                        );
+                                                                        ).then((value) =>
+                                                                            setState(() {}));
                                                                       },
                                                                       child:
                                                                           Container(
@@ -877,7 +879,9 @@ class _VideoScreenWidgetState extends State<VideoScreenWidget>
                                                                           ),
                                                                         );
                                                                       },
-                                                                    );
+                                                                    ).then((value) =>
+                                                                        setState(
+                                                                            () {}));
                                                                   },
                                                                 ),
                                                               ),
@@ -1261,7 +1265,9 @@ class _VideoScreenWidgetState extends State<VideoScreenWidget>
                                                                     ),
                                                                   );
                                                                 },
-                                                              );
+                                                              ).then((value) =>
+                                                                  setState(
+                                                                      () {}));
                                                             },
                                                             child: Text(
                                                               pageViewPostsRecord
@@ -1520,7 +1526,8 @@ class _VideoScreenWidgetState extends State<VideoScreenWidget>
                                                                                   ),
                                                                                 );
                                                                               },
-                                                                            );
+                                                                            ).then((value) =>
+                                                                                setState(() {}));
                                                                           },
                                                                           child:
                                                                               Row(
@@ -1555,7 +1562,7 @@ class _VideoScreenWidgetState extends State<VideoScreenWidget>
                                                                                         ),
                                                                                       );
                                                                                     },
-                                                                                  );
+                                                                                  ).then((value) => setState(() {}));
                                                                                 },
                                                                                 child: Icon(
                                                                                   Icons.fastfood_rounded,
@@ -1627,7 +1634,8 @@ class _VideoScreenWidgetState extends State<VideoScreenWidget>
                                                                               ),
                                                                             );
                                                                           },
-                                                                        );
+                                                                        ).then((value) =>
+                                                                            setState(() {}));
                                                                       },
                                                                       child:
                                                                           Row(
@@ -1650,7 +1658,7 @@ class _VideoScreenWidgetState extends State<VideoScreenWidget>
                                                                                     ),
                                                                                   );
                                                                                 },
-                                                                              );
+                                                                              ).then((value) => setState(() {}));
                                                                             },
                                                                             child:
                                                                                 Icon(

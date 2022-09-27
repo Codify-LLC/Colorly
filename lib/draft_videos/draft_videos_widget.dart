@@ -213,7 +213,7 @@ class _DraftVideosWidgetState extends State<DraftVideosWidget> {
                                             ),
                                           );
                                         },
-                                      );
+                                      ).then((value) => setState(() {}));
                                     },
                                     child: Container(
                                       width: MediaQuery.of(context).size.width,

@@ -80,7 +80,7 @@ class _GiftorbuyWidgetState extends State<GiftorbuyWidget> {
                         child: GiftFizzzCopyWidget(),
                       );
                     },
-                  );
+                  ).then((value) => setState(() {}));
                 },
                 text: FFLocalizations.of(context).getText(
                   '0ulvon2s' /* Buy */,

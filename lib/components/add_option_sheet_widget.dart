@@ -31,13 +31,10 @@ class AddOptionSheetWidget extends StatefulWidget {
 }
 
 class _AddOptionSheetWidgetState extends State<AddOptionSheetWidget> {
-  TextEditingController? textController1;
-
-  TextEditingController? textController2;
-
-  TextEditingController? textController3;
-
   PageController? pageViewController;
+  TextEditingController? textController1;
+  TextEditingController? textController2;
+  TextEditingController? textController3;
 
   @override
   void initState() {
@@ -45,6 +42,14 @@ class _AddOptionSheetWidgetState extends State<AddOptionSheetWidget> {
     textController1 = TextEditingController();
     textController2 = TextEditingController();
     textController3 = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController1?.dispose();
+    textController2?.dispose();
+    textController3?.dispose();
+    super.dispose();
   }
 
   @override

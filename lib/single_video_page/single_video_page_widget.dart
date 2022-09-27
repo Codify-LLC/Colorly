@@ -558,7 +558,8 @@ class _SingleVideoPageWidgetState extends State<SingleVideoPageWidget>
                                                               ),
                                                             );
                                                           },
-                                                        );
+                                                        ).then((value) =>
+                                                            setState(() {}));
                                                       },
                                                       child:
                                                           FlutterFlowVideoPlayer(
@@ -779,7 +780,8 @@ class _SingleVideoPageWidgetState extends State<SingleVideoPageWidget>
                                                             ),
                                                           );
                                                         },
-                                                      );
+                                                      ).then((value) =>
+                                                          setState(() {}));
                                                     },
                                                     child: Container(
                                                       width: 54,
@@ -865,7 +867,8 @@ class _SingleVideoPageWidgetState extends State<SingleVideoPageWidget>
                                                     ),
                                                   );
                                                 },
-                                              );
+                                              ).then(
+                                                  (value) => setState(() {}));
                                             },
                                           ),
                                         ),
@@ -1190,7 +1193,7 @@ class _SingleVideoPageWidgetState extends State<SingleVideoPageWidget>
                                                 ),
                                               );
                                             },
-                                          );
+                                          ).then((value) => setState(() {}));
                                         },
                                         child: Text(
                                           widget.post!.description!
@@ -1402,7 +1405,8 @@ class _SingleVideoPageWidgetState extends State<SingleVideoPageWidget>
                                                               ),
                                                             );
                                                           },
-                                                        );
+                                                        ).then((value) =>
+                                                            setState(() {}));
                                                       },
                                                       child: Row(
                                                         mainAxisSize:
@@ -1460,7 +1464,9 @@ class _SingleVideoPageWidgetState extends State<SingleVideoPageWidget>
                                                                     ),
                                                                   );
                                                                 },
-                                                              );
+                                                              ).then((value) =>
+                                                                  setState(
+                                                                      () {}));
                                                             },
                                                             child: Icon(
                                                               Icons
@@ -1535,7 +1541,8 @@ class _SingleVideoPageWidgetState extends State<SingleVideoPageWidget>
                                                           ),
                                                         );
                                                       },
-                                                    );
+                                                    ).then((value) =>
+                                                        setState(() {}));
                                                   },
                                                   child: Row(
                                                     mainAxisSize:
@@ -1563,7 +1570,8 @@ class _SingleVideoPageWidgetState extends State<SingleVideoPageWidget>
                                                                 ),
                                                               );
                                                             },
-                                                          );
+                                                          ).then((value) =>
+                                                              setState(() {}));
                                                         },
                                                         child: Icon(
                                                           Icons

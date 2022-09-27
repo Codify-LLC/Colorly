@@ -1,12 +1,12 @@
 // Export pages
 export 'login/login_widget.dart' show LoginWidget;
+export 'create_account/create_account_widget.dart' show CreateAccountWidget;
 export 'home_page/home_page_widget.dart' show HomePageWidget;
 export 'search_results/search_results_widget.dart' show SearchResultsWidget;
 export 'explore/explore_widget.dart' show ExploreWidget;
-export 'create_account/create_account_widget.dart' show CreateAccountWidget;
+export 'add_story_page/add_story_page_widget.dart' show AddStoryPageWidget;
 export 'restaurant_details/restaurant_details_widget.dart'
     show RestaurantDetailsWidget;
-export 'add_story_page/add_story_page_widget.dart' show AddStoryPageWidget;
 export 'user_profile/user_profile_widget.dart' show UserProfileWidget;
 export 'view_profile_other/view_profile_other_widget.dart'
     show ViewProfileOtherWidget;
@@ -74,13 +74,14 @@ export 'nearby_restaurants/nearby_restaurants_widget.dart'
     show NearbyRestaurantsWidget;
 export 'restaurant_orders/restaurant_orders_widget.dart'
     show RestaurantOrdersWidget;
-export 'wallet/wallet_widget.dart' show WalletWidget;
 export 'draft_videos/draft_videos_widget.dart' show DraftVideosWidget;
 export 'order_transactions/order_transactions_widget.dart'
     show OrderTransactionsWidget;
+export 'wallet/wallet_widget.dart' show WalletWidget;
 export 'order_status/order_status_widget.dart' show OrderStatusWidget;
 export 'order_success/order_success_widget.dart' show OrderSuccessWidget;
 export 'streams_page/streams_page_widget.dart' show StreamsPageWidget;
 export 'broadcast_page/broadcast_page_widget.dart' show BroadcastPageWidget;
 export 'live_video_page/live_video_page_widget.dart' show LiveVideoPageWidget;
 export 'post_collage/post_collage_widget.dart' show PostCollageWidget;
+export 'gallery/gallery_widget.dart' show GalleryWidget;

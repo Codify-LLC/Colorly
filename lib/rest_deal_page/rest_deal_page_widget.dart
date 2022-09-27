@@ -214,7 +214,8 @@ class _RestDealPageWidgetState extends State<RestDealPageWidget> {
                                                           ),
                                                         );
                                                       },
-                                                    );
+                                                    ).then((value) =>
+                                                        setState(() {}));
                                                   },
                                                   child: Row(
                                                     mainAxisSize:
@@ -707,7 +708,8 @@ class _RestDealPageWidgetState extends State<RestDealPageWidget> {
                                                     ),
                                                   );
                                                 },
-                                              );
+                                              ).then(
+                                                  (value) => setState(() {}));
                                             },
                                             child: Container(
                                               width: MediaQuery.of(context)

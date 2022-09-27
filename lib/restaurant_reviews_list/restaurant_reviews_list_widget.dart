@@ -578,7 +578,8 @@ class _RestaurantReviewsListWidgetState
                                                                                   ),
                                                                                 );
                                                                               },
-                                                                            );
+                                                                            ).then((value) =>
+                                                                                setState(() {}));
                                                                           },
                                                                           child:
                                                                               FlutterFlowVideoPlayer(
@@ -748,7 +749,8 @@ class _RestaurantReviewsListWidgetState
                                                                                 ),
                                                                               );
                                                                             },
-                                                                          );
+                                                                          ).then((value) =>
+                                                                              setState(() {}));
                                                                         },
                                                                         child:
                                                                             Container(
@@ -865,7 +867,9 @@ class _RestaurantReviewsListWidgetState
                                                                             ),
                                                                           );
                                                                         },
-                                                                      );
+                                                                      ).then((value) =>
+                                                                          setState(
+                                                                              () {}));
                                                                     },
                                                                   ),
                                                                 ),
@@ -1259,7 +1263,9 @@ class _RestaurantReviewsListWidgetState
                                                                         ),
                                                                       );
                                                                     },
-                                                                  );
+                                                                  ).then((value) =>
+                                                                      setState(
+                                                                          () {}));
                                                                 },
                                                                 child: Text(
                                                                   pageViewPostsRecord
@@ -1499,7 +1505,7 @@ class _RestaurantReviewsListWidgetState
                                                                                       ),
                                                                                     );
                                                                                   },
-                                                                                );
+                                                                                ).then((value) => setState(() {}));
                                                                               },
                                                                               child: Row(
                                                                                 mainAxisSize: MainAxisSize.max,
@@ -1532,7 +1538,7 @@ class _RestaurantReviewsListWidgetState
                                                                                             ),
                                                                                           );
                                                                                         },
-                                                                                      );
+                                                                                      ).then((value) => setState(() {}));
                                                                                     },
                                                                                     child: Icon(
                                                                                       Icons.fastfood_rounded,
@@ -1596,7 +1602,7 @@ class _RestaurantReviewsListWidgetState
                                                                                       ),
                                                                                     );
                                                                                   },
-                                                                                );
+                                                                                ).then((value) => setState(() {}));
                                                                               },
                                                                               child: Icon(
                                                                                 Icons.mode_comment_outlined,

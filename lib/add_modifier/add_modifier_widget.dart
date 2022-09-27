@@ -26,7 +26,6 @@ class AddModifierWidget extends StatefulWidget {
 
 class _AddModifierWidgetState extends State<AddModifierWidget> {
   TextEditingController? textController;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -34,6 +33,12 @@ class _AddModifierWidgetState extends State<AddModifierWidget> {
     super.initState();
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'addModifier'});
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override

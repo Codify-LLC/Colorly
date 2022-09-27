@@ -293,7 +293,8 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                                     ),
                                                   );
                                                 },
-                                              );
+                                              ).then(
+                                                  (value) => setState(() {}));
                                             },
                                             text: '',
                                             icon: FaIcon(

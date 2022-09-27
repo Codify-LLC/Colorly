@@ -24,17 +24,12 @@ class EditDealWidget extends StatefulWidget {
 }
 
 class _EditDealWidgetState extends State<EditDealWidget> {
-  TextEditingController? textController1;
-
-  bool? switchListTileValue1;
-
-  TextEditingController? textController2;
-
-  TextEditingController? textController3;
-
-  TextEditingController? textController4;
-
   DateTime? datePicked;
+  TextEditingController? textController1;
+  bool? switchListTileValue1;
+  TextEditingController? textController2;
+  TextEditingController? textController3;
+  TextEditingController? textController4;
   bool? switchListTileValue2;
 
   @override
@@ -44,6 +39,15 @@ class _EditDealWidgetState extends State<EditDealWidget> {
     textController2 = TextEditingController(text: widget.deal!.details);
     textController3 = TextEditingController(text: widget.deal!.conditions);
     textController4 = TextEditingController(text: widget.deal!.code);
+  }
+
+  @override
+  void dispose() {
+    textController1?.dispose();
+    textController2?.dispose();
+    textController3?.dispose();
+    textController4?.dispose();
+    super.dispose();
   }
 
   @override

@@ -92,6 +92,49 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
   },
+  // createAccount
+  {
+    'a71da90s': {
+      'en': 'Welcome,',
+      'es': 'Bienvenidos,',
+    },
+    '0om3kvb5': {
+      'en': 'Create your account below, or',
+      'es': 'Cree su cuenta a continuación, o',
+    },
+    'mld28txl': {
+      'en': 'Login',
+      'es': 'Acceso',
+    },
+    '0lhqopte': {
+      'en': 'Your email...',
+      'es': 'Tu correo electrónico...',
+    },
+    'tlbu70y2': {
+      'en': 'Password',
+      'es': 'Contraseña',
+    },
+    'kabx20i9': {
+      'en': 'Confirm Password',
+      'es': 'Confirmar contraseña',
+    },
+    'nb5oacbr': {
+      'en': 'Create Account',
+      'es': 'Crear una cuenta',
+    },
+    'wo6xyqu0': {
+      'en': 'Agree to ',
+      'es': 'De acuerdo con',
+    },
+    'unbtu568': {
+      'en': 'Terms & Conditions',
+      'es': 'Términos y condiciones',
+    },
+    'xm32ozns': {
+      'en': 'Home',
+      'es': '',
+    },
+  },
   // homePage
   {
     '1t2uo9tm': {
@@ -293,45 +336,45 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
   },
-  // createAccount
+  // addStoryPage
   {
-    'a71da90s': {
-      'en': 'Welcome,',
-      'es': 'Bienvenidos,',
+    '5f9uhtv9': {
+      'en': 'Campaign Name',
+      'es': 'Nombre de campaña',
     },
-    '0om3kvb5': {
-      'en': 'Create your account below, or',
-      'es': 'Cree su cuenta a continuación, o',
+    'lok62mpw': {
+      'en': 'Campaign Name',
+      'es': 'Nombre de campaña',
     },
-    'mld28txl': {
-      'en': 'Login',
-      'es': 'Acceso',
+    '1ft47jdq': {
+      'en': 'Website Link',
+      'es': 'Enlace de página web',
     },
-    '0lhqopte': {
-      'en': 'Your email...',
-      'es': 'Tu correo electrónico...',
+    'ewgvzio4': {
+      'en': 'Campaign Name',
+      'es': 'Nombre de campaña',
     },
-    'tlbu70y2': {
-      'en': 'Password',
-      'es': 'Contraseña',
+    's2xl4pxv': {
+      'en': 'https://',
+      'es': 'https://',
     },
-    'kabx20i9': {
-      'en': 'Confirm Password',
-      'es': 'Confirmar contraseña',
+    '3iuuviir': {
+      'en': 'Add Comment....',
+      'es': 'Agregar comentario....',
     },
-    'nb5oacbr': {
-      'en': 'Create Account',
-      'es': 'Crear una cuenta',
+    '7y7xkdja': {
+      'en': 'Video',
+      'es': 'Video',
     },
-    'wo6xyqu0': {
-      'en': 'Agree to ',
-      'es': 'De acuerdo con',
+    'ii9wvyqr': {
+      'en': 'Add Story',
+      'es': 'Agregar historia',
     },
-    'unbtu568': {
-      'en': 'Terms & Conditions',
-      'es': 'Términos y condiciones',
+    '862rtn8c': {
+      'en': 'Add Story',
+      'es': '',
     },
-    'xm32ozns': {
+    '5nf94ual': {
       'en': 'Home',
       'es': '',
     },
@@ -459,49 +502,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': 'Enviar opinión',
     },
     'k72dqonh': {
-      'en': 'Home',
-      'es': '',
-    },
-  },
-  // addStoryPage
-  {
-    '5f9uhtv9': {
-      'en': 'Campaign Name',
-      'es': 'Nombre de campaña',
-    },
-    'lok62mpw': {
-      'en': 'Campaign Name',
-      'es': 'Nombre de campaña',
-    },
-    '1ft47jdq': {
-      'en': 'Website Link',
-      'es': 'Enlace de página web',
-    },
-    'ewgvzio4': {
-      'en': 'Campaign Name',
-      'es': 'Nombre de campaña',
-    },
-    's2xl4pxv': {
-      'en': 'https://',
-      'es': 'https://',
-    },
-    '3iuuviir': {
-      'en': 'Add Comment....',
-      'es': 'Agregar comentario....',
-    },
-    '7y7xkdja': {
-      'en': 'Video',
-      'es': 'Video',
-    },
-    'ii9wvyqr': {
-      'en': 'Add Story',
-      'es': 'Agregar historia',
-    },
-    '862rtn8c': {
-      'en': 'Add Story',
-      'es': '',
-    },
-    '5nf94ual': {
       'en': 'Home',
       'es': '',
     },
@@ -2167,6 +2167,36 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
   },
+  // draftVideos
+  {
+    'rwanjnyu': {
+      'en': 'Drafts',
+      'es': '',
+    },
+    '802i3cf0': {
+      'en': 'Home',
+      'es': '',
+    },
+  },
+  // orderTransactions
+  {
+    'xuzvarxo': {
+      'en': 'Active',
+      'es': '',
+    },
+    'cizoefnt': {
+      'en': 'Completed',
+      'es': '',
+    },
+    's3vxa02g': {
+      'en': 'Order History',
+      'es': '',
+    },
+    'aebr4v5f': {
+      'en': 'Home',
+      'es': '',
+    },
+  },
   // wallet
   {
     '9gj0etpd': {
@@ -2210,36 +2240,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
     '9hnw9ery': {
-      'en': 'Home',
-      'es': '',
-    },
-  },
-  // draftVideos
-  {
-    'rwanjnyu': {
-      'en': 'Drafts',
-      'es': '',
-    },
-    '802i3cf0': {
-      'en': 'Home',
-      'es': '',
-    },
-  },
-  // orderTransactions
-  {
-    'xuzvarxo': {
-      'en': 'Active',
-      'es': '',
-    },
-    'cizoefnt': {
-      'en': 'Completed',
-      'es': '',
-    },
-    's3vxa02g': {
-      'en': 'Order History',
-      'es': '',
-    },
-    'aebr4v5f': {
       'en': 'Home',
       'es': '',
     },
@@ -2375,6 +2375,17 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
     '7adqm3x1': {
+      'en': 'Home',
+      'es': '',
+    },
+  },
+  // gallery
+  {
+    'svjs0en5': {
+      'en': 'Gallery',
+      'es': '',
+    },
+    '1u1j51t0': {
       'en': 'Home',
       'es': '',
     },

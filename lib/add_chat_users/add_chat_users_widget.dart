@@ -30,7 +30,6 @@ class _AddChatUsersWidgetState extends State<AddChatUsersWidget> {
           .toList();
 
   TextEditingController? textController;
-
   ChatsRecord? groupChat;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -40,6 +39,12 @@ class _AddChatUsersWidgetState extends State<AddChatUsersWidget> {
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'addChatUsers'});
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override

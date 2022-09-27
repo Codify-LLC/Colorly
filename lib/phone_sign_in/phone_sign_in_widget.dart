@@ -15,7 +15,6 @@ class PhoneSignInWidget extends StatefulWidget {
 
 class _PhoneSignInWidgetState extends State<PhoneSignInWidget> {
   TextEditingController? phoneNumberController;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -28,6 +27,12 @@ class _PhoneSignInWidgetState extends State<PhoneSignInWidget> {
             'mwm5ejka' /* +1 */,
           );
         }));
+  }
+
+  @override
+  void dispose() {
+    phoneNumberController?.dispose();
+    super.dispose();
   }
 
   @override

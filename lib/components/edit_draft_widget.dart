@@ -33,16 +33,21 @@ class EditDraftWidget extends StatefulWidget {
 }
 
 class _EditDraftWidgetState extends State<EditDraftWidget> {
-  TextEditingController? textController;
-
   String uploadedFileUrl1 = '';
   String uploadedFileUrl2 = '';
+  TextEditingController? textController;
   double? ratingBarValue;
 
   @override
   void initState() {
     super.initState();
     textController = TextEditingController(text: widget.postDraft!.description);
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override

@@ -35,6 +35,12 @@ class _CommentsWidgetState extends State<CommentsWidget> {
   }
 
   @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       height: 563,

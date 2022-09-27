@@ -26,10 +26,8 @@ class AddMenuCourseWidget extends StatefulWidget {
 }
 
 class _AddMenuCourseWidgetState extends State<AddMenuCourseWidget> {
-  TextEditingController? textController1;
-
   String uploadedFileUrl = '';
-
+  TextEditingController? textController1;
   TextEditingController? textController2;
 
   @override
@@ -37,6 +35,13 @@ class _AddMenuCourseWidgetState extends State<AddMenuCourseWidget> {
     super.initState();
     textController1 = TextEditingController();
     textController2 = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController1?.dispose();
+    textController2?.dispose();
+    super.dispose();
   }
 
   @override

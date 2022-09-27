@@ -201,7 +201,8 @@ class _DealPageWidgetState extends State<DealPageWidget> {
                                                           ),
                                                         );
                                                       },
-                                                    );
+                                                    ).then((value) =>
+                                                        setState(() {}));
                                                   },
                                                   child: Row(
                                                     mainAxisSize:
@@ -687,7 +688,7 @@ class _DealPageWidgetState extends State<DealPageWidget> {
                                                   ),
                                                 );
                                               },
-                                            );
+                                            ).then((value) => setState(() {}));
                                           },
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
@@ -753,7 +754,9 @@ class _DealPageWidgetState extends State<DealPageWidget> {
                                                                         ),
                                                                       );
                                                                     },
-                                                                  );
+                                                                  ).then((value) =>
+                                                                      setState(
+                                                                          () {}));
                                                                 },
                                                                 child:
                                                                     Container(
