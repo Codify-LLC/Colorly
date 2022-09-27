@@ -48,45 +48,47 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryDark,
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: StreamBuilder<List<PostsRecord>>(
-          stream: queryPostsRecord(
-            queryBuilder: (postsRecord) => postsRecord
-                .where('isFlagged', isEqualTo: false)
-                .orderBy('created_at', descending: true),
-          ),
-          builder: (context, snapshot) {
-            // Customize what your widget looks like when it's loading.
-            if (!snapshot.hasData) {
-              return Center(
-                child: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: SpinKitThreeBounce(
-                    color: FlutterFlowTheme.of(context).primaryColor,
-                    size: 30,
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: StreamBuilder<List<PostsRecord>>(
+            stream: queryPostsRecord(
+              queryBuilder: (postsRecord) => postsRecord
+                  .where('isFlagged', isEqualTo: false)
+                  .orderBy('created_at', descending: true),
+            ),
+            builder: (context, snapshot) {
+              // Customize what your widget looks like when it's loading.
+              if (!snapshot.hasData) {
+                return Center(
+                  child: SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: SpinKitThreeBounce(
+                      color: FlutterFlowTheme.of(context).primaryColor,
+                      size: 30,
+                    ),
                   ),
-                ),
-              );
-            }
-            List<PostsRecord> preloadVideoPlayerCopyPostsRecordList =
-                snapshot.data!;
-            return Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 1,
-              child: custom_widgets.PreloadVideoPlayerCopy(
+                );
+              }
+              List<PostsRecord> preloadVideoPlayerCopyPostsRecordList =
+                  snapshot.data!;
+              return Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 1,
-                itemCount: preloadVideoPlayerCopyPostsRecordList.length,
-                preLoadPagesCount: 4,
-                autoplay: true,
-                looping: true,
-                allowFullScreen: true,
-                post: preloadVideoPlayerCopyPostsRecordList.toList(),
-              ),
-            );
-          },
+                child: custom_widgets.PreloadVideoPlayerCopy(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 1,
+                  itemCount: preloadVideoPlayerCopyPostsRecordList.length,
+                  preLoadPagesCount: 4,
+                  autoplay: true,
+                  looping: true,
+                  allowFullScreen: true,
+                  post: preloadVideoPlayerCopyPostsRecordList.toList(),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

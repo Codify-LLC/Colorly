@@ -49,6 +49,7 @@ class _PreloadVideoPlayerCopyState extends State<PreloadVideoPlayerCopy> {
   void initState() {
     super.initState();
     foregroundFlagList = List.filled(widget.itemCount, false, growable: false);
+    foregroundFlagList[0] = true;
   }
 
   @override
@@ -150,7 +151,7 @@ class _FlutterFlowVideoPlayerState extends State<FlutterFlowVideoPlayer> {
           : widget.height!;
 
   double get aspectRatio =>
-      _chewieController?.videoPlayerController?.value?.aspectRatio ??
+      _chewieController?.videoPlayerController.value.aspectRatio ??
       kDefaultAspectRatio;
 
   Future initializePlayer() async {
@@ -175,31 +176,39 @@ class _FlutterFlowVideoPlayerState extends State<FlutterFlowVideoPlayer> {
     setState(() {});
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Future playOrPause() async {
     if (_chewieController != null &&
         _chewieController!.videoPlayerController.value.isInitialized) {
       widget.foreground
-          ? _videoPlayerController!.play
-          : _videoPlayerController!.pause;
+          ? await _videoPlayerController!.play()
+          : await _videoPlayerController!.pause();
     }
-    return FittedBox(
-      fit: BoxFit.cover,
-      child: SizedBox(
-        height: height,
-        width: width,
-        child: _chewieController != null &&
-                _chewieController!.videoPlayerController.value.isInitialized
-            ? Chewie(controller: _chewieController!)
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 20),
-                  Text('Loading'),
-                ],
-              ),
-      ),
-    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: playOrPause(),
+        builder: (context, snapshot) {
+          return FittedBox(
+            fit: BoxFit.cover,
+            child: SizedBox(
+              height: height,
+              width: width,
+              child: _chewieController != null &&
+                      _chewieController!
+                          .videoPlayerController.value.isInitialized
+                  ? Chewie(controller: _chewieController!)
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 20),
+                        Text('Loading'),
+                      ],
+                    ),
+            ),
+          );
+        });
   }
 }
