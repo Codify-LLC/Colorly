@@ -2558,17 +2558,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
   },
-  // homePageCopy
-  {
-    'cz518bkg': {
-      'en': 'Reply',
-      'es': '',
-    },
-    'ckh3yv54': {
-      'en': 'Home',
-      'es': '',
-    },
-  },
   // indyOnly
   {
     'nvogr7bm': {

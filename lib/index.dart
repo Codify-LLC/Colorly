@@ -119,6 +119,4 @@ export '/pages/user_pages/draft_videos/draft_videos_widget.dart'
 export '/pages/profile_home/profile_home_widget.dart' show ProfileHomeWidget;
 export '/pages/toggle_notifications/toggle_notifications_widget.dart'
     show ToggleNotificationsWidget;
-export '/pages/home_page_copy/home_page_copy_widget.dart'
-    show HomePageCopyWidget;
 export '/pages/indy_only/indy_only_widget.dart' show IndyOnlyWidget;

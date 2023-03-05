@@ -944,22 +944,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => ToggleNotificationsWidget(),
             ),
             FFRoute(
-              name: 'homePageCopy',
-              path: 'homePageCopy',
-              requireAuth: true,
-              asyncParams: {
-                'user': getDoc(['users'], UsersRecord.serializer),
-                'posts': getDoc(['posts'], PostsRecord.serializer),
-              },
-              builder: (context, params) => HomePageCopyWidget(
-                numLikes: params.getParam('numLikes', ParamType.int),
-                user: params.getParam('user', ParamType.Document),
-                posts: params.getParam('posts', ParamType.Document),
-                users: params.getParam(
-                    'users', ParamType.DocumentReference, false, ['users']),
-              ),
-            ),
-            FFRoute(
               name: 'indyOnly',
               path: 'indyOnly',
               requireAuth: true,
