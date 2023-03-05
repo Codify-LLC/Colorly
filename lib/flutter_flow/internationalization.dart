@@ -2312,13 +2312,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
   },
-  // homePageTest
-  {
-    'o1pw258z': {
-      'en': 'Home',
-      'es': '',
-    },
-  },
   // LiveVideoPage
   {
     'klwbmc9j': {

@@ -142,7 +142,6 @@ class _NavBarPageState extends State<NavBarPage> {
       'chatMain': ChatMainWidget(),
       'searchUsers': SearchUsersWidget(),
       'userProfile': UserProfileWidget(),
-      'homePageTest': HomePageTestWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
     return Scaffold(
@@ -233,24 +232,6 @@ class _NavBarPageState extends State<NavBarPage> {
             ),
             iconSize: 24.0,
             backgroundGradient: currentIndex == 4
-                ? LinearGradient(
-                    colors: [
-                      FlutterFlowTheme.of(context).primaryColor,
-                      Color(0xFF874E00)
-                    ],
-                    stops: [0.0, 1.0],
-                    begin: AlignmentDirectional(1.0, -1.0),
-                    end: AlignmentDirectional(-1.0, 1.0),
-                  )
-                : null,
-          ),
-          GButton(
-            icon: Icons.home_outlined,
-            text: FFLocalizations.of(context).getText(
-              'o1pw258z' /* Home */,
-            ),
-            iconSize: 28.0,
-            backgroundGradient: currentIndex == 5
                 ? LinearGradient(
                     colors: [
                       FlutterFlowTheme.of(context).primaryColor,

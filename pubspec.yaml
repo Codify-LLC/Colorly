@@ -115,7 +115,6 @@ dependencies:
   percent_indicator: 4.2.2
   photo_view: 0.14.0
   plugin_platform_interface: 2.1.3
-  preload_page_view:
   provider: 6.0.4
   rxdart: 0.27.4
   share_plus: 2.1.4

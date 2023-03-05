@@ -864,24 +864,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'homePageTest',
-              path: 'homePageTest',
-              requireAuth: true,
-              asyncParams: {
-                'user': getDoc(['users'], UsersRecord.serializer),
-                'posts': getDoc(['posts'], PostsRecord.serializer),
-              },
-              builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'homePageTest')
-                  : HomePageTestWidget(
-                      numLikes: params.getParam('numLikes', ParamType.int),
-                      user: params.getParam('user', ParamType.Document),
-                      posts: params.getParam('posts', ParamType.Document),
-                      users: params.getParam('users',
-                          ParamType.DocumentReference, false, ['users']),
-                    ),
-            ),
-            FFRoute(
               name: 'LiveVideoPage',
               path: 'liveVideoPage',
               requireAuth: true,
