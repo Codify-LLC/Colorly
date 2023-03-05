@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:webviewx/webviewx.dart';
+import 'package:webviewx_plus/webviewx_plus.dart';
 
 class FlutterFlowWebView extends StatefulWidget {
   const FlutterFlowWebView({

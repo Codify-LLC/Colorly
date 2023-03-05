@@ -7,16 +7,31 @@ import 'package:flutter/material.dart';
 const _kDynamicLinksUrl = 'https://colorlyapp.page.link';
 const _kAppId = 'com.colorlyinc.colorlyapp';
 
-Future<String> generateCurrentPageLink(BuildContext context) async {
+Future<String> generateCurrentPageLink(
+  BuildContext context, {
+  String? title,
+  String? description,
+  String? imageUrl,
+  bool isShortLink = true,
+}) async {
   final dynamicLinkParams = DynamicLinkParameters(
     link: Uri.parse('$_kDynamicLinksUrl${GoRouter.of(context).location}'),
     uriPrefix: _kDynamicLinksUrl,
     androidParameters: const AndroidParameters(packageName: _kAppId),
     iosParameters: const IOSParameters(bundleId: _kAppId),
+    socialMetaTagParameters: SocialMetaTagParameters(
+      title: title,
+      description: description,
+      imageUrl: imageUrl != null ? Uri.tryParse(imageUrl) : null,
+    ),
   );
-  return FirebaseDynamicLinks.instance
-      .buildLink(dynamicLinkParams)
-      .then((link) => link.toString());
+  return isShortLink
+      ? FirebaseDynamicLinks.instance
+          .buildShortLink(dynamicLinkParams)
+          .then((link) => link.shortUrl.toString())
+      : FirebaseDynamicLinks.instance
+          .buildLink(dynamicLinkParams)
+          .then((link) => link.toString());
 }
 
 class DynamicLinksHandler extends StatefulWidget {
@@ -33,7 +48,7 @@ class _DynamicLinksHandlerState extends State<DynamicLinksHandler> {
 
   static Set<String> kInitialLinks = {};
 
-  Future handleOpenedPushNotification() async {
+  Future handleOpenedDynamicLink() async {
     final linkData = await FirebaseDynamicLinks.instance.getInitialLink();
     final link = linkData?.link.toString();
     if (linkData != null && link != null && !kInitialLinks.contains(link)) {
@@ -56,7 +71,7 @@ class _DynamicLinksHandlerState extends State<DynamicLinksHandler> {
   void initState() {
     super.initState();
     if (!isWeb) {
-      handleOpenedPushNotification();
+      handleOpenedDynamicLink();
     }
   }
 

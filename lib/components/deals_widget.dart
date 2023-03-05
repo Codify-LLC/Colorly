@@ -1,9 +1,12 @@
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'deals_model.dart';
+export 'deals_model.dart';
 
 class DealsWidget extends StatefulWidget {
   const DealsWidget({
@@ -18,8 +21,33 @@ class DealsWidget extends StatefulWidget {
 }
 
 class _DealsWidgetState extends State<DealsWidget> {
+  late DealsModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => DealsModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -28,7 +56,7 @@ class _DealsWidgetState extends State<DealsWidget> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 0.0, 0.0),
                 child: Text(
                   FFLocalizations.of(context).getText(
                     '5r03fm32' /* Expiring Soon */,
@@ -58,11 +86,11 @@ class _DealsWidgetState extends State<DealsWidget> {
                     if (!snapshot.hasData) {
                       return Center(
                         child: SizedBox(
-                          width: 30,
-                          height: 30,
+                          width: 30.0,
+                          height: 30.0,
                           child: SpinKitThreeBounce(
                             color: FlutterFlowTheme.of(context).primaryColor,
-                            size: 30,
+                            size: 30.0,
                           ),
                         ),
                       );
@@ -77,43 +105,43 @@ class _DealsWidgetState extends State<DealsWidget> {
                         final listViewDealsRecord =
                             listViewDealsRecordList[listViewIndex];
                         return Stack(
-                          alignment: AlignmentDirectional(0, 0),
+                          alignment: AlignmentDirectional(0.0, 0.0),
                           children: [
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 12.0, 16.0, 0.0),
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.86,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   boxShadow: [
                                     BoxShadow(
-                                      blurRadius: 3,
+                                      blurRadius: 3.0,
                                       color: Color(0x25000000),
-                                      offset: Offset(0, 2),
+                                      offset: Offset(0.0, 2.0),
                                     )
                                   ],
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(8.0),
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          4, 4, 4, 4),
+                                          4.0, 4.0, 4.0, 4.0),
                                       child: Container(
-                                        width: 4,
-                                        height: 90,
+                                        width: 4.0,
+                                        height: 90.0,
                                         decoration: BoxDecoration(
                                           color: Color(0xFFFFEE47),
                                           borderRadius:
-                                              BorderRadius.circular(4),
+                                              BorderRadius.circular(4.0),
                                         ),
                                       ),
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          12, 12, 16, 12),
+                                          12.0, 12.0, 16.0, 12.0),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,
                                         crossAxisAlignment:
@@ -126,14 +154,14 @@ class _DealsWidgetState extends State<DealsWidget> {
                                                 .override(
                                                   fontFamily: 'Lexend Deca',
                                                   color: Color(0xFF090F13),
-                                                  fontSize: 22,
+                                                  fontSize: 22.0,
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                           ),
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    0, 4, 0, 0),
+                                                    0.0, 4.0, 0.0, 0.0),
                                             child: Text(
                                               listViewDealsRecord.details!,
                                               style: FlutterFlowTheme.of(
@@ -142,7 +170,7 @@ class _DealsWidgetState extends State<DealsWidget> {
                                                   .override(
                                                     fontFamily: 'Lexend Deca',
                                                     color: Color(0xFF090F13),
-                                                    fontSize: 14,
+                                                    fontSize: 14.0,
                                                     fontWeight:
                                                         FontWeight.normal,
                                                   ),
@@ -151,16 +179,22 @@ class _DealsWidgetState extends State<DealsWidget> {
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    0, 4, 0, 0),
+                                                    0.0, 4.0, 0.0, 0.0),
                                             child: Text(
-                                              'Until ${dateTimeFormat('MMMEd', listViewDealsRecord.expiry)}',
+                                              'Until ${dateTimeFormat(
+                                                'MMMEd',
+                                                listViewDealsRecord.expiry,
+                                                locale:
+                                                    FFLocalizations.of(context)
+                                                        .languageCode,
+                                              )}',
                                               style: FlutterFlowTheme.of(
                                                       context)
                                                   .bodyText1
                                                   .override(
                                                     fontFamily: 'Lexend Deca',
                                                     color: Color(0xFF4B39EF),
-                                                    fontSize: 14,
+                                                    fontSize: 14.0,
                                                     fontWeight:
                                                         FontWeight.normal,
                                                   ),
@@ -171,22 +205,22 @@ class _DealsWidgetState extends State<DealsWidget> {
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          30, 0, 0, 0),
+                                          30.0, 0.0, 0.0, 0.0),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           Container(
-                                            width: 5,
-                                            height: 10,
+                                            width: 5.0,
+                                            height: 10.0,
                                             decoration: BoxDecoration(
                                               color: Color(0xFFEEEEEE),
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(8.0),
                                             ),
                                           ),
                                           Container(
-                                            width: 5,
-                                            height: 5,
+                                            width: 5.0,
+                                            height: 5.0,
                                             decoration: BoxDecoration(
                                               color:
                                                   FlutterFlowTheme.of(context)
@@ -194,17 +228,17 @@ class _DealsWidgetState extends State<DealsWidget> {
                                             ),
                                           ),
                                           Container(
-                                            width: 5,
-                                            height: 10,
+                                            width: 5.0,
+                                            height: 10.0,
                                             decoration: BoxDecoration(
                                               color: Color(0xFFEEEEEE),
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(8.0),
                                             ),
                                           ),
                                           Container(
-                                            width: 5,
-                                            height: 5,
+                                            width: 5.0,
+                                            height: 5.0,
                                             decoration: BoxDecoration(
                                               color:
                                                   FlutterFlowTheme.of(context)
@@ -212,17 +246,17 @@ class _DealsWidgetState extends State<DealsWidget> {
                                             ),
                                           ),
                                           Container(
-                                            width: 5,
-                                            height: 10,
+                                            width: 5.0,
+                                            height: 10.0,
                                             decoration: BoxDecoration(
                                               color: Color(0xFFEEEEEE),
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(8.0),
                                             ),
                                           ),
                                           Container(
-                                            width: 5,
-                                            height: 5,
+                                            width: 5.0,
+                                            height: 5.0,
                                             decoration: BoxDecoration(
                                               color:
                                                   FlutterFlowTheme.of(context)
@@ -230,17 +264,17 @@ class _DealsWidgetState extends State<DealsWidget> {
                                             ),
                                           ),
                                           Container(
-                                            width: 5,
-                                            height: 10,
+                                            width: 5.0,
+                                            height: 10.0,
                                             decoration: BoxDecoration(
                                               color: Color(0xFFEEEEEE),
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(8.0),
                                             ),
                                           ),
                                           Container(
-                                            width: 5,
-                                            height: 5,
+                                            width: 5.0,
+                                            height: 5.0,
                                             decoration: BoxDecoration(
                                               color:
                                                   FlutterFlowTheme.of(context)
@@ -248,17 +282,17 @@ class _DealsWidgetState extends State<DealsWidget> {
                                             ),
                                           ),
                                           Container(
-                                            width: 5,
-                                            height: 10,
+                                            width: 5.0,
+                                            height: 10.0,
                                             decoration: BoxDecoration(
                                               color: Color(0xFFEEEEEE),
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(8.0),
                                             ),
                                           ),
                                           Container(
-                                            width: 5,
-                                            height: 5,
+                                            width: 5.0,
+                                            height: 5.0,
                                             decoration: BoxDecoration(
                                               color:
                                                   FlutterFlowTheme.of(context)
@@ -266,17 +300,17 @@ class _DealsWidgetState extends State<DealsWidget> {
                                             ),
                                           ),
                                           Container(
-                                            width: 5,
-                                            height: 10,
+                                            width: 5.0,
+                                            height: 10.0,
                                             decoration: BoxDecoration(
                                               color: Color(0xFFEEEEEE),
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(8.0),
                                             ),
                                           ),
                                           Container(
-                                            width: 5,
-                                            height: 5,
+                                            width: 5.0,
+                                            height: 5.0,
                                             decoration: BoxDecoration(
                                               color:
                                                   FlutterFlowTheme.of(context)
@@ -284,12 +318,12 @@ class _DealsWidgetState extends State<DealsWidget> {
                                             ),
                                           ),
                                           Container(
-                                            width: 5,
-                                            height: 10,
+                                            width: 5.0,
+                                            height: 10.0,
                                             decoration: BoxDecoration(
                                               color: Color(0xFFEEEEEE),
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(8.0),
                                             ),
                                           ),
                                         ],
@@ -300,19 +334,19 @@ class _DealsWidgetState extends State<DealsWidget> {
                               ),
                             ),
                             Align(
-                              alignment: AlignmentDirectional(1, 0),
+                              alignment: AlignmentDirectional(1.0, 0.0),
                               child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 10.0, 0.0, 0.0),
                                 child: Container(
-                                  width: 50,
-                                  height: 50,
+                                  width: 50.0,
+                                  height: 50.0,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
                                         .primaryDark,
                                     boxShadow: [
                                       BoxShadow(
-                                        blurRadius: 1,
+                                        blurRadius: 1.0,
                                         color: FlutterFlowTheme.of(context)
                                             .primaryDark,
                                       )
@@ -323,10 +357,10 @@ class _DealsWidgetState extends State<DealsWidget> {
                               ),
                             ),
                             Align(
-                              alignment: AlignmentDirectional(0.6, 0),
+                              alignment: AlignmentDirectional(0.6, 0.0),
                               child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 10.0, 0.0, 0.0),
                                 child: StreamBuilder<RestaurantsRecord>(
                                   stream: RestaurantsRecord.getDocument(
                                       listViewDealsRecord.restRef!),
@@ -335,12 +369,12 @@ class _DealsWidgetState extends State<DealsWidget> {
                                     if (!snapshot.hasData) {
                                       return Center(
                                         child: SizedBox(
-                                          width: 30,
-                                          height: 30,
+                                          width: 30.0,
+                                          height: 30.0,
                                           child: SpinKitThreeBounce(
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryColor,
-                                            size: 30,
+                                            size: 30.0,
                                           ),
                                         ),
                                       );
@@ -348,8 +382,8 @@ class _DealsWidgetState extends State<DealsWidget> {
                                     final circleImageRestaurantsRecord =
                                         snapshot.data!;
                                     return Container(
-                                      width: 60,
-                                      height: 60,
+                                      width: 60.0,
+                                      height: 60.0,
                                       clipBehavior: Clip.antiAlias,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
@@ -375,7 +409,7 @@ class _DealsWidgetState extends State<DealsWidget> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 0.0, 0.0),
                 child: Text(
                   FFLocalizations.of(context).getText(
                     'a3oyv7ri' /* Current Offers */,
@@ -393,7 +427,7 @@ class _DealsWidgetState extends State<DealsWidget> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 30.0),
                   child: StreamBuilder<List<DealsRecord>>(
                     stream: queryDealsRecord(
                       queryBuilder: (dealsRecord) => dealsRecord.where(
@@ -405,11 +439,11 @@ class _DealsWidgetState extends State<DealsWidget> {
                       if (!snapshot.hasData) {
                         return Center(
                           child: SizedBox(
-                            width: 30,
-                            height: 30,
+                            width: 30.0,
+                            height: 30.0,
                             child: SpinKitThreeBounce(
                               color: FlutterFlowTheme.of(context).primaryColor,
-                              size: 30,
+                              size: 30.0,
                             ),
                           ),
                         );
@@ -425,11 +459,11 @@ class _DealsWidgetState extends State<DealsWidget> {
                           final listViewDealsRecord =
                               listViewDealsRecordList[listViewIndex];
                           return Stack(
-                            alignment: AlignmentDirectional(0, 0),
+                            alignment: AlignmentDirectional(0.0, 0.0),
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    16, 12, 16, 0),
+                                    16.0, 12.0, 16.0, 0.0),
                                 child: Container(
                                   width:
                                       MediaQuery.of(context).size.width * 0.86,
@@ -437,32 +471,32 @@ class _DealsWidgetState extends State<DealsWidget> {
                                     color: Colors.white,
                                     boxShadow: [
                                       BoxShadow(
-                                        blurRadius: 3,
+                                        blurRadius: 3.0,
                                         color: Color(0x25000000),
-                                        offset: Offset(0, 2),
+                                        offset: Offset(0.0, 2.0),
                                       )
                                     ],
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(8.0),
                                   ),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            4, 4, 4, 4),
+                                            4.0, 4.0, 4.0, 4.0),
                                         child: Container(
-                                          width: 4,
-                                          height: 90,
+                                          width: 4.0,
+                                          height: 90.0,
                                           decoration: BoxDecoration(
                                             color: Color(0xFF43C643),
                                             borderRadius:
-                                                BorderRadius.circular(4),
+                                                BorderRadius.circular(4.0),
                                           ),
                                         ),
                                       ),
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            12, 12, 16, 12),
+                                            12.0, 12.0, 16.0, 12.0),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment:
@@ -476,13 +510,13 @@ class _DealsWidgetState extends State<DealsWidget> {
                                                   .override(
                                                     fontFamily: 'Lexend Deca',
                                                     color: Color(0xFF090F13),
-                                                    fontSize: 22,
+                                                    fontSize: 22.0,
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                             ),
                                             Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 4, 0, 0),
+                                                  .fromSTEB(0.0, 4.0, 0.0, 0.0),
                                               child: Text(
                                                 listViewDealsRecord.details!,
                                                 style: FlutterFlowTheme.of(
@@ -491,7 +525,7 @@ class _DealsWidgetState extends State<DealsWidget> {
                                                     .override(
                                                       fontFamily: 'Lexend Deca',
                                                       color: Color(0xFF090F13),
-                                                      fontSize: 14,
+                                                      fontSize: 14.0,
                                                       fontWeight:
                                                           FontWeight.normal,
                                                     ),
@@ -499,16 +533,22 @@ class _DealsWidgetState extends State<DealsWidget> {
                                             ),
                                             Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 4, 0, 0),
+                                                  .fromSTEB(0.0, 4.0, 0.0, 0.0),
                                               child: Text(
-                                                'Until ${dateTimeFormat('MMMEd', listViewDealsRecord.expiry)}',
+                                                'Until ${dateTimeFormat(
+                                                  'MMMEd',
+                                                  listViewDealsRecord.expiry,
+                                                  locale: FFLocalizations.of(
+                                                          context)
+                                                      .languageCode,
+                                                )}',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyText1
                                                     .override(
                                                       fontFamily: 'Lexend Deca',
                                                       color: Color(0xFF4B39EF),
-                                                      fontSize: 14,
+                                                      fontSize: 14.0,
                                                       fontWeight:
                                                           FontWeight.normal,
                                                     ),
@@ -519,22 +559,22 @@ class _DealsWidgetState extends State<DealsWidget> {
                                       ),
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            30, 0, 0, 0),
+                                            30.0, 0.0, 0.0, 0.0),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Container(
-                                              width: 5,
-                                              height: 10,
+                                              width: 5.0,
+                                              height: 10.0,
                                               decoration: BoxDecoration(
                                                 color: Color(0xFFEEEEEE),
                                                 borderRadius:
-                                                    BorderRadius.circular(5),
+                                                    BorderRadius.circular(5.0),
                                               ),
                                             ),
                                             Container(
-                                              width: 5,
-                                              height: 5,
+                                              width: 5.0,
+                                              height: 5.0,
                                               decoration: BoxDecoration(
                                                 color:
                                                     FlutterFlowTheme.of(context)
@@ -542,17 +582,17 @@ class _DealsWidgetState extends State<DealsWidget> {
                                               ),
                                             ),
                                             Container(
-                                              width: 5,
-                                              height: 10,
+                                              width: 5.0,
+                                              height: 10.0,
                                               decoration: BoxDecoration(
                                                 color: Color(0xFFEEEEEE),
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                    BorderRadius.circular(8.0),
                                               ),
                                             ),
                                             Container(
-                                              width: 5,
-                                              height: 5,
+                                              width: 5.0,
+                                              height: 5.0,
                                               decoration: BoxDecoration(
                                                 color:
                                                     FlutterFlowTheme.of(context)
@@ -560,17 +600,17 @@ class _DealsWidgetState extends State<DealsWidget> {
                                               ),
                                             ),
                                             Container(
-                                              width: 5,
-                                              height: 10,
+                                              width: 5.0,
+                                              height: 10.0,
                                               decoration: BoxDecoration(
                                                 color: Color(0xFFEEEEEE),
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                    BorderRadius.circular(8.0),
                                               ),
                                             ),
                                             Container(
-                                              width: 5,
-                                              height: 5,
+                                              width: 5.0,
+                                              height: 5.0,
                                               decoration: BoxDecoration(
                                                 color:
                                                     FlutterFlowTheme.of(context)
@@ -578,17 +618,17 @@ class _DealsWidgetState extends State<DealsWidget> {
                                               ),
                                             ),
                                             Container(
-                                              width: 5,
-                                              height: 10,
+                                              width: 5.0,
+                                              height: 10.0,
                                               decoration: BoxDecoration(
                                                 color: Color(0xFFEEEEEE),
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                    BorderRadius.circular(8.0),
                                               ),
                                             ),
                                             Container(
-                                              width: 5,
-                                              height: 5,
+                                              width: 5.0,
+                                              height: 5.0,
                                               decoration: BoxDecoration(
                                                 color:
                                                     FlutterFlowTheme.of(context)
@@ -596,17 +636,17 @@ class _DealsWidgetState extends State<DealsWidget> {
                                               ),
                                             ),
                                             Container(
-                                              width: 5,
-                                              height: 10,
+                                              width: 5.0,
+                                              height: 10.0,
                                               decoration: BoxDecoration(
                                                 color: Color(0xFFEEEEEE),
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                    BorderRadius.circular(8.0),
                                               ),
                                             ),
                                             Container(
-                                              width: 5,
-                                              height: 5,
+                                              width: 5.0,
+                                              height: 5.0,
                                               decoration: BoxDecoration(
                                                 color:
                                                     FlutterFlowTheme.of(context)
@@ -614,17 +654,17 @@ class _DealsWidgetState extends State<DealsWidget> {
                                               ),
                                             ),
                                             Container(
-                                              width: 5,
-                                              height: 10,
+                                              width: 5.0,
+                                              height: 10.0,
                                               decoration: BoxDecoration(
                                                 color: Color(0xFFEEEEEE),
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                    BorderRadius.circular(8.0),
                                               ),
                                             ),
                                             Container(
-                                              width: 5,
-                                              height: 5,
+                                              width: 5.0,
+                                              height: 5.0,
                                               decoration: BoxDecoration(
                                                 color:
                                                     FlutterFlowTheme.of(context)
@@ -632,12 +672,12 @@ class _DealsWidgetState extends State<DealsWidget> {
                                               ),
                                             ),
                                             Container(
-                                              width: 5,
-                                              height: 10,
+                                              width: 5.0,
+                                              height: 10.0,
                                               decoration: BoxDecoration(
                                                 color: Color(0xFFEEEEEE),
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                    BorderRadius.circular(8.0),
                                               ),
                                             ),
                                           ],
@@ -648,19 +688,19 @@ class _DealsWidgetState extends State<DealsWidget> {
                                 ),
                               ),
                               Align(
-                                alignment: AlignmentDirectional(1, 0),
+                                alignment: AlignmentDirectional(1.0, 0.0),
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 10, 0, 0),
+                                      0.0, 10.0, 0.0, 0.0),
                                   child: Container(
-                                    width: 50,
-                                    height: 50,
+                                    width: 50.0,
+                                    height: 50.0,
                                     decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
                                           .primaryDark,
                                       boxShadow: [
                                         BoxShadow(
-                                          blurRadius: 1,
+                                          blurRadius: 1.0,
                                           color: FlutterFlowTheme.of(context)
                                               .primaryDark,
                                         )
@@ -671,13 +711,13 @@ class _DealsWidgetState extends State<DealsWidget> {
                                 ),
                               ),
                               Align(
-                                alignment: AlignmentDirectional(0.6, 0),
+                                alignment: AlignmentDirectional(0.6, 0.0),
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 10, 0, 0),
+                                      0.0, 10.0, 0.0, 0.0),
                                   child: Container(
-                                    width: 60,
-                                    height: 60,
+                                    width: 60.0,
+                                    height: 60.0,
                                     clipBehavior: Clip.antiAlias,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,

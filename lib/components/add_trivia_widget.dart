@@ -1,12 +1,15 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '/auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'add_trivia_model.dart';
+export 'add_trivia_model.dart';
 
 class AddTriviaWidget extends StatefulWidget {
   const AddTriviaWidget({
@@ -21,35 +24,38 @@ class AddTriviaWidget extends StatefulWidget {
 }
 
 class _AddTriviaWidgetState extends State<AddTriviaWidget> {
-  TextEditingController? textController1;
-  TextEditingController? textField1Controller;
-  TextEditingController? textField2Controller;
-  TextEditingController? textField3Controller;
-  TextEditingController? textField4Controller;
-  TriviaRecord? triviaOutput;
+  late AddTriviaModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
 
   @override
   void initState() {
     super.initState();
-    textController1 = TextEditingController();
-    textField1Controller = TextEditingController();
-    textField2Controller = TextEditingController();
-    textField3Controller = TextEditingController();
-    textField4Controller = TextEditingController();
+    _model = createModel(context, () => AddTriviaModel());
+
+    _model.textController1 ??= TextEditingController();
+    _model.textField1Controller ??= TextEditingController();
+    _model.textField2Controller ??= TextEditingController();
+    _model.textField3Controller ??= TextEditingController();
+    _model.textField4Controller ??= TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
-    textController1?.dispose();
-    textField1Controller?.dispose();
-    textField2Controller?.dispose();
-    textField3Controller?.dispose();
-    textField4Controller?.dispose();
+    _model.maybeDispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<List<RestaurantsRecord>>(
       stream: queryRestaurantsRecord(),
       builder: (context, snapshot) {
@@ -57,11 +63,11 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 30,
-              height: 30,
+              width: 30.0,
+              height: 30.0,
               child: SpinKitThreeBounce(
                 color: FlutterFlowTheme.of(context).primaryColor,
-                size: 30,
+                size: 30.0,
               ),
             ),
           );
@@ -70,37 +76,38 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
             snapshot.data!;
         return Container(
           width: double.infinity,
-          height: 500,
+          height: 500.0,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).primaryColor,
             boxShadow: [
               BoxShadow(
-                blurRadius: 5,
+                blurRadius: 5.0,
                 color: Color(0x411D2429),
-                offset: Offset(0, -2),
+                offset: Offset(0.0, -2.0),
               )
             ],
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(0),
-              bottomRight: Radius.circular(0),
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
+              bottomLeft: Radius.circular(0.0),
+              bottomRight: Radius.circular(0.0),
+              topLeft: Radius.circular(16.0),
+              topRight: Radius.circular(16.0),
             ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
                 child: Container(
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
-                    borderRadius: BorderRadius.circular(60),
+                    borderRadius: BorderRadius.circular(60.0),
                   ),
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
                     child: TextFormField(
-                      controller: textController1,
+                      controller: _model.textController1,
                       autofocus: true,
                       obscureText: false,
                       decoration: InputDecoration(
@@ -111,7 +118,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0x00000000),
-                            width: 1,
+                            width: 1.0,
                           ),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(4.0),
@@ -121,7 +128,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0x00000000),
-                            width: 1,
+                            width: 1.0,
                           ),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(4.0),
@@ -131,7 +138,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                         errorBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0x00000000),
-                            width: 1,
+                            width: 1.0,
                           ),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(4.0),
@@ -141,7 +148,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                         focusedErrorBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0x00000000),
-                            width: 1,
+                            width: 1.0,
                           ),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(4.0),
@@ -150,6 +157,8 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).subtitle1,
+                      validator:
+                          _model.textController1Validator.asValidator(context),
                     ),
                   ),
                 ),
@@ -161,17 +170,18 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                 style: FlutterFlowTheme.of(context).bodyText1,
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 0.0),
                 child: Container(
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
-                    borderRadius: BorderRadius.circular(60),
+                    borderRadius: BorderRadius.circular(60.0),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Text(
                           FFLocalizations.of(context).getText(
                             'ffpspgwr' /* 1. */,
@@ -181,10 +191,10 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                       ),
                       Expanded(
                         child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              10.0, 10.0, 10.0, 10.0),
                           child: TextFormField(
-                            controller: textField1Controller,
+                            controller: _model.textField1Controller,
                             autofocus: true,
                             obscureText: false,
                             decoration: InputDecoration(
@@ -195,7 +205,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -205,7 +215,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -215,7 +225,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               errorBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -225,7 +235,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               focusedErrorBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -234,6 +244,8 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               ),
                             ),
                             style: FlutterFlowTheme.of(context).subtitle1,
+                            validator: _model.textField1ControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                       ),
@@ -242,17 +254,18 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 0.0),
                 child: Container(
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
-                    borderRadius: BorderRadius.circular(60),
+                    borderRadius: BorderRadius.circular(60.0),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Text(
                           FFLocalizations.of(context).getText(
                             'wfxiugax' /* 2. */,
@@ -262,10 +275,10 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                       ),
                       Expanded(
                         child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              10.0, 10.0, 10.0, 10.0),
                           child: TextFormField(
-                            controller: textField2Controller,
+                            controller: _model.textField2Controller,
                             autofocus: true,
                             obscureText: false,
                             decoration: InputDecoration(
@@ -276,7 +289,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -286,7 +299,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -296,7 +309,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               errorBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -306,7 +319,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               focusedErrorBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -315,6 +328,8 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               ),
                             ),
                             style: FlutterFlowTheme.of(context).subtitle1,
+                            validator: _model.textField2ControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                       ),
@@ -323,17 +338,18 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 0.0),
                 child: Container(
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
-                    borderRadius: BorderRadius.circular(60),
+                    borderRadius: BorderRadius.circular(60.0),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Text(
                           FFLocalizations.of(context).getText(
                             'zjkk17ni' /* 3. */,
@@ -343,10 +359,10 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                       ),
                       Expanded(
                         child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              10.0, 10.0, 10.0, 10.0),
                           child: TextFormField(
-                            controller: textField3Controller,
+                            controller: _model.textField3Controller,
                             autofocus: true,
                             obscureText: false,
                             decoration: InputDecoration(
@@ -357,7 +373,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -367,7 +383,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -377,7 +393,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               errorBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -387,7 +403,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               focusedErrorBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -396,6 +412,8 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               ),
                             ),
                             style: FlutterFlowTheme.of(context).subtitle1,
+                            validator: _model.textField3ControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                       ),
@@ -404,17 +422,18 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 0.0),
                 child: Container(
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
-                    borderRadius: BorderRadius.circular(60),
+                    borderRadius: BorderRadius.circular(60.0),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Text(
                           FFLocalizations.of(context).getText(
                             'cyf9k341' /* 4. */,
@@ -424,10 +443,10 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                       ),
                       Expanded(
                         child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              10.0, 10.0, 10.0, 10.0),
                           child: TextFormField(
-                            controller: textField4Controller,
+                            controller: _model.textField4Controller,
                             autofocus: true,
                             obscureText: false,
                             decoration: InputDecoration(
@@ -438,7 +457,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -448,7 +467,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -458,7 +477,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               errorBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -468,7 +487,7 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               focusedErrorBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -477,6 +496,8 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                               ),
                             ),
                             style: FlutterFlowTheme.of(context).subtitle1,
+                            validator: _model.textField4ControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                       ),
@@ -485,94 +506,102 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
                 child: FFButtonWidget(
                   onPressed: () async {
                     logFirebaseEvent('ADD_TRIVIA_COMP_DONE_BTN_ON_TAP');
-                    logFirebaseEvent('Button_Backend-Call');
+                    logFirebaseEvent('Button_backend_call');
 
                     final triviaCreateData = createTriviaRecordData(
                       stream: widget.stream!.reference,
                       current: true,
-                      question: textController1!.text,
+                      question: _model.textController1.text,
                     );
                     var triviaRecordReference = TriviaRecord.collection.doc();
                     await triviaRecordReference.set(triviaCreateData);
-                    triviaOutput = TriviaRecord.getDocumentFromData(
+                    _model.triviaOutput = TriviaRecord.getDocumentFromData(
                         triviaCreateData, triviaRecordReference);
-                    if (textField1Controller!.text != null &&
-                        textField1Controller!.text != '') {
-                      logFirebaseEvent('Button_Backend-Call');
+                    if (_model.textField1Controller.text != null &&
+                        _model.textField1Controller.text != '') {
+                      logFirebaseEvent('Button_backend_call');
 
-                      final triviaUpdateData = createTriviaRecordData(
+                      final triviaUpdateData1 = createTriviaRecordData(
                         has1: true,
-                        answer1: textField1Controller!.text,
+                        answer1: _model.textField1Controller.text,
                       );
-                      await triviaOutput!.reference.update(triviaUpdateData);
+                      await _model.triviaOutput!.reference
+                          .update(triviaUpdateData1);
                     } else {
-                      logFirebaseEvent('Button_Backend-Call');
+                      logFirebaseEvent('Button_backend_call');
 
-                      final triviaUpdateData = createTriviaRecordData(
+                      final triviaUpdateData2 = createTriviaRecordData(
                         has1: false,
                       );
-                      await triviaOutput!.reference.update(triviaUpdateData);
+                      await _model.triviaOutput!.reference
+                          .update(triviaUpdateData2);
                     }
 
-                    if (textField2Controller!.text != null &&
-                        textField2Controller!.text != '') {
-                      logFirebaseEvent('Button_Backend-Call');
+                    if (_model.textField2Controller.text != null &&
+                        _model.textField2Controller.text != '') {
+                      logFirebaseEvent('Button_backend_call');
 
-                      final triviaUpdateData = createTriviaRecordData(
+                      final triviaUpdateData3 = createTriviaRecordData(
                         has2: true,
-                        answer2: textField2Controller!.text,
+                        answer2: _model.textField2Controller.text,
                       );
-                      await triviaOutput!.reference.update(triviaUpdateData);
+                      await _model.triviaOutput!.reference
+                          .update(triviaUpdateData3);
                     } else {
-                      logFirebaseEvent('Button_Backend-Call');
+                      logFirebaseEvent('Button_backend_call');
 
-                      final triviaUpdateData = createTriviaRecordData(
+                      final triviaUpdateData4 = createTriviaRecordData(
                         has2: false,
                       );
-                      await triviaOutput!.reference.update(triviaUpdateData);
+                      await _model.triviaOutput!.reference
+                          .update(triviaUpdateData4);
                     }
 
-                    if (textField3Controller!.text != null &&
-                        textField3Controller!.text != '') {
-                      logFirebaseEvent('Button_Backend-Call');
+                    if (_model.textField3Controller.text != null &&
+                        _model.textField3Controller.text != '') {
+                      logFirebaseEvent('Button_backend_call');
 
-                      final triviaUpdateData = createTriviaRecordData(
+                      final triviaUpdateData5 = createTriviaRecordData(
                         has3: true,
-                        answer3: textField3Controller!.text,
+                        answer3: _model.textField3Controller.text,
                       );
-                      await triviaOutput!.reference.update(triviaUpdateData);
+                      await _model.triviaOutput!.reference
+                          .update(triviaUpdateData5);
                     } else {
-                      logFirebaseEvent('Button_Backend-Call');
+                      logFirebaseEvent('Button_backend_call');
 
-                      final triviaUpdateData = createTriviaRecordData(
+                      final triviaUpdateData6 = createTriviaRecordData(
                         has3: false,
                       );
-                      await triviaOutput!.reference.update(triviaUpdateData);
+                      await _model.triviaOutput!.reference
+                          .update(triviaUpdateData6);
                     }
 
-                    if (textField4Controller!.text != null &&
-                        textField4Controller!.text != '') {
-                      logFirebaseEvent('Button_Backend-Call');
+                    if (_model.textField4Controller.text != null &&
+                        _model.textField4Controller.text != '') {
+                      logFirebaseEvent('Button_backend_call');
 
-                      final triviaUpdateData = createTriviaRecordData(
+                      final triviaUpdateData7 = createTriviaRecordData(
                         has4: true,
-                        answer4: textField4Controller!.text,
+                        answer4: _model.textField4Controller.text,
                       );
-                      await triviaOutput!.reference.update(triviaUpdateData);
+                      await _model.triviaOutput!.reference
+                          .update(triviaUpdateData7);
                     } else {
-                      logFirebaseEvent('Button_Backend-Call');
+                      logFirebaseEvent('Button_backend_call');
 
-                      final triviaUpdateData = createTriviaRecordData(
+                      final triviaUpdateData8 = createTriviaRecordData(
                         has4: false,
                       );
-                      await triviaOutput!.reference.update(triviaUpdateData);
+                      await _model.triviaOutput!.reference
+                          .update(triviaUpdateData8);
                     }
 
-                    logFirebaseEvent('Button_Bottom-Sheet');
+                    logFirebaseEvent('Button_bottom_sheet');
                     Navigator.pop(context);
 
                     setState(() {});
@@ -581,8 +610,11 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                     '795uc176' /* Done */,
                   ),
                   options: FFButtonOptions(
-                    width: 130,
-                    height: 40,
+                    width: 130.0,
+                    height: 40.0,
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                     color: FlutterFlowTheme.of(context).primaryColor,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Lexend Deca',
@@ -590,9 +622,9 @@ class _AddTriviaWidgetState extends State<AddTriviaWidget> {
                         ),
                     borderSide: BorderSide(
                       color: FlutterFlowTheme.of(context).btnText,
-                      width: 1,
+                      width: 1.0,
                     ),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
               ),

@@ -24,10 +24,11 @@ abstract class FlutterFlowTheme {
       ? _prefs?.remove(kThemeModeKey)
       : _prefs?.setBool(kThemeModeKey, mode == ThemeMode.dark);
 
-  static FlutterFlowTheme of(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark
-          ? DarkModeTheme()
-          : LightModeTheme();
+  static FlutterFlowTheme of(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? DarkModeTheme()
+        : LightModeTheme();
+  }
 
   late Color primaryColor;
   late Color secondaryColor;
@@ -45,6 +46,14 @@ abstract class FlutterFlowTheme {
   late Color customColor4;
   late Color white;
   late Color background;
+  late Color primaryBtnText;
+  late Color backgroundComponents;
+  late Color grayIcon;
+  late Color gray200;
+  late Color gray600;
+  late Color black600;
+  late Color tertiary400;
+  late Color textColor;
 
   String get title1Family => typography.title1Family;
   TextStyle get title1 => typography.title1;
@@ -69,7 +78,7 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color secondaryColor = const Color(0xFFEE8B60);
   late Color tertiaryColor = const Color(0xFFFFFFFF);
   late Color alternate = const Color(0xFFDBE2E7);
-  late Color primaryBackground = const Color(0xFFF1F4F8);
+  late Color primaryBackground = const Color(0xFFEBEBEB);
   late Color secondaryBackground = const Color(0xFFFFFFFF);
   late Color primaryText = const Color(0xFF14181B);
   late Color secondaryText = const Color(0xFF57636C);
@@ -81,6 +90,14 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color customColor4 = Color(0xFF090F13);
   late Color white = Color(0xFFFFFFFF);
   late Color background = Color(0xFF1D2429);
+  late Color primaryBtnText = Color(0xFFFFFFFF);
+  late Color backgroundComponents = Color(0xFF1D2428);
+  late Color grayIcon = Color(0xFF95A1AC);
+  late Color gray200 = Color(0xFFDBE2E7);
+  late Color gray600 = Color(0xFF262D34);
+  late Color black600 = Color(0xFF090F13);
+  late Color tertiary400 = Color(0xFF39D2C0);
+  late Color textColor = Color(0xFF1E2429);
 }
 
 abstract class Typography {
@@ -110,49 +127,49 @@ class ThemeTypography extends Typography {
         'Lexend Deca',
         color: Color(0xFF303030),
         fontWeight: FontWeight.w600,
-        fontSize: 24,
+        fontSize: 24.0,
       );
   String get title2Family => 'Lexend Deca';
   TextStyle get title2 => GoogleFonts.getFont(
         'Lexend Deca',
         color: Color(0xFF303030),
         fontWeight: FontWeight.w500,
-        fontSize: 22,
+        fontSize: 22.0,
       );
   String get title3Family => 'Lexend Deca';
   TextStyle get title3 => GoogleFonts.getFont(
         'Lexend Deca',
         color: Color(0xFF303030),
         fontWeight: FontWeight.w500,
-        fontSize: 20,
+        fontSize: 20.0,
       );
   String get subtitle1Family => 'Lexend Deca';
   TextStyle get subtitle1 => GoogleFonts.getFont(
         'Lexend Deca',
         color: Color(0xFF757575),
         fontWeight: FontWeight.w500,
-        fontSize: 18,
+        fontSize: 18.0,
       );
   String get subtitle2Family => 'Lexend Deca';
   TextStyle get subtitle2 => GoogleFonts.getFont(
         'Lexend Deca',
         color: Color(0xFF616161),
         fontWeight: FontWeight.normal,
-        fontSize: 16,
+        fontSize: 16.0,
       );
   String get bodyText1Family => 'Lexend Deca';
   TextStyle get bodyText1 => GoogleFonts.getFont(
         'Lexend Deca',
         color: Color(0xFF303030),
         fontWeight: FontWeight.normal,
-        fontSize: 14,
+        fontSize: 14.0,
       );
   String get bodyText2Family => 'Lexend Deca';
   TextStyle get bodyText2 => GoogleFonts.getFont(
         'Lexend Deca',
         color: Color(0xFF424242),
         fontWeight: FontWeight.normal,
-        fontSize: 14,
+        fontSize: 14.0,
       );
 }
 
@@ -173,6 +190,14 @@ class DarkModeTheme extends FlutterFlowTheme {
   late Color customColor4 = Color(0xFF090F13);
   late Color white = Color(0xFFFFFFFF);
   late Color background = Color(0xFF1D2429);
+  late Color primaryBtnText = Color(0xFFFFFFFF);
+  late Color backgroundComponents = Color(0xFF1D2428);
+  late Color grayIcon = Color(0xFF95A1AC);
+  late Color gray200 = Color(0xFFDBE2E7);
+  late Color gray600 = Color(0xFF262D34);
+  late Color black600 = Color(0xFF090F13);
+  late Color tertiary400 = Color(0xFF39D2C0);
+  late Color textColor = Color(0xFF1E2429);
 }
 
 extension TextStyleHelper on TextStyle {

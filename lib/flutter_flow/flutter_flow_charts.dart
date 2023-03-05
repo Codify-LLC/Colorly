@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 export 'package:fl_chart/fl_chart.dart'
-    show BarAreaData, FlDotData, LineChartBarData;
+    show BarAreaData, FlDotData, LineChartBarData, BarChartAlignment;
 
 final _format = (NumberFormat()..significantDigits = 2);
 
@@ -243,12 +243,14 @@ class FlutterFlowPieChart extends StatelessWidget {
                     ? data.radius.first
                     : data.radius[index],
                 borderSide: BorderSide(
-                  color: otherPropsLength == 1
-                      ? data.borderColor.first
-                      : data.borderColor[index],
-                  width: otherPropsLength == 1
-                      ? data.borderWidth.first
-                      : data.borderWidth[index],
+                  color: (otherPropsLength == 1
+                          ? data.borderColor?.first
+                          : data.borderColor?.elementAt(index)) ??
+                      Colors.transparent,
+                  width: (otherPropsLength == 1
+                          ? data.borderWidth?.first
+                          : data.borderWidth?.elementAt(index)) ??
+                      0.0,
                 ),
                 showTitle: sectionLabelType != PieChartSectionLabelType.none,
                 titleStyle: sectionLabelStyle,
@@ -427,15 +429,15 @@ class FFPieChartData {
     required this.values,
     required this.colors,
     required this.radius,
-    this.borderWidth = const [0],
-    this.borderColor = const [Colors.transparent],
+    this.borderWidth,
+    this.borderColor,
   });
 
   final List<dynamic> values;
   final List<Color> colors;
   final List<double> radius;
-  final List<double> borderWidth;
-  final List<Color> borderColor;
+  final List<double>? borderWidth;
+  final List<Color>? borderColor;
 
   List<double> get data => _dataToDouble(values).map((e) => e ?? 0.0).toList();
 }
@@ -449,6 +451,11 @@ List<double?> _dataToDouble(List<dynamic> data) {
   }
   if (data.first is int) {
     return data.map((d) => (d as int).toDouble()).toList();
+  }
+  if (data.first is DateTime) {
+    return data
+        .map((d) => (d as DateTime).millisecondsSinceEpoch.toDouble())
+        .toList();
   }
   if (data.first is String) {
     // First try to parse as doubles

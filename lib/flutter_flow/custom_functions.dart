@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -34,15 +35,23 @@ String getAverageRating(List<PostsRecord>? posts) {
   return '${(ratingsSum / posts.length).toStringAsFixed(1)}';
 }
 
-String getAverageRatingCopy(List<PostsRecord>? posts) {
-  if (posts!.isEmpty) {
-    return '-';
+double? getAverageRatingCopy(List<double>? postRatings) {
+  // get the average of a list
+  if (postRatings != null && !postRatings.isEmpty) {
+    double ave = 0.0;
+    for (double s in postRatings) {
+      if (s.isFinite) {
+        ave = ave + s;
+      } else {
+        int x = 0; // do nothing
+        // yy.x.set();
+      }
+    }
+    ave = ave / postRatings.length;
+    return ave;
+  } else {
+    return 0.0;
   }
-  var ratingsSum = 0.0;
-  for (final post in posts) {
-    ratingsSum += post.userRating!;
-  }
-  return '${(ratingsSum / posts.length).toStringAsFixed(1)}';
 }
 
 LatLng getInitialMapLocation(LatLng? userLocation) {
@@ -137,6 +146,25 @@ String getDistance(
   c = c / su;
   double dis = c * 60 * 1.1515 * 1.609344;
   return dis.toStringAsFixed(2);
+}
+
+double distanceFromIndianapolisCenter(
+  LatLng? userLoc,
+  LatLng? indianapolisCenter,
+) {
+  // get distance between two locations in miles 2 decimal places
+  double su = math.pi / 180;
+  double fu = 52.00000;
+  double us = userLoc!.latitude * su;
+  double rl = indianapolisCenter!.latitude * su;
+  double fe = userLoc.longitude * su;
+  double re = indianapolisCenter.longitude * su;
+  double c = math.sin(us) * math.sin(rl) +
+      math.cos(us) * math.cos(rl) * math.cos(fe - re);
+  c = math.acos(c);
+  c = c / su;
+  double dis = c * 60 * 1.1515 * 1.609344;
+  return dis.toDouble();
 }
 
 double getFizzzPercent(
@@ -317,4 +345,24 @@ double percentage(
     return smallNumber * 100 / bigNumber;
   }
   return -1;
+}
+
+String? convertNumberToDouble(double? number) {
+  // convert double into string
+  if (number == null) {
+    return null;
+  }
+  return double.tryParse(number.toString())?.toString();
+}
+
+double? distanceFromIndianapolis(
+  LatLng? userLocation,
+  LatLng? indianapolisCenter,
+) {
+  // get distance between two points
+  if (userLocation == null || indianapolisCenter == null) return null;
+  double x = userLocation.latitude - indianapolisCenter.latitude;
+  double y = userLocation.longitude - indianapolisCenter.longitude;
+  double distance = math.sqrt(x * x + y * y) * 3960;
+  return distance;
 }

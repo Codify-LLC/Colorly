@@ -1,15 +1,18 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../components/delivery_sheet_widget.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
-import 'package:badges/badges.dart';
+import '/auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/delivery_sheet_widget.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'emptycart_model.dart';
+export 'emptycart_model.dart';
 
 class EmptycartWidget extends StatefulWidget {
   const EmptycartWidget({
@@ -28,12 +31,37 @@ class EmptycartWidget extends StatefulWidget {
 }
 
 class _EmptycartWidgetState extends State<EmptycartWidget> {
+  late EmptycartModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => EmptycartModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
+      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
       child: AuthUserStreamWidget(
-        child: StreamBuilder<List<InCartItemRecord>>(
+        builder: (context) => StreamBuilder<List<InCartItemRecord>>(
           stream: queryInCartItemRecord(
             queryBuilder: (inCartItemRecord) => inCartItemRecord.where(
                 'shoppingBag',
@@ -44,11 +72,11 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
             if (!snapshot.hasData) {
               return Center(
                 child: SizedBox(
-                  width: 30,
-                  height: 30,
+                  width: 30.0,
+                  height: 30.0,
                   child: SpinKitThreeBounce(
                     color: FlutterFlowTheme.of(context).primaryColor,
-                    size: 30,
+                    size: 30.0,
                   ),
                 ),
               );
@@ -56,20 +84,20 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
             List<InCartItemRecord> proPlanInCartItemRecordList = snapshot.data!;
             return Container(
               width: double.infinity,
-              height: 120,
+              height: 145.0,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: FlutterFlowTheme.of(context).secondaryBackground,
                 boxShadow: [
                   BoxShadow(
-                    blurRadius: 7,
+                    blurRadius: 7.0,
                     color: Color(0x32171717),
-                    offset: Offset(0, 3),
+                    offset: Offset(0.0, 3.0),
                   )
                 ],
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.0),
               ),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
                 child: StreamBuilder<UsersRecord>(
                   stream: UsersRecord.getDocument(currentUserReference!),
                   builder: (context, snapshot) {
@@ -77,11 +105,11 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                     if (!snapshot.hasData) {
                       return Center(
                         child: SizedBox(
-                          width: 30,
-                          height: 30,
+                          width: 30.0,
+                          height: 30.0,
                           child: SpinKitThreeBounce(
                             color: FlutterFlowTheme.of(context).primaryColor,
-                            size: 30,
+                            size: 30.0,
                           ),
                         ),
                       );
@@ -93,14 +121,14 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                       children: [
                         Image.asset(
                           'assets/images/shopping-basket-remove_hires.png',
-                          width: 90,
-                          height: 90,
+                          width: 90.0,
+                          height: 90.0,
                           fit: BoxFit.cover,
                         ),
                         Expanded(
                           child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                16.0, 0.0, 0.0, 0.0),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -114,14 +142,15 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                       .subtitle1
                                       .override(
                                         fontFamily: 'Lexend Deca',
-                                        color: Color(0xFF090F13),
-                                        fontSize: 20,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        fontSize: 20.0,
                                         fontWeight: FontWeight.w500,
                                       ),
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 4, 10, 0),
+                                      0.0, 4.0, 10.0, 5.0),
                                   child: Text(
                                     FFLocalizations.of(context).getText(
                                       'dzqmyonk' /* You have items from a differen... */,
@@ -131,14 +160,14 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                         .override(
                                           fontFamily: 'Lexend Deca',
                                           color: Color(0xFF57636C),
-                                          fontSize: 12,
+                                          fontSize: 12.0,
                                           fontWeight: FontWeight.normal,
                                         ),
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 5, 0, 0),
+                                      0.0, 5.0, 0.0, 0.0),
                                   child: StreamBuilder<ShoppingBagRecord>(
                                     stream: ShoppingBagRecord.getDocument(
                                         currentUserDocument!.shoppingBag!),
@@ -147,13 +176,13 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                       if (!snapshot.hasData) {
                                         return Center(
                                           child: SizedBox(
-                                            width: 30,
-                                            height: 30,
+                                            width: 30.0,
+                                            height: 30.0,
                                             child: SpinKitThreeBounce(
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .primaryColor,
-                                              size: 30,
+                                              size: 30.0,
                                             ),
                                           ),
                                         );
@@ -165,7 +194,7 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                         children: [
-                                          Badge(
+                                          badges.Badge(
                                             badgeContent: Text(
                                               formatNumber(
                                                 proPlanInCartItemRecordList
@@ -184,17 +213,18 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                                       ),
                                             ),
                                             showBadge: true,
-                                            shape: BadgeShape.circle,
+                                            shape: badges.BadgeShape.circle,
                                             badgeColor:
                                                 FlutterFlowTheme.of(context)
                                                     .primaryColor,
-                                            elevation: 4,
+                                            elevation: 4.0,
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    8, 8, 8, 8),
-                                            position: BadgePosition.topEnd(),
+                                                    8.0, 8.0, 8.0, 8.0),
+                                            position:
+                                                badges.BadgePosition.topEnd(),
                                             animationType:
-                                                BadgeAnimationType.scale,
+                                                badges.BadgeAnimationType.scale,
                                             toAnimate: true,
                                             child: StreamBuilder<
                                                 List<InCartItemRecord>>(
@@ -211,14 +241,14 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                                 if (!snapshot.hasData) {
                                                   return Center(
                                                     child: SizedBox(
-                                                      width: 30,
-                                                      height: 30,
+                                                      width: 30.0,
+                                                      height: 30.0,
                                                       child: SpinKitThreeBounce(
                                                         color:
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .primaryColor,
-                                                        size: 30,
+                                                        size: 30.0,
                                                       ),
                                                     ),
                                                   );
@@ -231,7 +261,7 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                                     logFirebaseEvent(
                                                         'EMPTYCART_COMP_MY_BAG_BTN_ON_TAP');
                                                     logFirebaseEvent(
-                                                        'Button_Navigate-To');
+                                                        'Button_navigate_to');
 
                                                     context.pushNamed(
                                                         'shoppingCart');
@@ -242,8 +272,16 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                                     'vakr97dy' /* My Bag */,
                                                   ),
                                                   options: FFButtonOptions(
-                                                    width: 100,
-                                                    height: 40,
+                                                    width: 100.0,
+                                                    height: 40.0,
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 0.0,
+                                                                0.0, 0.0),
+                                                    iconPadding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 0.0,
+                                                                0.0, 0.0),
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .primaryColor,
@@ -257,11 +295,11 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                                         ),
                                                     borderSide: BorderSide(
                                                       color: Colors.transparent,
-                                                      width: 1,
+                                                      width: 1.0,
                                                     ),
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            12),
+                                                            12.0),
                                                   ),
                                                 );
                                               },
@@ -272,7 +310,7 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                               logFirebaseEvent(
                                                   'EMPTYCART_COMP__BTN_ON_TAP');
                                               logFirebaseEvent(
-                                                  'Button_Bottom-Sheet');
+                                                  'Button_bottom_sheet');
                                               await showModalBottomSheet(
                                                 isScrollControlled: true,
                                                 backgroundColor:
@@ -284,7 +322,7 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                                         MediaQuery.of(context)
                                                             .viewInsets,
                                                     child: Container(
-                                                      height: 400,
+                                                      height: 400.0,
                                                       child:
                                                           DeliverySheetWidget(
                                                         restaurant:
@@ -301,8 +339,11 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                               FontAwesomeIcons.solidTrashAlt,
                                             ),
                                             options: FFButtonOptions(
-                                              width: 45,
-                                              height: 40,
+                                              height: 40.0,
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                              iconPadding: EdgeInsetsDirectional
+                                                  .fromSTEB(4.0, 0.0, 0.0, 0.0),
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .primaryColor,
@@ -316,10 +357,10 @@ class _EmptycartWidgetState extends State<EmptycartWidget> {
                                                       ),
                                               borderSide: BorderSide(
                                                 color: Colors.transparent,
-                                                width: 1,
+                                                width: 1.0,
                                               ),
                                               borderRadius:
-                                                  BorderRadius.circular(12),
+                                                  BorderRadius.circular(12.0),
                                             ),
                                           ),
                                         ],

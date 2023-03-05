@@ -1,8 +1,8 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +10,10 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:text_search/text_search.dart';
+import 'choose_restaurant_model.dart';
+export 'choose_restaurant_model.dart';
 
 class ChooseRestaurantWidget extends StatefulWidget {
   const ChooseRestaurantWidget({
@@ -25,38 +28,53 @@ class ChooseRestaurantWidget extends StatefulWidget {
 }
 
 class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
+  late ChooseRestaurantModel _model;
+
   LatLng? currentUserLocationValue;
-  List<RestaurantsRecord> simpleSearchResults = [];
-  TextEditingController? textController;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => ChooseRestaurantModel());
+
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
         .then((loc) => setState(() => currentUserLocationValue = loc));
-    textController = TextEditingController();
+    _model.textController ??= TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
-    textController?.dispose();
+    _model.maybeDispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
     if (currentUserLocationValue == null) {
-      return Center(
-        child: SizedBox(
-          width: 30,
-          height: 30,
-          child: SpinKitThreeBounce(
-            color: FlutterFlowTheme.of(context).primaryColor,
-            size: 30,
+      return Container(
+        color: FlutterFlowTheme.of(context).primaryBackground,
+        child: Center(
+          child: SizedBox(
+            width: 30.0,
+            height: 30.0,
+            child: SpinKitThreeBounce(
+              color: FlutterFlowTheme.of(context).primaryColor,
+              size: 30.0,
+            ),
           ),
         ),
       );
     }
+
     return StreamBuilder<List<RestaurantsRecord>>(
       stream: queryRestaurantsRecord(),
       builder: (context, snapshot) {
@@ -64,11 +82,11 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 30,
-              height: 30,
+              width: 30.0,
+              height: 30.0,
               child: SpinKitThreeBounce(
                 color: FlutterFlowTheme.of(context).primaryColor,
-                size: 30,
+                size: 30.0,
               ),
             ),
           );
@@ -77,46 +95,47 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
             snapshot.data!;
         return Container(
           width: double.infinity,
-          height: 320,
+          height: 320.0,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).primaryColor,
             boxShadow: [
               BoxShadow(
-                blurRadius: 5,
+                blurRadius: 5.0,
                 color: Color(0x411D2429),
-                offset: Offset(0, -2),
+                offset: Offset(0.0, -2.0),
               )
             ],
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(0),
-              bottomRight: Radius.circular(0),
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
+              bottomLeft: Radius.circular(0.0),
+              bottomRight: Radius.circular(0.0),
+              topLeft: Radius.circular(16.0),
+              topRight: Radius.circular(16.0),
             ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
                 child: Container(
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
-                    borderRadius: BorderRadius.circular(60),
+                    borderRadius: BorderRadius.circular(60.0),
                   ),
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(20, 5, 10, 5),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(20.0, 5.0, 10.0, 5.0),
                     child: TextFormField(
-                      controller: textController,
+                      controller: _model.textController,
                       onChanged: (_) => EasyDebounce.debounce(
-                        'textController',
+                        '_model.textController',
                         Duration(milliseconds: 200),
                         () async {
                           logFirebaseEvent(
                               'CHOOSE_RESTAURANT_TextField_e0xphe0g_ON_');
-                          logFirebaseEvent('TextField_Simple-Search');
+                          logFirebaseEvent('TextField_simple_search');
                           setState(() {
-                            simpleSearchResults = TextSearch(
+                            _model.simpleSearchResults = TextSearch(
                               buttonFullWidthRestaurantsRecordList
                                   .map(
                                     (record) => TextSearchItem(record, [
@@ -127,7 +146,7 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                                   )
                                   .toList(),
                             )
-                                .search(textController!.text)
+                                .search(_model.textController.text)
                                 .map((r) => r.object)
                                 .take(20)
                                 .toList();
@@ -144,7 +163,7 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0x00000000),
-                            width: 1,
+                            width: 1.0,
                           ),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(4.0),
@@ -154,7 +173,7 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0x00000000),
-                            width: 1,
+                            width: 1.0,
                           ),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(4.0),
@@ -164,7 +183,7 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                         errorBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0x00000000),
-                            width: 1,
+                            width: 1.0,
                           ),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(4.0),
@@ -174,7 +193,7 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                         focusedErrorBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0x00000000),
-                            width: 1,
+                            width: 1.0,
                           ),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(4.0),
@@ -183,6 +202,8 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
+                      validator:
+                          _model.textControllerValidator.asValidator(context),
                     ),
                   ),
                 ),
@@ -190,7 +211,7 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
               Expanded(
                 child: Builder(
                   builder: (context) {
-                    final restaurants = simpleSearchResults.toList();
+                    final restaurants = _model.simpleSearchResults.toList();
                     return ListView.builder(
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,
@@ -199,13 +220,13 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                       itemBuilder: (context, restaurantsIndex) {
                         final restaurantsItem = restaurants[restaurantsIndex];
                         return Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              10.0, 10.0, 10.0, 10.0),
                           child: InkWell(
                             onTap: () async {
                               logFirebaseEvent(
                                   'CHOOSE_RESTAURANT_COMP_menuItem_ON_TAP');
-                              logFirebaseEvent('menuItem_Backend-Call');
+                              logFirebaseEvent('menuItem_backend_call');
 
                               final streamsUpdateData = createStreamsRecordData(
                                 restaurant: restaurantsItem.reference,
@@ -213,37 +234,38 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                               );
                               await widget.stream!.reference
                                   .update(streamsUpdateData);
-                              logFirebaseEvent('menuItem_Bottom-Sheet');
+                              logFirebaseEvent('menuItem_bottom_sheet');
                               Navigator.pop(context);
                             },
                             child: Container(
-                              height: 100,
+                              height: 100.0,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
-                                    blurRadius: 3,
+                                    blurRadius: 3.0,
                                     color: Color(0x411D2429),
-                                    offset: Offset(0, 1),
+                                    offset: Offset(0.0, 1.0),
                                   )
                                 ],
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.0),
                               ),
                               child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    8.0, 8.0, 8.0, 8.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 1, 1, 1),
+                                          0.0, 1.0, 1.0, 1.0),
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
                                         child: CachedNetworkImage(
                                           imageUrl: restaurantsItem.logo!,
-                                          width: 70,
-                                          height: 100,
+                                          width: 70.0,
+                                          height: 100.0,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -251,7 +273,7 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                                     Expanded(
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            8, 8, 4, 0),
+                                            8.0, 8.0, 4.0, 0.0),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment:
@@ -267,14 +289,15 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                                                   .override(
                                                     fontFamily: 'Outfit',
                                                     color: Color(0xFF090F13),
-                                                    fontSize: 20,
+                                                    fontSize: 20.0,
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                             ),
                                             Expanded(
                                               child: Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 4, 8, 0),
+                                                    .fromSTEB(
+                                                        0.0, 4.0, 8.0, 0.0),
                                                 child: AutoSizeText(
                                                   restaurantsItem.restAddress!
                                                       .maybeHandleOverflow(
@@ -289,7 +312,7 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                                                         fontFamily: 'Outfit',
                                                         color:
                                                             Color(0xFF7C8791),
-                                                        fontSize: 14,
+                                                        fontSize: 14.0,
                                                         fontWeight:
                                                             FontWeight.normal,
                                                       ),
@@ -310,17 +333,17 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0, 4, 0, 0),
+                                                  0.0, 4.0, 0.0, 0.0),
                                           child: Icon(
                                             Icons.chevron_right_rounded,
                                             color: Color(0xFF57636C),
-                                            size: 24,
+                                            size: 24.0,
                                           ),
                                         ),
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 4, 8),
+                                                  0.0, 0.0, 4.0, 8.0),
                                           child: Text(
                                             '${functions.getDistance(currentUserLocationValue, restaurantsItem.restLatLong)} mi.',
                                             textAlign: TextAlign.end,
@@ -331,7 +354,7 @@ class _ChooseRestaurantWidgetState extends State<ChooseRestaurantWidget> {
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .background,
-                                                  fontSize: 14,
+                                                  fontSize: 14.0,
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                           ),

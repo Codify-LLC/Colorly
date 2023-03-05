@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const _kLocaleStorageKey = '__locale_key__';
 
 class FFLocalizations {
   FFLocalizations(this.locale);
@@ -11,7 +14,21 @@ class FFLocalizations {
 
   static List<String> languages() => ['en', 'es'];
 
+  static late SharedPreferences _prefs;
+  static Future initialize() async =>
+      _prefs = await SharedPreferences.getInstance();
+  static Future storeLocale(String locale) =>
+      _prefs.setString(_kLocaleStorageKey, locale);
+  static Locale? getStoredLocale() {
+    final locale = _prefs.getString(_kLocaleStorageKey);
+    return locale != null && locale.isNotEmpty ? createLocale(locale) : null;
+  }
+
   String get languageCode => locale.toString();
+  String? get languageShortCode =>
+      _languagesWithShortCode.contains(locale.toString())
+          ? '${locale.toString()}_short'
+          : null;
   int get languageIndex => languages().contains(languageCode)
       ? languages().indexOf(languageCode)
       : 0;
@@ -24,14 +41,53 @@ class FFLocalizations {
     String? esText = '',
   }) =>
       [enText, esText][languageIndex] ?? '';
+
+  static const Set<String> _languagesWithShortCode = {
+    'ar',
+    'az',
+    'ca',
+    'cs',
+    'da',
+    'de',
+    'dv',
+    'en',
+    'es',
+    'et',
+    'fi',
+    'fr',
+    'gr',
+    'he',
+    'hi',
+    'hu',
+    'it',
+    'km',
+    'ku',
+    'mn',
+    'ms',
+    'no',
+    'pt',
+    'ro',
+    'ru',
+    'rw',
+    'sv',
+    'th',
+    'uk',
+    'vi',
+  };
 }
 
 class FFLocalizationsDelegate extends LocalizationsDelegate<FFLocalizations> {
   const FFLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) =>
-      FFLocalizations.languages().contains(locale.toString());
+  bool isSupported(Locale locale) {
+    final language = locale.toString();
+    return FFLocalizations.languages().contains(
+      language.endsWith('_')
+          ? language.substring(0, language.length - 1)
+          : language,
+    );
+  }
 
   @override
   Future<FFLocalizations> load(Locale locale) =>
@@ -135,13 +191,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
   },
-  // homePage
-  {
-    '1t2uo9tm': {
-      'en': 'Home',
-      'es': '',
-    },
-  },
   // searchResults
   {
     'l3d990cn': {
@@ -154,6 +203,17 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
     },
     'k0hwvmck': {
       'en': 'Shop',
+      'es': '',
+    },
+  },
+  // homePage
+  {
+    'mr1fdlx2': {
+      'en': 'Reply',
+      'es': '',
+    },
+    '1t2uo9tm': {
+      'en': 'Home',
       'es': '',
     },
   },
@@ -336,6 +396,29 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
   },
+  // storySuccess
+  {
+    'o2rgppsf': {
+      'en': 'Your Story Has Been Added',
+      'es': 'Tu historia ha sido agregada',
+    },
+    '287croya': {
+      'en': 'Would you like to highlight a deal on your story?',
+      'es': '¿Te gustaría destacar un trato en tu historia?',
+    },
+    'bb817vi2': {
+      'en': 'Add Deal',
+      'es': 'Agregar oferta',
+    },
+    'i6w90t37': {
+      'en': 'Done',
+      'es': 'Agregar oferta',
+    },
+    '7h56woa5': {
+      'en': 'Home',
+      'es': '',
+    },
+  },
   // addStoryPage
   {
     '5f9uhtv9': {
@@ -375,133 +458,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
     '5nf94ual': {
-      'en': 'Home',
-      'es': '',
-    },
-  },
-  // restaurantDetails
-  {
-    '4y3mz4hi': {
-      'en': 'About',
-      'es': 'Acerca de',
-    },
-    'iszr0yxx': {
-      'en': 'Hours',
-      'es': 'Horas',
-    },
-    'zjgvzv9h': {
-      'en': 'Monday',
-      'es': 'lunes',
-    },
-    '8yruo0a7': {
-      'en': 'Tuesday',
-      'es': 'martes',
-    },
-    'evyha2z5': {
-      'en': 'Wednesday',
-      'es': 'miércoles',
-    },
-    'x89kprj2': {
-      'en': 'Thursday',
-      'es': 'jueves',
-    },
-    'pkupf5as': {
-      'en': 'Friday',
-      'es': 'viernes',
-    },
-    '097ue4qn': {
-      'en': 'Saturday',
-      'es': 'sábado',
-    },
-    'b5bt1w2o': {
-      'en': 'Sunday',
-      'es': 'domingo',
-    },
-    'ap7ymnq3': {
-      'en': 'Recommended',
-      'es': 'Recomendado',
-    },
-    'nc07hntw': {
-      'en': 'Mobile Rewards',
-      'es': 'Recompensas móviles',
-    },
-    'b6nhxkwn': {
-      'en': 'Takeout',
-      'es': 'Sacar',
-    },
-    'q7qmxgiq': {
-      'en': 'Delivery',
-      'es': 'Entrega',
-    },
-    '10ndmhzb': {
-      'en': 'Wifi',
-      'es': 'Wifi',
-    },
-    'fq77p7sg': {
-      'en': 'Reservations',
-      'es': 'Reservas',
-    },
-    'hmx32kgz': {
-      'en': 'Standalone',
-      'es': 'Ser único',
-    },
-    'a1l1f7ra': {
-      'en': 'Table Service',
-      'es': 'Servicio de mesa',
-    },
-    '0jhaxrqr': {
-      'en': 'Happy Hour',
-      'es': 'Hora feliz',
-    },
-    'ht5wk5hh': {
-      'en': 'Birthday Freebies',
-      'es': 'regalos de cumpleaños',
-    },
-    '36ku01rm': {
-      'en': 'Featured Menu Items',
-      'es': 'Elementos de menú destacados',
-    },
-    'ef9g5yx2': {
-      'en': 'Reviews',
-      'es': 'Reseñas',
-    },
-    'ffgc305k': {
-      'en': '# of Reviews',
-      'es': '# de Reseñas',
-    },
-    'jkszesic': {
-      'en': 'Avg. Rating',
-      'es': 'Promedio Clasificación',
-    },
-    '4g2xfy63': {
-      'en': 'Menu',
-      'es': 'Menú',
-    },
-    '41gi3khj': {
-      'en': 'Add Course',
-      'es': 'Agregar curso',
-    },
-    '4f6bwbrf': {
-      'en': 'Search menu...',
-      'es': 'Buscar restaurantes...',
-    },
-    's3ptpx9y': {
-      'en': 'Deals',
-      'es': 'ofertas',
-    },
-    'ays8iw2y': {
-      'en': 'Add Deal',
-      'es': 'Agregar oferta',
-    },
-    't3jc4ik7': {
-      'en': 'Deals & Discounts',
-      'es': 'Ofertas y descuentos',
-    },
-    'dt22dswx': {
-      'en': 'Submit Review',
-      'es': 'Enviar opinión',
-    },
-    'k72dqonh': {
       'en': 'Home',
       'es': '',
     },
@@ -810,9 +766,9 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
   },
   // searchUsers
   {
-    'eayfq412': {
+    'qlb97vcb': {
       'en': 'Search users...',
-      'es': 'Buscar usuarios...',
+      'es': '',
     },
     'fo5gslji': {
       'en': 'All Users',
@@ -825,27 +781,16 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
   },
   // following
   {
+    '4uxp2u13': {
+      'en': 'Search following...',
+      'es': '',
+    },
     'rinbjsea': {
       'en': 'Following',
       'es': 'Siguiente',
     },
     '9b0vrfne': {
       'en': 'Users',
-      'es': '',
-    },
-  },
-  // mapResultsPage
-  {
-    'cx7um3dd': {
-      'en': 'Search restaurants...',
-      'es': 'Buscar restaurantes...',
-    },
-    'zqp31c31': {
-      'en': 'What\'s up',
-      'es': 'Qué sucede',
-    },
-    'cp187huq': {
-      'en': 'Home',
       'es': '',
     },
   },
@@ -918,6 +863,102 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
     'p73jvfjj': {
       'en': '\$\$\$\$',
       'es': '\$\$\$\$',
+    },
+    'meg4nhjx': {
+      'en': 'Accessabilities',
+      'es': '',
+    },
+    'u2hxz8dt': {
+      'en': 'Expand the list and choose all that apply.',
+      'es': '',
+    },
+    'rbpfr5s7': {
+      'en': 'Option 1',
+      'es': '',
+    },
+    'wjhzgywg': {
+      'en': 'Amentities',
+      'es': '',
+    },
+    'gkch0hfm': {
+      'en': 'Expand the list and choose all that apply.',
+      'es': '',
+    },
+    'dhbzodjd': {
+      'en': 'Option 1',
+      'es': '',
+    },
+    'n07cij5z': {
+      'en': 'Crowd',
+      'es': '',
+    },
+    'ydkmgp4u': {
+      'en': 'Expand the list and choose all that apply.',
+      'es': '',
+    },
+    '8p0u351x': {
+      'en': 'Option 1',
+      'es': '',
+    },
+    'cl61milg': {
+      'en': 'Dining Options',
+      'es': '',
+    },
+    '3ejp0xnd': {
+      'en': 'Expand the list and choose all that apply.',
+      'es': '',
+    },
+    'hfbzkqwx': {
+      'en': 'Option 1',
+      'es': '',
+    },
+    'tnbx5c05': {
+      'en': 'Highlights',
+      'es': '',
+    },
+    't0zsbxg8': {
+      'en': 'Expand the list and choose all that apply.',
+      'es': '',
+    },
+    'jyxizube': {
+      'en': 'Option 1',
+      'es': '',
+    },
+    '1f29tg6k': {
+      'en': 'Offerings',
+      'es': '',
+    },
+    'prik31ej': {
+      'en': 'Expand the list and choose all that apply.',
+      'es': '',
+    },
+    '44mchegc': {
+      'en': 'Option 1',
+      'es': '',
+    },
+    '6ujmeovc': {
+      'en': 'Payments',
+      'es': '',
+    },
+    'cf9s9gym': {
+      'en': 'Expand the list and choose all that apply.',
+      'es': '',
+    },
+    '432p738e': {
+      'en': 'Option 1',
+      'es': '',
+    },
+    'vut9fw8v': {
+      'en': 'Planning',
+      'es': '',
+    },
+    'cpxyumsw': {
+      'en': 'Expand the list and choose all that apply.',
+      'es': '',
+    },
+    '17ofzmef': {
+      'en': 'Option 1',
+      'es': '',
     },
     'jwsotjes': {
       'en': 'Video Tour Link',
@@ -1037,7 +1078,7 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': 'Su número de teléfono...',
     },
     'z4q03qzj': {
-      'en': '+1 (204) 204-2056',
+      'en': '+1 (317) 204-2056',
       'es': '+1 (204) 204-2056',
     },
     'mwm5ejka': {
@@ -1179,17 +1220,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': 'Resultados de la búsqueda',
     },
     '8s095zqb': {
-      'en': 'Home',
-      'es': '',
-    },
-  },
-  // singleVideoPage
-  {
-    '7a31neeg': {
-      'en': 'Reply',
-      'es': '',
-    },
-    'z57hn3w0': {
       'en': 'Home',
       'es': '',
     },
@@ -1474,10 +1504,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'en': 'delivery time',
       'es': '',
     },
-    'pb6hsx5m': {
-      'en': '**This restaurant ONLY delivers within a\n 7 mile radius',
-      'es': '',
-    },
     'kkmr75ij': {
       'en': 'Delivery Location:',
       'es': '',
@@ -1506,17 +1532,9 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'en': 'Subtotal',
       'es': 'Total parcial',
     },
-    'q4cm5hsw': {
-      'en': '\$',
-      'es': '[Precio]',
-    },
     'dohdaqs4': {
       'en': 'Tax',
       'es': 'Impuesto',
-    },
-    'hxhwmpll': {
-      'en': '\$',
-      'es': '[Precio]',
     },
     '40tat5wu': {
       'en': 'Delivery',
@@ -1525,10 +1543,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
     'ehmjcars': {
       'en': 'Total',
       'es': 'Total',
-    },
-    'wdmrfnyb': {
-      'en': '\$',
-      'es': '[Total del pedido]',
     },
     'szjn0gxf': {
       'en': 'Proceed to Checkout',
@@ -1738,29 +1752,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
   },
-  // storySuccess
-  {
-    'o2rgppsf': {
-      'en': 'Your Story Has Been Added',
-      'es': 'Tu historia ha sido agregada',
-    },
-    '287croya': {
-      'en': 'Would you like to highlight a deal on your story?',
-      'es': '¿Te gustaría destacar un trato en tu historia?',
-    },
-    'bb817vi2': {
-      'en': 'Add Deal',
-      'es': 'Agregar oferta',
-    },
-    'i6w90t37': {
-      'en': 'Done',
-      'es': 'Agregar oferta',
-    },
-    '7h56woa5': {
-      'en': 'Home',
-      'es': '',
-    },
-  },
   // nearbyVideoPage
   {
     'a7f07ain': {
@@ -1768,25 +1759,13 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
   },
-  // adventurePage
+  // singleVideoPage
   {
-    '13yi472h': {
-      'en': 'Details',
+    '7a31neeg': {
+      'en': 'Reply',
       'es': '',
     },
-    '0hra6l0e': {
-      'en': 'Details',
-      'es': '',
-    },
-    'nciixyra': {
-      'en': 'Details',
-      'es': '',
-    },
-    'fmo7le4r': {
-      'en': 'Adventure',
-      'es': '',
-    },
-    'asm5p9pz': {
+    'z57hn3w0': {
       'en': 'Home',
       'es': '',
     },
@@ -1942,10 +1921,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'en': 'delivery time',
       'es': '',
     },
-    'vajvqze1': {
-      'en': '**This restaurant ONLY delivers within a\n 7 mile radius',
-      'es': '',
-    },
     'auw5opaj': {
       'en': 'Pickup',
       'es': 'Levantar',
@@ -1985,6 +1960,10 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
   },
   // curatedListSwipe
   {
+    '036au228': {
+      'en': 'Recent reviews',
+      'es': '',
+    },
     'dd1vtmq5': {
       'en': 'Hours',
       'es': 'Horas',
@@ -2066,6 +2045,17 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
   },
+  // nearbyRestaurants
+  {
+    'sqxyatdc': {
+      'en': 'Nearby Restaurants',
+      'es': '',
+    },
+    'tqwxloiq': {
+      'en': 'Shop',
+      'es': '',
+    },
+  },
   // curatedListPage
   {
     '9l5v18gi': {
@@ -2094,17 +2084,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
     },
     'wqa6s6un': {
       'en': 'Discover',
-      'es': '',
-    },
-  },
-  // nearbyRestaurants
-  {
-    'sqxyatdc': {
-      'en': 'Nearby Restaurants',
-      'es': '',
-    },
-    'tqwxloiq': {
-      'en': 'Shop',
       'es': '',
     },
   },
@@ -2163,17 +2142,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
     'pavrttm9': {
-      'en': 'Home',
-      'es': '',
-    },
-  },
-  // draftVideos
-  {
-    'rwanjnyu': {
-      'en': 'Drafts',
-      'es': '',
-    },
-    '802i3cf0': {
       'en': 'Home',
       'es': '',
     },
@@ -2322,29 +2290,31 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
   },
-  // BroadcastPage
+  // postCollage
   {
-    'bfjsfg2d': {
-      'en': 'Live',
+    'hcnc8tgs': {
+      'en': 'Posted Reviews',
       'es': '',
     },
-    'b2ipe1ip': {
-      'en': 'Live',
+    '7adqm3x1': {
+      'en': 'Home',
       'es': '',
     },
-    'us0j47hz': {
-      'en': 'Start Stream',
+  },
+  // gallery
+  {
+    'svjs0en5': {
+      'en': 'Gallery',
       'es': '',
     },
-    'efe943ng': {
-      'en': 'Start streaming to add features',
+    '1u1j51t0': {
+      'en': 'Home',
       'es': '',
     },
-    '5ooam8aq': {
-      'en': 'Live Broadcast',
-      'es': '',
-    },
-    'ovefj2xh': {
+  },
+  // homePageTest
+  {
+    'o1pw258z': {
       'en': 'Home',
       'es': '',
     },
@@ -2368,61 +2338,250 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': '',
     },
   },
-  // postCollage
+  // restaurantDetails
   {
-    'hcnc8tgs': {
-      'en': 'Posted Reviews',
+    '806bg15c': {
+      'en': 'About',
+      'es': 'Acerca de',
+    },
+    'p0os1vf1': {
+      'en': 'Avg. rating',
       'es': '',
     },
-    '7adqm3x1': {
+    'sl4yi2xt': {
+      'en': 'Reviews',
+      'es': '',
+    },
+    '7x8qss8l': {
+      'en': 'Price',
+      'es': '',
+    },
+    'weu9n3rc': {
+      'en': 'Avg. rating',
+      'es': '',
+    },
+    'rcrs3v8k': {
+      'en': 'Reviews',
+      'es': '',
+    },
+    '9qor34u4': {
+      'en': 'Price',
+      'es': '',
+    },
+    '9p249uxe': {
+      'en': 'Stories',
+      'es': '',
+    },
+    'tnkbg3gf': {
+      'en': 'About',
+      'es': '',
+    },
+    'lsgozxjc': {
+      'en': 'Location',
+      'es': '',
+    },
+    'r55m03jp': {
+      'en': 'Recommended',
+      'es': 'Recomendado',
+    },
+    '6d3y7khj': {
+      'en': 'Accessabilities',
+      'es': '',
+    },
+    '3o5btf94': {
+      'en': 'Amenities',
+      'es': '',
+    },
+    'jg1u1skv': {
+      'en': 'Crowd',
+      'es': '',
+    },
+    '3wwxnobj': {
+      'en': 'Dining Options',
+      'es': '',
+    },
+    'sdyaz4vy': {
+      'en': 'Highlights',
+      'es': '',
+    },
+    'y9e89p84': {
+      'en': 'Offerings',
+      'es': '',
+    },
+    'bcntatqj': {
+      'en': 'Payments',
+      'es': '',
+    },
+    'dde7qlpv': {
+      'en': 'Planning',
+      'es': '',
+    },
+    'kuowja73': {
+      'en': 'Featured Menu Items',
+      'es': 'Recomendado',
+    },
+    '2qhir7v3': {
+      'en': 'Reviews',
+      'es': 'Reseñas',
+    },
+    'k4c2bsap': {
+      'en': '# of Reviews',
+      'es': '# de Reseñas',
+    },
+    'ou55vegb': {
+      'en': 'Avg. Rating',
+      'es': 'Promedio Clasificación',
+    },
+    'omqeuiy7': {
+      'en': 'Menu',
+      'es': 'Menú',
+    },
+    'eqfvuwd9': {
+      'en': 'Add Course',
+      'es': 'Agregar curso',
+    },
+    '4uic4x0b': {
+      'en': 'Search menu...',
+      'es': 'Buscar restaurantes...',
+    },
+    '83amgoty': {
+      'en': 'Deals',
+      'es': 'ofertas',
+    },
+    'ck7rh365': {
+      'en': 'Add Deal',
+      'es': 'Agregar oferta',
+    },
+    'ys3x1g8m': {
+      'en': 'Deals & Discounts',
+      'es': 'Ofertas y descuentos',
+    },
+    'zroo44cc': {
       'en': 'Home',
       'es': '',
     },
   },
-  // gallery
+  // draftVideos
   {
-    'svjs0en5': {
-      'en': 'Gallery',
+    'rwanjnyu': {
+      'en': 'Drafts',
       'es': '',
     },
-    '1u1j51t0': {
+    '802i3cf0': {
       'en': 'Home',
       'es': '',
     },
   },
-  // addStory
+  // profileHome
   {
-    'evb6md6g': {
-      'en': 'Campaign Name',
-      'es': 'Nombre de campaña',
+    'r2ehjzv4': {
+      'en': 'Switch to Dark Mode',
+      'es': '',
     },
-    'yhga2ynn': {
-      'en': 'Campaign Name',
-      'es': 'Nombre de campaña',
+    'v46thimt': {
+      'en': 'Switch to Light Mode',
+      'es': '',
     },
-    'mejupvow': {
-      'en': 'Website Link',
-      'es': 'Enlace de página web',
+    'ehh539im': {
+      'en': 'Account',
+      'es': '',
     },
-    'qgngerbn': {
-      'en': 'Campaign Name',
-      'es': 'Nombre de campaña',
+    'htyugot9': {
+      'en': 'Notification Settings',
+      'es': '',
     },
-    '0kw8gcba': {
-      'en': 'https://',
-      'es': 'https://',
+    '5hsg41rb': {
+      'en': 'Edit Profile',
+      'es': '',
     },
-    '19ib7d9k': {
-      'en': 'Add Comment....',
-      'es': 'Agregar comentario....',
+    'j6xhlxmv': {
+      'en': 'General',
+      'es': '',
     },
-    's6bgi17x': {
-      'en': 'Video',
-      'es': 'Video',
+    '4gr6obyd': {
+      'en': 'Support',
+      'es': '',
     },
-    'l8k86572': {
-      'en': 'Add Story',
-      'es': 'Agregar historia',
+    'f34g6xzr': {
+      'en': 'Terms of Service',
+      'es': '',
+    },
+    'x5x0363p': {
+      'en': 'Invite Friends',
+      'es': '',
+    },
+    'dz2cmgip': {
+      'en': 'Profile',
+      'es': '',
+    },
+    'ni39cci4': {
+      'en': 'Home',
+      'es': '',
+    },
+  },
+  // toggleNotifications
+  {
+    'e0ydgtl3': {
+      'en':
+          'Choose what notifcations you want to recieve below and we will update the settings.',
+      'es': '',
+    },
+    'vk9ffct9': {
+      'en': 'Push Notifications',
+      'es': '',
+    },
+    'qlp7awm5': {
+      'en':
+          'Receive Push notifications from our application on a semi regular basis.',
+      'es': '',
+    },
+    'f3mmrrfi': {
+      'en': 'Email Notifications',
+      'es': '',
+    },
+    '0ucriqi6': {
+      'en':
+          'Receive email notifications from our marketing team about new features.',
+      'es': '',
+    },
+    'lh1yl6wp': {
+      'en': 'Location Services',
+      'es': '',
+    },
+    'iowwuoz9': {
+      'en':
+          'Allow us to track your location, this helps keep track of spending and keeps you safe.',
+      'es': '',
+    },
+    'i4c3zn8k': {
+      'en': 'Settings',
+      'es': '',
+    },
+  },
+  // homePageCopy
+  {
+    'cz518bkg': {
+      'en': 'Reply',
+      'es': '',
+    },
+    'ckh3yv54': {
+      'en': 'Home',
+      'es': '',
+    },
+  },
+  // indyOnly
+  {
+    'nvogr7bm': {
+      'en': 'Currently, we are ONLY in the INDY area!',
+      'es': '',
+    },
+    'm9tzcsic': {
+      'en': 'Stay tuned for as we add more cities',
+      'es': '',
+    },
+    'wbv18x8l': {
+      'en': 'Home',
+      'es': '',
     },
   },
   // deleteStory
@@ -2920,13 +3079,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
       'es': 'Agregar',
     },
   },
-  // nodealsFound
-  {
-    'jp9afosg': {
-      'en': 'See all deals',
-      'es': 'Ver todas las ofertas',
-    },
-  },
   // dealPopupCopy
   {
     'c06lrs0y': {
@@ -3063,13 +3215,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
     'w9iz77d0': {
       'en': 'Edit',
       'es': 'Agregar',
-    },
-  },
-  // purchaseItem
-  {
-    'pyf6ey1t': {
-      'en': '',
-      'es': 'Orden de inicio',
     },
   },
   // noResults
@@ -3262,21 +3407,6 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
     },
     'fnwtudn6': {
       'en': 'This review doesn\'t have any\ntagged menu items',
-      'es': '',
-    },
-  },
-  // cartList
-  {
-    'efrwb5ae': {
-      'en': 'Delete All Items First',
-      'es': '',
-    },
-    'm1r187cv': {
-      'en': 'Start New Order',
-      'es': '',
-    },
-    'iypz3hbd': {
-      'en': 'Done',
       'es': '',
     },
   },
@@ -3515,6 +3645,60 @@ final kTranslationsMap = <Map<String, Map<String, String>>>[
   {
     'y7wj3vhv': {
       'en': 'Reply',
+      'es': '',
+    },
+  },
+  // hoursSheet
+  {
+    'kbjn1uoe': {
+      'en': 'Hours',
+      'es': 'Horas',
+    },
+    'hxk1j1cf': {
+      'en': 'Monday',
+      'es': 'lunes',
+    },
+    'rji6nvex': {
+      'en': 'Tuesday',
+      'es': 'martes',
+    },
+    '82wproxi': {
+      'en': 'Wednesday',
+      'es': 'miércoles',
+    },
+    '8j4pc8r6': {
+      'en': 'Thursday',
+      'es': 'jueves',
+    },
+    'lvgc4khj': {
+      'en': 'Friday',
+      'es': 'viernes',
+    },
+    '5unju68d': {
+      'en': 'Saturday',
+      'es': 'sábado',
+    },
+    'xzyszrf6': {
+      'en': 'Sunday',
+      'es': 'domingo',
+    },
+  },
+  // menuSheet
+  {
+    'lwnrn1r7': {
+      'en': 'Check In',
+      'es': '',
+    },
+    'ksomfe83': {
+      'en': 'Add Photo/Video',
+      'es': '',
+    },
+    'npj1gwwq': {
+      'en': 'Edit Restaurant',
+      'es': '',
+    },
+    'dyqu538g': {
+      'en': 'Cancel',
       'es': '',
     },
   },

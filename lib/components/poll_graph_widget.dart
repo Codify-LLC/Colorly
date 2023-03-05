@@ -1,11 +1,14 @@
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_charts.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_charts.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'poll_graph_model.dart';
+export 'poll_graph_model.dart';
 
 class PollGraphWidget extends StatefulWidget {
   const PollGraphWidget({
@@ -22,20 +25,45 @@ class PollGraphWidget extends StatefulWidget {
 }
 
 class _PollGraphWidgetState extends State<PollGraphWidget> {
+  late PollGraphModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => PollGraphModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Container(
-      width: 300,
+      width: 300.0,
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).secondaryBackground,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.0),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
           Container(
-            width: 300,
-            height: 300,
+            width: 300.0,
+            height: 300.0,
             child: FlutterFlowPieChart(
               data: FFPieChartData(
                 values: [
@@ -59,9 +87,9 @@ class _PollGraphWidgetState extends State<PollGraphWidget> {
                   Color(0xFFA4A3A3),
                   Color(0xFFCCFABF)
                 ],
-                radius: [100, 100, 100, 100],
+                radius: [100.0, 100.0, 100.0, 100.0],
               ),
-              donutHoleRadius: 0,
+              donutHoleRadius: 0.0,
               donutHoleColor: Colors.white,
               sectionLabelType: PieChartSectionLabelType.percent,
               sectionLabelStyle: FlutterFlowTheme.of(context).title3,
@@ -73,16 +101,17 @@ class _PollGraphWidgetState extends State<PollGraphWidget> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                   child: Container(
-                    width: 100,
-                    height: 50,
+                    width: 100.0,
+                    height: 50.0,
                     decoration: BoxDecoration(
                       color: Color(0xD1E5831D),
-                      borderRadius: BorderRadius.circular(99),
+                      borderRadius: BorderRadius.circular(99.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -129,16 +158,18 @@ class _PollGraphWidgetState extends State<PollGraphWidget> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                  padding:
+                      EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 0.0),
                   child: Container(
-                    width: 100,
-                    height: 50,
+                    width: 100.0,
+                    height: 50.0,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(99),
+                      borderRadius: BorderRadius.circular(99.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -185,16 +216,18 @@ class _PollGraphWidgetState extends State<PollGraphWidget> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                  padding:
+                      EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 0.0),
                   child: Container(
-                    width: 100,
-                    height: 50,
+                    width: 100.0,
+                    height: 50.0,
                     decoration: BoxDecoration(
                       color: Color(0xFFA4A3A3),
-                      borderRadius: BorderRadius.circular(99),
+                      borderRadius: BorderRadius.circular(99.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -241,16 +274,18 @@ class _PollGraphWidgetState extends State<PollGraphWidget> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                  padding:
+                      EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
                   child: Container(
-                    width: 100,
-                    height: 50,
+                    width: 100.0,
+                    height: 50.0,
                     decoration: BoxDecoration(
                       color: Color(0xFFCCFABF),
-                      borderRadius: BorderRadius.circular(99),
+                      borderRadius: BorderRadius.circular(99.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,

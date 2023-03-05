@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>883261131668-7k0u7ugpufrgjdmb38cq9vq0aoc56q1v.apps.googleusercontent.com</string>
+	<string>970279790480-v8aktpr7qngb2qq3l8s149k7pe0qhdv3.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.883261131668-7k0u7ugpufrgjdmb38cq9vq0aoc56q1v</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>883261131668-7e78a18qe34d4u93meumi3niurarvrek.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.970279790480-v8aktpr7qngb2qq3l8s149k7pe0qhdv3</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBH1fZaBJ0aBUx4Y6fjsVaEs6cD9FhYgow</string>
+	<string>AIzaSyC91Bq9gQro1fEJmBoM7DonWutAkcdg7YI</string>
 	<key>GCM_SENDER_ID</key>
-	<string>883261131668</string>
+	<string>970279790480</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.colorlyinc.colorlyapp</string>
 	<key>PROJECT_ID</key>
-	<string>flutter-flow-colorly</string>
+	<string>colorly-ff7ef</string>
 	<key>STORAGE_BUCKET</key>
-	<string>flutter-flow-colorly.appspot.com</string>
+	<string>colorly-ff7ef.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:883261131668:ios:6c66299e248519bcb5dd81</string>
-	<key>DATABASE_URL</key>
-	<string>https://flutter-flow-colorly-default-rtdb.firebaseio.com</string>
+	<string>1:970279790480:ios:234b5f6fff9a226d9df515</string>
 </dict>
 </plist>

@@ -1,6 +1,6 @@
 {
-    "name": "Colorly App",
-    "short_name": "Colorly App",
+    "name": "Colorly Backup",
+    "short_name": "Colorly Backup",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

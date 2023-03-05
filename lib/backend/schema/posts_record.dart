@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:from_css_color/from_css_color.dart';
+
 import 'index.dart';
 import 'serializers.dart';
 import 'package:built_value/built_value.dart';
@@ -82,6 +84,8 @@ abstract class PostsRecord implements Built<PostsRecord, PostsRecordBuilder> {
 
   double? get cleanliness;
 
+  String? get playbackId;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -110,7 +114,8 @@ abstract class PostsRecord implements Built<PostsRecord, PostsRecordBuilder> {
     ..videoReplyURL = ''
     ..food = 0.0
     ..service = 0.0
-    ..cleanliness = 0.0;
+    ..cleanliness = 0.0
+    ..playbackId = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('posts');
@@ -169,6 +174,7 @@ abstract class PostsRecord implements Built<PostsRecord, PostsRecordBuilder> {
           ..food = snapshot.data['food']?.toDouble()
           ..service = snapshot.data['service']?.toDouble()
           ..cleanliness = snapshot.data['cleanliness']?.toDouble()
+          ..playbackId = snapshot.data['playbackId']
           ..ffRef = PostsRecord.collection.doc(snapshot.objectID),
       );
 
@@ -226,6 +232,7 @@ Map<String, dynamic> createPostsRecordData({
   double? food,
   double? service,
   double? cleanliness,
+  String? playbackId,
 }) {
   final firestoreData = serializers.toFirestore(
     PostsRecord.serializer,
@@ -262,7 +269,8 @@ Map<String, dynamic> createPostsRecordData({
         ..videoReplyURL = videoReplyURL
         ..food = food
         ..service = service
-        ..cleanliness = cleanliness,
+        ..cleanliness = cleanliness
+        ..playbackId = playbackId,
     ),
   );
 

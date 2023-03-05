@@ -1,6 +1,7 @@
 import 'package:built_value/serializer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../auth/auth_util.dart';
 
 import '../flutter_flow/flutter_flow_util.dart';
 
@@ -38,6 +39,7 @@ import 'schema/streams_record.dart';
 import 'schema/live_comments_record.dart';
 import 'schema/trivia_record.dart';
 import 'schema/poll_record.dart';
+import 'schema/restaurant_check_items_record.dart';
 import 'schema/serializers.dart';
 
 export 'dart:async' show StreamSubscription;
@@ -79,8 +81,19 @@ export 'schema/streams_record.dart';
 export 'schema/live_comments_record.dart';
 export 'schema/trivia_record.dart';
 export 'schema/poll_record.dart';
+export 'schema/restaurant_check_items_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
+Future<int> queryUsersRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      UsersRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<UsersRecord>> queryUsersRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -123,6 +136,16 @@ Future<FFFirestorePage<UsersRecord>> queryUsersRecordPage({
     );
 
 /// Functions to query PostsRecords (as a Stream and as a Future).
+Future<int> queryPostsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      PostsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<PostsRecord>> queryPostsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -165,6 +188,16 @@ Future<FFFirestorePage<PostsRecord>> queryPostsRecordPage({
     );
 
 /// Functions to query RestaurantsRecords (as a Stream and as a Future).
+Future<int> queryRestaurantsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      RestaurantsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<RestaurantsRecord>> queryRestaurantsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -207,6 +240,16 @@ Future<FFFirestorePage<RestaurantsRecord>> queryRestaurantsRecordPage({
     );
 
 /// Functions to query StoriesRecords (as a Stream and as a Future).
+Future<int> queryStoriesRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      StoriesRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<StoriesRecord>> queryStoriesRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -249,6 +292,16 @@ Future<FFFirestorePage<StoriesRecord>> queryStoriesRecordPage({
     );
 
 /// Functions to query PostCommentsRecords (as a Stream and as a Future).
+Future<int> queryPostCommentsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      PostCommentsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<PostCommentsRecord>> queryPostCommentsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -291,6 +344,16 @@ Future<FFFirestorePage<PostCommentsRecord>> queryPostCommentsRecordPage({
     );
 
 /// Functions to query StoryCommentsRecords (as a Stream and as a Future).
+Future<int> queryStoryCommentsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      StoryCommentsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<StoryCommentsRecord>> queryStoryCommentsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -333,6 +396,16 @@ Future<FFFirestorePage<StoryCommentsRecord>> queryStoryCommentsRecordPage({
     );
 
 /// Functions to query FriendsRecords (as a Stream and as a Future).
+Future<int> queryFriendsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      FriendsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<FriendsRecord>> queryFriendsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -375,6 +448,16 @@ Future<FFFirestorePage<FriendsRecord>> queryFriendsRecordPage({
     );
 
 /// Functions to query ChatsRecords (as a Stream and as a Future).
+Future<int> queryChatsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      ChatsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<ChatsRecord>> queryChatsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -417,6 +500,16 @@ Future<FFFirestorePage<ChatsRecord>> queryChatsRecordPage({
     );
 
 /// Functions to query ChatMessagesRecords (as a Stream and as a Future).
+Future<int> queryChatMessagesRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      ChatMessagesRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<ChatMessagesRecord>> queryChatMessagesRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -459,6 +552,16 @@ Future<FFFirestorePage<ChatMessagesRecord>> queryChatMessagesRecordPage({
     );
 
 /// Functions to query StatisticsRecords (as a Stream and as a Future).
+Future<int> queryStatisticsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      StatisticsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<StatisticsRecord>> queryStatisticsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -501,6 +604,16 @@ Future<FFFirestorePage<StatisticsRecord>> queryStatisticsRecordPage({
     );
 
 /// Functions to query LikesRecords (as a Stream and as a Future).
+Future<int> queryLikesRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      LikesRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<LikesRecord>> queryLikesRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -543,6 +656,16 @@ Future<FFFirestorePage<LikesRecord>> queryLikesRecordPage({
     );
 
 /// Functions to query FlaggedVideosRecords (as a Stream and as a Future).
+Future<int> queryFlaggedVideosRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      FlaggedVideosRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<FlaggedVideosRecord>> queryFlaggedVideosRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -585,6 +708,16 @@ Future<FFFirestorePage<FlaggedVideosRecord>> queryFlaggedVideosRecordPage({
     );
 
 /// Functions to query MenuItemRecords (as a Stream and as a Future).
+Future<int> queryMenuItemRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      MenuItemRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<MenuItemRecord>> queryMenuItemRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -627,6 +760,16 @@ Future<FFFirestorePage<MenuItemRecord>> queryMenuItemRecordPage({
     );
 
 /// Functions to query MenuCourseRecords (as a Stream and as a Future).
+Future<int> queryMenuCourseRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      MenuCourseRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<MenuCourseRecord>> queryMenuCourseRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -669,6 +812,16 @@ Future<FFFirestorePage<MenuCourseRecord>> queryMenuCourseRecordPage({
     );
 
 /// Functions to query OrderRecords (as a Stream and as a Future).
+Future<int> queryOrderRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      OrderRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<OrderRecord>> queryOrderRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -711,6 +864,16 @@ Future<FFFirestorePage<OrderRecord>> queryOrderRecordPage({
     );
 
 /// Functions to query ModifiersRecords (as a Stream and as a Future).
+Future<int> queryModifiersRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      ModifiersRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<ModifiersRecord>> queryModifiersRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -753,6 +916,16 @@ Future<FFFirestorePage<ModifiersRecord>> queryModifiersRecordPage({
     );
 
 /// Functions to query Option1Records (as a Stream and as a Future).
+Future<int> queryOption1RecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      Option1Record.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<Option1Record>> queryOption1Record({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -795,6 +968,16 @@ Future<FFFirestorePage<Option1Record>> queryOption1RecordPage({
     );
 
 /// Functions to query InCartItemRecords (as a Stream and as a Future).
+Future<int> queryInCartItemRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      InCartItemRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<InCartItemRecord>> queryInCartItemRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -837,6 +1020,16 @@ Future<FFFirestorePage<InCartItemRecord>> queryInCartItemRecordPage({
     );
 
 /// Functions to query DealsRecords (as a Stream and as a Future).
+Future<int> queryDealsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      DealsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<DealsRecord>> queryDealsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -879,6 +1072,16 @@ Future<FFFirestorePage<DealsRecord>> queryDealsRecordPage({
     );
 
 /// Functions to query AdventuresRecords (as a Stream and as a Future).
+Future<int> queryAdventuresRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      AdventuresRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<AdventuresRecord>> queryAdventuresRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -921,6 +1124,16 @@ Future<FFFirestorePage<AdventuresRecord>> queryAdventuresRecordPage({
     );
 
 /// Functions to query AddNumberRecords (as a Stream and as a Future).
+Future<int> queryAddNumberRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      AddNumberRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<AddNumberRecord>> queryAddNumberRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -963,6 +1176,16 @@ Future<FFFirestorePage<AddNumberRecord>> queryAddNumberRecordPage({
     );
 
 /// Functions to query ShoppingBagRecords (as a Stream and as a Future).
+Future<int> queryShoppingBagRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      ShoppingBagRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<ShoppingBagRecord>> queryShoppingBagRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -1005,6 +1228,16 @@ Future<FFFirestorePage<ShoppingBagRecord>> queryShoppingBagRecordPage({
     );
 
 /// Functions to query CompletedBagsRecords (as a Stream and as a Future).
+Future<int> queryCompletedBagsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      CompletedBagsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<CompletedBagsRecord>> queryCompletedBagsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -1047,6 +1280,16 @@ Future<FFFirestorePage<CompletedBagsRecord>> queryCompletedBagsRecordPage({
     );
 
 /// Functions to query OptionsForICIRecords (as a Stream and as a Future).
+Future<int> queryOptionsForICIRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      OptionsForICIRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<OptionsForICIRecord>> queryOptionsForICIRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -1089,6 +1332,17 @@ Future<FFFirestorePage<OptionsForICIRecord>> queryOptionsForICIRecordPage({
     );
 
 /// Functions to query OptionsRecords (as a Stream and as a Future).
+Future<int> queryOptionsRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      OptionsRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<OptionsRecord>> queryOptionsRecord({
   DocumentReference? parent,
   Query Function(Query)? queryBuilder,
@@ -1134,6 +1388,17 @@ Future<FFFirestorePage<OptionsRecord>> queryOptionsRecordPage({
     );
 
 /// Functions to query InCartItemsRecords (as a Stream and as a Future).
+Future<int> queryInCartItemsRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      InCartItemsRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<InCartItemsRecord>> queryInCartItemsRecord({
   DocumentReference? parent,
   Query Function(Query)? queryBuilder,
@@ -1179,6 +1444,16 @@ Future<FFFirestorePage<InCartItemsRecord>> queryInCartItemsRecordPage({
     );
 
 /// Functions to query CuratedListsRecords (as a Stream and as a Future).
+Future<int> queryCuratedListsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      CuratedListsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<CuratedListsRecord>> queryCuratedListsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -1221,6 +1496,17 @@ Future<FFFirestorePage<CuratedListsRecord>> queryCuratedListsRecordPage({
     );
 
 /// Functions to query PersonalListsRecords (as a Stream and as a Future).
+Future<int> queryPersonalListsRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      PersonalListsRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<PersonalListsRecord>> queryPersonalListsRecord({
   DocumentReference? parent,
   Query Function(Query)? queryBuilder,
@@ -1266,6 +1552,16 @@ Future<FFFirestorePage<PersonalListsRecord>> queryPersonalListsRecordPage({
     );
 
 /// Functions to query ReplyVideosRecords (as a Stream and as a Future).
+Future<int> queryReplyVideosRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      ReplyVideosRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<ReplyVideosRecord>> queryReplyVideosRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -1308,6 +1604,16 @@ Future<FFFirestorePage<ReplyVideosRecord>> queryReplyVideosRecordPage({
     );
 
 /// Functions to query PostDraftsRecords (as a Stream and as a Future).
+Future<int> queryPostDraftsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      PostDraftsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<PostDraftsRecord>> queryPostDraftsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -1350,6 +1656,16 @@ Future<FFFirestorePage<PostDraftsRecord>> queryPostDraftsRecordPage({
     );
 
 /// Functions to query StreamsRecords (as a Stream and as a Future).
+Future<int> queryStreamsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      StreamsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<StreamsRecord>> queryStreamsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -1392,6 +1708,16 @@ Future<FFFirestorePage<StreamsRecord>> queryStreamsRecordPage({
     );
 
 /// Functions to query LiveCommentsRecords (as a Stream and as a Future).
+Future<int> queryLiveCommentsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      LiveCommentsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<LiveCommentsRecord>> queryLiveCommentsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -1434,6 +1760,16 @@ Future<FFFirestorePage<LiveCommentsRecord>> queryLiveCommentsRecordPage({
     );
 
 /// Functions to query TriviaRecords (as a Stream and as a Future).
+Future<int> queryTriviaRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      TriviaRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<TriviaRecord>> queryTriviaRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -1476,6 +1812,16 @@ Future<FFFirestorePage<TriviaRecord>> queryTriviaRecordPage({
     );
 
 /// Functions to query PollRecords (as a Stream and as a Future).
+Future<int> queryPollRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      PollRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
 Stream<List<PollRecord>> queryPollRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
@@ -1516,6 +1862,75 @@ Future<FFFirestorePage<PollRecord>> queryPollRecordPage({
       pageSize: pageSize,
       isStream: isStream,
     );
+
+/// Functions to query RestaurantCheckItemsRecords (as a Stream and as a Future).
+Future<int> queryRestaurantCheckItemsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      RestaurantCheckItemsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<RestaurantCheckItemsRecord>> queryRestaurantCheckItemsRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      RestaurantCheckItemsRecord.collection,
+      RestaurantCheckItemsRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<RestaurantCheckItemsRecord>> queryRestaurantCheckItemsRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      RestaurantCheckItemsRecord.collection,
+      RestaurantCheckItemsRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<RestaurantCheckItemsRecord>>
+    queryRestaurantCheckItemsRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+        queryCollectionPage(
+          RestaurantCheckItemsRecord.collection,
+          RestaurantCheckItemsRecord.serializer,
+          queryBuilder: queryBuilder,
+          nextPageMarker: nextPageMarker,
+          pageSize: pageSize,
+          isStream: isStream,
+        );
+
+Future<int> queryCollectionCount(
+  Query collection, {
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) {
+  final builder = queryBuilder ?? (q) => q;
+  var query = builder(collection);
+  if (limit > 0) {
+    query = query.limit(limit);
+  }
+
+  return query.count().get().catchError((err) {
+    print('Error querying $collection: $err');
+  }).then((value) => value.count);
+}
 
 Stream<List<T>> queryCollection<T>(Query collection, Serializer<T> serializer,
     {Query Function(Query)? queryBuilder,
@@ -1627,6 +2042,7 @@ Future maybeCreateUser(User user) async {
   final userRecord = UsersRecord.collection.doc(user.uid);
   final userExists = await userRecord.get().then((u) => u.exists);
   if (userExists) {
+    currentUserDocument = await UsersRecord.getDocumentOnce(userRecord);
     return;
   }
 
@@ -1640,4 +2056,6 @@ Future maybeCreateUser(User user) async {
   );
 
   await userRecord.set(userData);
+  currentUserDocument =
+      serializers.deserializeWith(UsersRecord.serializer, userData);
 }

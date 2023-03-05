@@ -1,30 +1,34 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../backend/firebase_storage/storage.dart';
-import '../backend/push_notifications/push_notifications_util.dart';
-import '../components/add_menu_cart_widget.dart';
-import '../components/comments_copy_widget.dart';
-import '../components/comments_widget.dart';
-import '../components/description_sheet_widget.dart';
-import '../components/flag_video_widget.dart';
-import '../components/reply_video_widget.dart';
-import '../flutter_flow/flutter_flow_animations.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_video_player.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
-import '../flutter_flow/upload_media.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/backend/firebase_storage/storage.dart';
+import '/components/add_menu_cart_widget.dart';
+import '/components/comments_copy_widget.dart';
+import '/components/comments_widget.dart';
+import '/components/description_sheet_widget.dart';
+import '/components/flag_video_widget.dart';
+import '/components/reply_video_widget.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_video_player.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/upload_media.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'page_view_overlay_model.dart';
+export 'page_view_overlay_model.dart';
 
 class PageViewOverlayWidget extends StatefulWidget {
   const PageViewOverlayWidget({
@@ -40,71 +44,93 @@ class PageViewOverlayWidget extends StatefulWidget {
 
 class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
     with TickerProviderStateMixin {
-  AudioPlayer? soundPlayer;
-  ReplyVideosRecord? replyVideo;
-  String uploadedFileUrl = '';
+  late PageViewOverlayModel _model;
+
   LatLng? currentUserLocationValue;
+  var hasIconTriggered = false;
   final animationsMap = {
     'iconOnActionTriggerAnimation': AnimationInfo(
       trigger: AnimationTrigger.onActionTrigger,
-      duration: 600,
-      hideBeforeAnimating: false,
-      initialState: AnimationState(
-        scale: 1.2,
-        opacity: 0,
-      ),
-      finalState: AnimationState(
-        scale: 1,
-        opacity: 1,
-      ),
+      applyInitialState: false,
+      effects: [
+        ScaleEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 600.ms,
+          begin: 1.2,
+          end: 1.0,
+        ),
+      ],
     ),
   };
 
   @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
   void initState() {
     super.initState();
-    setupTriggerAnimations(
-      animationsMap.values
-          .where((anim) => anim.trigger == AnimationTrigger.onActionTrigger),
-      this,
-    );
+    _model = createModel(context, () => PageViewOverlayModel());
 
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
         .then((loc) => setState(() => currentUserLocationValue = loc));
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
     if (currentUserLocationValue == null) {
-      return Center(
-        child: SizedBox(
-          width: 30,
-          height: 30,
-          child: SpinKitThreeBounce(
-            color: FlutterFlowTheme.of(context).primaryColor,
-            size: 30,
+      return Container(
+        color: FlutterFlowTheme.of(context).primaryBackground,
+        child: Center(
+          child: SizedBox(
+            width: 30.0,
+            height: 30.0,
+            child: SpinKitThreeBounce(
+              color: FlutterFlowTheme.of(context).primaryColor,
+              size: 30.0,
+            ),
           ),
         ),
       );
     }
+
     return Align(
-      alignment: AlignmentDirectional(0, 0),
+      alignment: AlignmentDirectional(0.0, 0.0),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 250,
+            height: 250.0,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   FlutterFlowTheme.of(context).primaryDark,
                   Color(0x001A1F24)
                 ],
-                stops: [0, 1],
-                begin: AlignmentDirectional(0, -1),
-                end: AlignmentDirectional(0, 1),
+                stops: [0.0, 1.0],
+                begin: AlignmentDirectional(0.0, -1.0),
+                end: AlignmentDirectional(0, 1.0),
               ),
             ),
             child: Column(
@@ -112,16 +138,17 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                   child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 70,
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    height: 70.0,
                     decoration: BoxDecoration(
                       color: Color(0x45EEEEEE),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(5, 0, 16, 0),
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 16.0, 0.0),
                       child: StreamBuilder<RestaurantsRecord>(
                         stream: RestaurantsRecord.getDocument(
                             widget.posts!.restRef!),
@@ -130,12 +157,12 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                           if (!snapshot.hasData) {
                             return Center(
                               child: SizedBox(
-                                width: 30,
-                                height: 30,
+                                width: 30.0,
+                                height: 30.0,
                                 child: SpinKitThreeBounce(
                                   color:
                                       FlutterFlowTheme.of(context).primaryColor,
-                                  size: 30,
+                                  size: 30.0,
                                 ),
                               ),
                             );
@@ -147,25 +174,26 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 10.0, 0.0, 0.0),
                                 child: InkWell(
                                   onTap: () async {
                                     logFirebaseEvent(
                                         'VIEW_OVERLAY_CircleImage_qy9plohn_ON_TAP');
-                                    logFirebaseEvent('CircleImage_Navigate-To');
+                                    logFirebaseEvent('CircleImage_navigate_to');
 
                                     context.pushNamed(
                                       'restaurantDetails',
                                       queryParams: {
                                         'restaurant': serializeParam(
-                                            userInfoRestaurantsRecord.reference,
-                                            ParamType.DocumentReference),
+                                          userInfoRestaurantsRecord.reference,
+                                          ParamType.DocumentReference,
+                                        ),
                                       }.withoutNulls,
                                     );
 
                                     logFirebaseEvent(
-                                        'CircleImage_Backend-Call');
+                                        'CircleImage_backend_call');
 
                                     final restaurantsUpdateData = {
                                       'cardClicks': FieldValue.increment(1),
@@ -174,8 +202,8 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                         .update(restaurantsUpdateData);
                                   },
                                   child: Container(
-                                    width: 50,
-                                    height: 50,
+                                    width: 50.0,
+                                    height: 50.0,
                                     clipBehavior: Clip.antiAlias,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
@@ -195,18 +223,19 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                   onTap: () async {
                                     logFirebaseEvent(
                                         'VIEW_OVERLAY_Column_8guhpbkz_ON_TAP');
-                                    logFirebaseEvent('Column_Navigate-To');
+                                    logFirebaseEvent('Column_navigate_to');
 
                                     context.pushNamed(
                                       'restaurantDetails',
                                       queryParams: {
                                         'restaurant': serializeParam(
-                                            userInfoRestaurantsRecord.reference,
-                                            ParamType.DocumentReference),
+                                          userInfoRestaurantsRecord.reference,
+                                          ParamType.DocumentReference,
+                                        ),
                                       }.withoutNulls,
                                     );
 
-                                    logFirebaseEvent('Column_Backend-Call');
+                                    logFirebaseEvent('Column_backend_call');
 
                                     final restaurantsUpdateData = {
                                       'cardClicks': FieldValue.increment(1),
@@ -228,7 +257,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    12, 0, 0, 0),
+                                                    12.0, 0.0, 0.0, 0.0),
                                             child: Text(
                                               userInfoRestaurantsRecord
                                                   .restaurantName!
@@ -248,7 +277,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    12, 0, 0, 0),
+                                                    12.0, 0.0, 0.0, 0.0),
                                             child: Text(
                                               '${functions.getDistance(currentUserLocationValue, userInfoRestaurantsRecord.restLatLong)} mi.',
                                               style: FlutterFlowTheme.of(
@@ -266,7 +295,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                       ),
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            12, 0, 0, 0),
+                                            12.0, 0.0, 0.0, 0.0),
                                         child: Text(
                                           userInfoRestaurantsRecord.restAddress!
                                               .maybeHandleOverflow(
@@ -278,7 +307,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .tertiaryColor,
-                                                fontSize: 12,
+                                                fontSize: 12.0,
                                               ),
                                         ),
                                       ),
@@ -288,7 +317,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    12, 0, 0, 0),
+                                                    12.0, 0.0, 0.0, 0.0),
                                             child: Text(
                                               valueOrDefault<String>(
                                                 userInfoRestaurantsRecord
@@ -301,14 +330,14 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                   .override(
                                                     fontFamily: 'Lexend Deca',
                                                     color: Color(0xFF32FF48),
-                                                    fontSize: 12,
+                                                    fontSize: 12.0,
                                                   ),
                                             ),
                                           ),
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    12, 0, 0, 0),
+                                                    12.0, 0.0, 0.0, 0.0),
                                             child: Text(
                                               userInfoRestaurantsRecord
                                                   .categories!
@@ -322,7 +351,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .secondaryColor,
-                                                    fontSize: 12,
+                                                    fontSize: 12.0,
                                                   ),
                                             ),
                                           ),
@@ -334,7 +363,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    12, 0, 0, 0),
+                                                    12.0, 0.0, 0.0, 0.0),
                                             child: Text(
                                               '${valueOrDefault<String>(
                                                 userInfoRestaurantsRecord
@@ -350,7 +379,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .tertiaryColor,
-                                                    fontSize: 12,
+                                                    fontSize: 12.0,
                                                   ),
                                             ),
                                           ),
@@ -368,7 +397,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                   child: StreamBuilder<RestaurantsRecord>(
                     stream:
                         RestaurantsRecord.getDocument(widget.posts!.restRef!),
@@ -377,11 +406,11 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                       if (!snapshot.hasData) {
                         return Center(
                           child: SizedBox(
-                            width: 30,
-                            height: 30,
+                            width: 30.0,
+                            height: 30.0,
                             child: SpinKitThreeBounce(
                               color: FlutterFlowTheme.of(context).primaryColor,
-                              size: 30,
+                              size: 30.0,
                             ),
                           ),
                         );
@@ -400,12 +429,12 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                               if (!snapshot.hasData) {
                                 return Center(
                                   child: SizedBox(
-                                    width: 30,
-                                    height: 30,
+                                    width: 30.0,
+                                    height: 30.0,
                                     child: SpinKitThreeBounce(
                                       color: FlutterFlowTheme.of(context)
                                           .primaryColor,
-                                      size: 30,
+                                      size: 30.0,
                                     ),
                                   ),
                                 );
@@ -420,13 +449,13 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  10, 5, 0, 0),
+                                                  10.0, 5.0, 0.0, 0.0),
                                           child: InkWell(
                                             onTap: () async {
                                               logFirebaseEvent(
                                                   'VIEW_OVERLAY_VideoPlayer_35gibtci_ON_TAP');
                                               logFirebaseEvent(
-                                                  'VideoPlayer_Bottom-Sheet');
+                                                  'VideoPlayer_bottom_sheet');
                                               await showModalBottomSheet(
                                                 isScrollControlled: true,
                                                 backgroundColor:
@@ -442,7 +471,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                           MediaQuery.of(context)
                                                                   .size
                                                                   .height *
-                                                              1,
+                                                              1.0,
                                                       child: ReplyVideoWidget(),
                                                     ),
                                                   );
@@ -454,8 +483,8 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                               path: stackPostsRecord
                                                   .videoReplyURL!,
                                               videoType: VideoType.network,
-                                              width: 54,
-                                              height: 96,
+                                              width: 54.0,
+                                              height: 96.0,
                                               autoPlay: false,
                                               looping: false,
                                               showControls: false,
@@ -479,14 +508,15 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                 0.97, -0.57),
                                             child: Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(10, 5, 0, 0),
+                                                  .fromSTEB(
+                                                      10.0, 5.0, 0.0, 0.0),
                                               child: FFButtonWidget(
                                                 onPressed: () async {
                                                   logFirebaseEvent(
                                                       'PAGE_VIEW_OVERLAY_COMP_REPLY_BTN_ON_TAP');
                                                   var _shouldSetState = false;
                                                   logFirebaseEvent(
-                                                      'Button_Upload-Photo-Video');
+                                                      'Button_upload_media_to_firebase');
                                                   final selectedMedia =
                                                       await selectMediaWithSourceBottomSheet(
                                                     context: context,
@@ -498,46 +528,89 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                           validateFileFormat(
                                                               m.storagePath,
                                                               context))) {
-                                                    showUploadMessage(
-                                                      context,
-                                                      'Uploading file...',
-                                                      showLoading: true,
-                                                    );
-                                                    final downloadUrls = (await Future
-                                                            .wait(selectedMedia
-                                                                .map((m) async =>
-                                                                    await uploadData(
-                                                                        m.storagePath,
-                                                                        m.bytes))))
-                                                        .where((u) => u != null)
-                                                        .map((u) => u!)
-                                                        .toList();
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .hideCurrentSnackBar();
-                                                    if (downloadUrls.length ==
-                                                        selectedMedia.length) {
-                                                      setState(() =>
-                                                          uploadedFileUrl =
-                                                              downloadUrls
-                                                                  .first);
+                                                    setState(() => _model
+                                                            .isMediaUploading =
+                                                        true);
+                                                    var selectedUploadedFiles =
+                                                        <FFUploadedFile>[];
+                                                    var downloadUrls =
+                                                        <String>[];
+                                                    try {
                                                       showUploadMessage(
                                                         context,
-                                                        'Success!',
+                                                        'Uploading file...',
+                                                        showLoading: true,
                                                       );
+                                                      selectedUploadedFiles =
+                                                          selectedMedia
+                                                              .map((m) =>
+                                                                  FFUploadedFile(
+                                                                    name: m
+                                                                        .storagePath
+                                                                        .split(
+                                                                            '/')
+                                                                        .last,
+                                                                    bytes:
+                                                                        m.bytes,
+                                                                    height: m
+                                                                        .dimensions
+                                                                        ?.height,
+                                                                    width: m
+                                                                        .dimensions
+                                                                        ?.width,
+                                                                  ))
+                                                              .toList();
+
+                                                      downloadUrls =
+                                                          (await Future.wait(
+                                                        selectedMedia.map(
+                                                          (m) async =>
+                                                              await uploadData(
+                                                                  m.storagePath,
+                                                                  m.bytes),
+                                                        ),
+                                                      ))
+                                                              .where((u) =>
+                                                                  u != null)
+                                                              .map((u) => u!)
+                                                              .toList();
+                                                    } finally {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .hideCurrentSnackBar();
+                                                      _model.isMediaUploading =
+                                                          false;
+                                                    }
+                                                    if (selectedUploadedFiles
+                                                                .length ==
+                                                            selectedMedia
+                                                                .length &&
+                                                        downloadUrls.length ==
+                                                            selectedMedia
+                                                                .length) {
+                                                      setState(() {
+                                                        _model.uploadedLocalFile =
+                                                            selectedUploadedFiles
+                                                                .first;
+                                                        _model.uploadedFileUrl =
+                                                            downloadUrls.first;
+                                                      });
+                                                      showUploadMessage(
+                                                          context, 'Success!');
                                                     } else {
-                                                      showUploadMessage(
-                                                        context,
-                                                        'Failed to upload media',
-                                                      );
+                                                      setState(() {});
+                                                      showUploadMessage(context,
+                                                          'Failed to upload media');
                                                       return;
                                                     }
                                                   }
 
-                                                  if (uploadedFileUrl != null &&
-                                                      uploadedFileUrl != '') {
+                                                  if (_model.uploadedFileUrl !=
+                                                          null &&
+                                                      _model.uploadedFileUrl !=
+                                                          '') {
                                                     logFirebaseEvent(
-                                                        'Button_Backend-Call');
+                                                        'Button_backend_call');
 
                                                     final replyVideosCreateData =
                                                         createReplyVideosRecordData(
@@ -545,7 +618,8 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                           currentUserReference,
                                                       post: stackPostsRecord
                                                           .reference,
-                                                      video: uploadedFileUrl,
+                                                      video: _model
+                                                          .uploadedFileUrl,
                                                     );
                                                     var replyVideosRecordReference =
                                                         ReplyVideosRecord
@@ -554,21 +628,22 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                     await replyVideosRecordReference
                                                         .set(
                                                             replyVideosCreateData);
-                                                    replyVideo = ReplyVideosRecord
+                                                    _model.replyVideo = ReplyVideosRecord
                                                         .getDocumentFromData(
                                                             replyVideosCreateData,
                                                             replyVideosRecordReference);
                                                     _shouldSetState = true;
                                                     logFirebaseEvent(
-                                                        'Button_Backend-Call');
+                                                        'Button_backend_call');
 
                                                     final postsUpdateData =
                                                         createPostsRecordData(
-                                                      replyVideo:
-                                                          replyVideo!.reference,
+                                                      replyVideo: _model
+                                                          .replyVideo!
+                                                          .reference,
                                                       hasReply: true,
-                                                      videoReplyURL:
-                                                          uploadedFileUrl,
+                                                      videoReplyURL: _model
+                                                          .uploadedFileUrl,
                                                     );
                                                     await stackPostsRecord
                                                         .reference
@@ -589,8 +664,15 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                   'y7wj3vhv' /* Reply */,
                                                 ),
                                                 options: FFButtonOptions(
-                                                  width: 130,
-                                                  height: 40,
+                                                  width: 130.0,
+                                                  height: 40.0,
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          0.0, 0.0, 0.0, 0.0),
+                                                  iconPadding:
+                                                      EdgeInsetsDirectional
+                                                          .fromSTEB(0.0, 0.0,
+                                                              0.0, 0.0),
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .primaryColor,
@@ -605,10 +687,11 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                           ),
                                                   borderSide: BorderSide(
                                                     color: Colors.transparent,
-                                                    width: 1,
+                                                    width: 1.0,
                                                   ),
                                                   borderRadius:
-                                                      BorderRadius.circular(12),
+                                                      BorderRadius.circular(
+                                                          12.0),
                                                 ),
                                               ),
                                             ),
@@ -621,13 +704,13 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                           AlignmentDirectional(0.36, 14.18),
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            10, 5, 0, 0),
+                                            10.0, 5.0, 0.0, 0.0),
                                         child: InkWell(
                                           onTap: () async {
                                             logFirebaseEvent(
                                                 'VIEW_OVERLAY_Container_on38uz5e_ON_TAP');
                                             logFirebaseEvent(
-                                                'Container_Bottom-Sheet');
+                                                'Container_bottom_sheet');
                                             await showModalBottomSheet(
                                               isScrollControlled: true,
                                               backgroundColor:
@@ -643,7 +726,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height *
-                                                            1,
+                                                            1.0,
                                                     child: ReplyVideoWidget(
                                                       video2: stackPostsRecord
                                                           .replyVideo,
@@ -654,8 +737,8 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                             ).then((value) => setState(() {}));
                                           },
                                           child: Container(
-                                            width: 54,
-                                            height: 96,
+                                            width: 54.0,
+                                            height: 96.0,
                                             decoration: BoxDecoration(),
                                           ),
                                         ),
@@ -672,22 +755,22 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
                                 color: FlutterFlowTheme.of(context).primaryDark,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(60),
+                                  borderRadius: BorderRadius.circular(60.0),
                                 ),
                                 child: FlutterFlowIconButton(
                                   borderColor: Colors.transparent,
-                                  borderRadius: 30,
-                                  buttonSize: 34,
+                                  borderRadius: 30.0,
+                                  buttonSize: 34.0,
                                   fillColor: Color(0xFF2D2D2D),
                                   icon: Icon(
                                     Icons.flag_rounded,
                                     color: Color(0xFFA4A4A4),
-                                    size: 20,
+                                    size: 20.0,
                                   ),
                                   onPressed: () async {
                                     logFirebaseEvent(
                                         'VIEW_OVERLAY_flag_rounded_ICN_ON_TAP');
-                                    logFirebaseEvent('IconButton_Bottom-Sheet');
+                                    logFirebaseEvent('IconButton_bottom_sheet');
                                     await showModalBottomSheet(
                                       isScrollControlled: true,
                                       context: context,
@@ -708,25 +791,25 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
                                 color: FlutterFlowTheme.of(context).primaryDark,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(60),
+                                  borderRadius: BorderRadius.circular(60.0),
                                 ),
                                 child: Stack(
                                   children: [
                                     FlutterFlowIconButton(
                                       borderColor: Colors.transparent,
-                                      borderRadius: 30,
-                                      buttonSize: 34,
+                                      borderRadius: 30.0,
+                                      buttonSize: 34.0,
                                       fillColor: Color(0xFF2D2D2D),
                                       icon: Icon(
                                         Icons.theaters,
                                         color: Color(0xFFA4A4A4),
-                                        size: 20,
+                                        size: 20.0,
                                       ),
                                       onPressed: () async {
                                         logFirebaseEvent(
                                             'VIEW_OVERLAY_theaters_ICN_ON_TAP');
                                         logFirebaseEvent(
-                                            'IconButton_Backend-Call');
+                                            'IconButton_backend_call');
 
                                         final usersUpdateData = {
                                           'savedPosts': FieldValue.arrayUnion(
@@ -741,22 +824,23 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                             [])
                                         .contains(widget.posts!.reference))
                                       AuthUserStreamWidget(
-                                        child: FlutterFlowIconButton(
+                                        builder: (context) =>
+                                            FlutterFlowIconButton(
                                           borderColor: Colors.transparent,
-                                          borderRadius: 30,
-                                          buttonSize: 34,
+                                          borderRadius: 30.0,
+                                          buttonSize: 34.0,
                                           fillColor: Color(0xFF2D2D2D),
                                           icon: Icon(
                                             Icons.theaters,
                                             color: FlutterFlowTheme.of(context)
                                                 .secondaryColor,
-                                            size: 18,
+                                            size: 18.0,
                                           ),
                                           onPressed: () async {
                                             logFirebaseEvent(
                                                 'VIEW_OVERLAY_theaters_ICN_ON_TAP');
                                             logFirebaseEvent(
-                                                'IconButton_Backend-Call');
+                                                'IconButton_backend_call');
 
                                             final usersUpdateData = {
                                               'savedPosts':
@@ -777,24 +861,25 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                 color:
                                     FlutterFlowTheme.of(context).primaryColor,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(60),
+                                  borderRadius: BorderRadius.circular(60.0),
                                 ),
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      2, 2, 2, 2),
+                                      2.0, 2.0, 2.0, 2.0),
                                   child: InkWell(
                                     onTap: () async {
                                       logFirebaseEvent(
                                           'VIEW_OVERLAY_LottieAnimation_d9yrrsqa_ON');
                                       logFirebaseEvent(
-                                          'LottieAnimation_Navigate-To');
+                                          'LottieAnimation_navigate_to');
 
                                       context.pushNamed(
                                         'restDealPage',
                                         queryParams: {
                                           'restaurant': serializeParam(
-                                              userInfoRestaurantsRecord,
-                                              ParamType.Document),
+                                            userInfoRestaurantsRecord,
+                                            ParamType.Document,
+                                          ),
                                         }.withoutNulls,
                                         extra: <String, dynamic>{
                                           'restaurant':
@@ -804,8 +889,8 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                     },
                                     child: Lottie.asset(
                                       'assets/lottie_animations/deal_tag.json',
-                                      width: 31,
-                                      height: 31,
+                                      width: 31.0,
+                                      height: 31.0,
                                       fit: BoxFit.cover,
                                       reverse: true,
                                       animate: true,
@@ -818,24 +903,24 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                 color:
                                     FlutterFlowTheme.of(context).primaryColor,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(60),
+                                  borderRadius: BorderRadius.circular(60.0),
                                 ),
                                 child: FlutterFlowIconButton(
                                   borderColor: Colors.transparent,
-                                  borderRadius: 30,
-                                  buttonSize: 34,
+                                  borderRadius: 30.0,
+                                  buttonSize: 34.0,
                                   fillColor:
                                       FlutterFlowTheme.of(context).primaryColor,
                                   icon: FaIcon(
                                     FontAwesomeIcons.mapMarkerAlt,
                                     color: FlutterFlowTheme.of(context)
                                         .tertiaryColor,
-                                    size: 20,
+                                    size: 20.0,
                                   ),
                                   onPressed: () async {
                                     logFirebaseEvent(
                                         'VIEW_OVERLAY_mapMarkerAlt_ICN_ON_TAP');
-                                    logFirebaseEvent('IconButton_Navigate-To');
+                                    logFirebaseEvent('IconButton_navigate_to');
 
                                     context.pushNamed('videoFind');
                                   },
@@ -859,9 +944,9 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                   Color(0x001A1F24),
                   FlutterFlowTheme.of(context).primaryDark
                 ],
-                stops: [0, 1],
-                begin: AlignmentDirectional(0, -1),
-                end: AlignmentDirectional(0, 1),
+                stops: [0.0, 1.0],
+                begin: AlignmentDirectional(0.0, -1.0),
+                end: AlignmentDirectional(0, 1.0),
               ),
             ),
             child: Column(
@@ -873,15 +958,30 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 10),
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 10.0),
                       child: Container(
-                        width: 40,
-                        height: 40,
+                        width: 40.0,
+                        height: 40.0,
                         decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).tertiaryColor,
+                          color: () {
+                            if (widget.posts!.userRating == 5.0) {
+                              return Color(0xFF3FDF86);
+                            } else if (widget.posts!.userRating == 4.0) {
+                              return Color(0xFFC3DF3F);
+                            } else if (widget.posts!.userRating == 3.0) {
+                              return Color(0xFFDFCB3F);
+                            } else if (widget.posts!.userRating == 2.0) {
+                              return Color(0xFFDF993F);
+                            } else if (widget.posts!.userRating == 1.0) {
+                              return Color(0xFFDF5A3F);
+                            } else {
+                              return Color(0x00000000);
+                            }
+                          }(),
                           shape: BoxShape.circle,
                         ),
-                        alignment: AlignmentDirectional(0, 0),
+                        alignment: AlignmentDirectional(0.0, 0.0),
                         child: Text(
                           formatNumber(
                             widget.posts!.userRating!,
@@ -892,7 +992,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                           style:
                               FlutterFlowTheme.of(context).bodyText1.override(
                                     fontFamily: 'Lexend Deca',
-                                    fontSize: 24,
+                                    fontSize: 24.0,
                                   ),
                         ),
                       ),
@@ -906,11 +1006,11 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                     if (!snapshot.hasData) {
                       return Center(
                         child: SizedBox(
-                          width: 30,
-                          height: 30,
+                          width: 30.0,
+                          height: 30.0,
                           child: SpinKitThreeBounce(
                             color: FlutterFlowTheme.of(context).primaryColor,
-                            size: 30,
+                            size: 30.0,
                           ),
                         ),
                       );
@@ -921,7 +1021,8 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 10),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              10.0, 0.0, 0.0, 10.0),
                           child: Text(
                             rowUsersRecord.username!,
                             style:
@@ -947,12 +1048,13 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              10.0, 0.0, 0.0, 0.0),
                           child: InkWell(
                             onTap: () async {
                               logFirebaseEvent(
                                   'VIEW_OVERLAY_Text_ufcamyxq_ON_TAP');
-                              logFirebaseEvent('Text_Bottom-Sheet');
+                              logFirebaseEvent('Text_bottom_sheet');
                               await showModalBottomSheet(
                                 isScrollControlled: true,
                                 context: context,
@@ -977,7 +1079,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                     fontFamily: 'Lexend Deca',
                                     color: FlutterFlowTheme.of(context)
                                         .tertiaryColor,
-                                    fontSize: 12,
+                                    fontSize: 12.0,
                                   ),
                             ),
                           ),
@@ -987,14 +1089,16 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 8),
+                  padding:
+                      EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 8.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 20, 0),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 20.0, 0.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -1002,7 +1106,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Stack(
-                                  alignment: AlignmentDirectional(0, 0),
+                                  alignment: AlignmentDirectional(0.0, 0.0),
                                   children: [
                                     StreamBuilder<UsersRecord>(
                                       stream: UsersRecord.getDocument(
@@ -1012,13 +1116,13 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                         if (!snapshot.hasData) {
                                           return Center(
                                             child: SizedBox(
-                                              width: 30,
-                                              height: 30,
+                                              width: 30.0,
+                                              height: 30.0,
                                               child: SpinKitThreeBounce(
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .primaryColor,
-                                                size: 30,
+                                                size: 30.0,
                                               ),
                                             ),
                                           );
@@ -1026,8 +1130,8 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                         final containerUsersRecord =
                                             snapshot.data!;
                                         return Container(
-                                          width: 40,
-                                          height: 40,
+                                          width: 40.0,
+                                          height: 40.0,
                                           decoration: BoxDecoration(
                                             color: Color(0xFFEEEEEE),
                                             shape: BoxShape.circle,
@@ -1037,22 +1141,22 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                               logFirebaseEvent(
                                                   'VIEW_OVERLAY_CircleImage_as3pbp7q_ON_TAP');
                                               logFirebaseEvent(
-                                                  'CircleImage_Navigate-To');
+                                                  'CircleImage_navigate_to');
 
                                               context.pushNamed(
                                                 'viewProfileOther',
                                                 queryParams: {
                                                   'otherUser': serializeParam(
-                                                      containerUsersRecord
-                                                          .reference,
-                                                      ParamType
-                                                          .DocumentReference),
+                                                    containerUsersRecord
+                                                        .reference,
+                                                    ParamType.DocumentReference,
+                                                  ),
                                                 }.withoutNulls,
                                               );
                                             },
                                             child: Container(
-                                              width: 120,
-                                              height: 120,
+                                              width: 120.0,
+                                              height: 120.0,
                                               clipBehavior: Clip.antiAlias,
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
@@ -1072,10 +1176,10 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 40, 0, 0),
+                                          0.0, 40.0, 0.0, 0.0),
                                       child: Container(
-                                        width: 15,
-                                        height: 15,
+                                        width: 15.0,
+                                        height: 15.0,
                                         decoration: BoxDecoration(
                                           color: FlutterFlowTheme.of(context)
                                               .primaryColor,
@@ -1085,7 +1189,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                           Icons.add_rounded,
                                           color: FlutterFlowTheme.of(context)
                                               .tertiaryColor,
-                                          size: 10,
+                                          size: 10.0,
                                         ),
                                       ),
                                     ),
@@ -1100,15 +1204,15 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(50, 0, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                50.0, 0.0, 0.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 20, 0),
+                                      0.0, 0.0, 20.0, 0.0),
                                   child: StreamBuilder<RestaurantsRecord>(
                                     stream: RestaurantsRecord.getDocument(
                                         widget.posts!.restRef!),
@@ -1117,13 +1221,13 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                       if (!snapshot.hasData) {
                                         return Center(
                                           child: SizedBox(
-                                            width: 30,
-                                            height: 30,
+                                            width: 30.0,
+                                            height: 30.0,
                                             child: SpinKitThreeBounce(
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .primaryColor,
-                                              size: 30,
+                                              size: 30.0,
                                             ),
                                           ),
                                         );
@@ -1142,7 +1246,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                               logFirebaseEvent(
                                                   'VIEW_OVERLAY_commentSection_ON_TAP');
                                               logFirebaseEvent(
-                                                  'commentSection_Bottom-Sheet');
+                                                  'commentSection_bottom_sheet');
                                               await showModalBottomSheet(
                                                 isScrollControlled: true,
                                                 context: context,
@@ -1152,7 +1256,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                         MediaQuery.of(context)
                                                             .viewInsets,
                                                     child: Container(
-                                                      height: 600,
+                                                      height: 600.0,
                                                       child: CommentsWidget(
                                                         post: widget.posts,
                                                       ),
@@ -1170,22 +1274,24 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                     logFirebaseEvent(
                                                         'VIEW_OVERLAY_Icon_1ndlydws_ON_TAP');
                                                     logFirebaseEvent(
-                                                        'Icon_Play-Sound');
-                                                    soundPlayer ??=
+                                                        'Icon_play_sound');
+                                                    _model.soundPlayer ??=
                                                         AudioPlayer();
-                                                    if (soundPlayer!.playing) {
-                                                      await soundPlayer!.stop();
+                                                    if (_model
+                                                        .soundPlayer!.playing) {
+                                                      await _model.soundPlayer!
+                                                          .stop();
                                                     }
 
-                                                    soundPlayer!
+                                                    _model.soundPlayer!
                                                         .setAsset(
                                                             'assets/audios/Female_Saying_Yummy_2_1.mp3')
-                                                        .then((_) =>
-                                                            soundPlayer!
-                                                                .play());
+                                                        .then((_) => _model
+                                                            .soundPlayer!
+                                                            .play());
 
                                                     logFirebaseEvent(
-                                                        'Icon_Bottom-Sheet');
+                                                        'Icon_bottom_sheet');
                                                     await showModalBottomSheet(
                                                       isScrollControlled: true,
                                                       backgroundColor:
@@ -1200,7 +1306,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                                       context)
                                                                   .viewInsets,
                                                           child: Container(
-                                                            height: 470,
+                                                            height: 470.0,
                                                             child:
                                                                 AddMenuCartWidget(
                                                               post:
@@ -1219,7 +1325,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .tertiaryColor,
-                                                    size: 30,
+                                                    size: 30.0,
                                                   ),
                                                 ),
                                               ],
@@ -1249,7 +1355,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 20, 0),
+                                      0.0, 0.0, 20.0, 0.0),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -1261,7 +1367,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                           logFirebaseEvent(
                                               'VIEW_OVERLAY_commentSection_ON_TAP');
                                           logFirebaseEvent(
-                                              'commentSection_Bottom-Sheet');
+                                              'commentSection_bottom_sheet');
                                           await showModalBottomSheet(
                                             isScrollControlled: true,
                                             context: context,
@@ -1270,7 +1376,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                 padding: MediaQuery.of(context)
                                                     .viewInsets,
                                                 child: Container(
-                                                  height: 600,
+                                                  height: 600.0,
                                                   child: CommentsWidget(
                                                     post: widget.posts,
                                                   ),
@@ -1287,7 +1393,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                 logFirebaseEvent(
                                                     'VIEW_OVERLAY_Icon_q02axlug_ON_TAP');
                                                 logFirebaseEvent(
-                                                    'Icon_Bottom-Sheet');
+                                                    'Icon_bottom_sheet');
                                                 await showModalBottomSheet(
                                                   isScrollControlled: true,
                                                   context: context,
@@ -1297,7 +1403,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                           MediaQuery.of(context)
                                                               .viewInsets,
                                                       child: Container(
-                                                        height: 525,
+                                                        height: 525.0,
                                                         child:
                                                             CommentsCopyWidget(
                                                           post: widget.posts,
@@ -1313,7 +1419,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .tertiaryColor,
-                                                size: 30,
+                                                size: 30.0,
                                               ),
                                             ),
                                           ],
@@ -1341,12 +1447,12 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                     if (!snapshot.hasData) {
                                       return Center(
                                         child: SizedBox(
-                                          width: 30,
-                                          height: 30,
+                                          width: 30.0,
+                                          height: 30.0,
                                           child: SpinKitThreeBounce(
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryColor,
-                                            size: 30,
+                                            size: 30.0,
                                           ),
                                         ),
                                       );
@@ -1362,17 +1468,17 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                 .contains(currentUserReference))
                                               Align(
                                                 alignment: AlignmentDirectional(
-                                                    0, 0.25),
+                                                    0.0, 0.25),
                                                 child: InkWell(
                                                   onTap: () async {
                                                     logFirebaseEvent(
                                                         'VIEW_OVERLAY_Icon_bavv37qb_ON_TAP');
                                                     logFirebaseEvent(
-                                                        'Icon_Haptic-Feedback');
+                                                        'Icon_haptic_feedback');
                                                     HapticFeedback
                                                         .selectionClick();
                                                     logFirebaseEvent(
-                                                        'Icon_Backend-Call');
+                                                        'Icon_backend_call');
 
                                                     final postsUpdateData = {
                                                       'likes': FieldValue
@@ -1385,42 +1491,24 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                         .update(
                                                             postsUpdateData);
                                                     logFirebaseEvent(
-                                                        'Icon_Widget-Animation');
+                                                        'Icon_widget_animation');
                                                     if (animationsMap[
-                                                            'iconOnActionTriggerAnimation'] ==
+                                                            'iconOnActionTriggerAnimation'] !=
                                                         null) {
-                                                      return;
+                                                      setState(() =>
+                                                          hasIconTriggered =
+                                                              true);
+                                                      SchedulerBinding.instance
+                                                          .addPostFrameCallback((_) async =>
+                                                              await animationsMap[
+                                                                      'iconOnActionTriggerAnimation']!
+                                                                  .controller
+                                                                  .forward(
+                                                                      from:
+                                                                          0.0));
                                                     }
-                                                    await (animationsMap[
-                                                                    'iconOnActionTriggerAnimation']!
-                                                                .curvedAnimation
-                                                                .parent
-                                                            as AnimationController)
-                                                        .forward(from: 0.0);
-
                                                     logFirebaseEvent(
-                                                        'Icon_Trigger-Push-Notification');
-                                                    triggerPushNotification(
-                                                      notificationTitle:
-                                                          'You got Flavor! 🔥',
-                                                      notificationText:
-                                                          '${valueOrDefault<String>(
-                                                        currentUserDisplayName,
-                                                        'A Colorly foodie',
-                                                      )} gave you flavor',
-                                                      notificationImageUrl:
-                                                          currentUserPhoto,
-                                                      notificationSound:
-                                                          'default',
-                                                      userRefs: [
-                                                        widget.posts!.user!
-                                                      ],
-                                                      initialPageName:
-                                                          'userProfile',
-                                                      parameterData: {},
-                                                    );
-                                                    logFirebaseEvent(
-                                                        'Icon_Backend-Call');
+                                                        'Icon_backend_call');
 
                                                     final usersUpdateData = {
                                                       'fizzzCoin':
@@ -1439,7 +1527,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .tertiaryColor,
-                                                    size: 26,
+                                                    size: 26.0,
                                                   ),
                                                 ),
                                               ),
@@ -1448,13 +1536,13 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                 .contains(currentUserReference))
                                               Align(
                                                 alignment: AlignmentDirectional(
-                                                    0, 0.25),
+                                                    0.0, 0.25),
                                                 child: InkWell(
                                                   onTap: () async {
                                                     logFirebaseEvent(
                                                         'VIEW_OVERLAY_Icon_nezhaoh0_ON_TAP');
                                                     logFirebaseEvent(
-                                                        'Icon_Backend-Call');
+                                                        'Icon_backend_call');
 
                                                     final postsUpdateData = {
                                                       'likes': FieldValue
@@ -1467,7 +1555,7 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                         .update(
                                                             postsUpdateData);
                                                     logFirebaseEvent(
-                                                        'Icon_Backend-Call');
+                                                        'Icon_backend_call');
 
                                                     final usersUpdateData = {
                                                       'fizzzCoin':
@@ -1484,12 +1572,13 @@ class _PageViewOverlayWidgetState extends State<PageViewOverlayWidget>
                                                   child: FaIcon(
                                                     FontAwesomeIcons.fire,
                                                     color: Color(0xFFB94600),
-                                                    size: 26,
+                                                    size: 26.0,
                                                   ),
-                                                ).animated([
-                                                  animationsMap[
-                                                      'iconOnActionTriggerAnimation']!
-                                                ]),
+                                                ).animateOnActionTrigger(
+                                                    animationsMap[
+                                                        'iconOnActionTriggerAnimation']!,
+                                                    hasBeenTriggered:
+                                                        hasIconTriggered),
                                               ),
                                           ],
                                         ),

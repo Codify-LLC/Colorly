@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:from_css_color/from_css_color.dart';
+
 import 'index.dart';
 import 'serializers.dart';
 import 'package:built_value/built_value.dart';
@@ -200,8 +202,8 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
               ListBuilder(snapshot.data['followers'].map((s) => toRef(s))))
           ..following = safeGet(() =>
               ListBuilder(snapshot.data['following'].map((s) => toRef(s))))
-          ..flavor =
-              safeGet(() => ListBuilder(snapshot.data['flavor']?.round()))
+          ..flavor = safeGet(() => ListBuilder(
+              snapshot.data['flavor'].map((i) => (i as num).round())))
           ..restConnections = safeGet(() => ListBuilder(
               snapshot.data['restConnections'].map((s) => toRef(s))))
           ..flavorTotal = snapshot.data['flavorTotal']?.round()

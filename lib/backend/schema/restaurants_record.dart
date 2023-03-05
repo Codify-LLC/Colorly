@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:from_css_color/from_css_color.dart';
+
 import 'index.dart';
 import 'serializers.dart';
 import 'package:built_value/built_value.dart';
@@ -174,6 +176,26 @@ abstract class RestaurantsRecord
 
   double? get cleanlinessMeter;
 
+  int? get checkedInCount;
+
+  BuiltList<DocumentReference>? get checkedIn;
+
+  BuiltList<String>? get accessabilities;
+
+  BuiltList<String>? get amenities;
+
+  BuiltList<String>? get crowd;
+
+  BuiltList<String>? get diningOptions;
+
+  BuiltList<String>? get highlights;
+
+  BuiltList<String>? get offerings;
+
+  BuiltList<String>? get payments;
+
+  BuiltList<String>? get planning;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -251,7 +273,17 @@ abstract class RestaurantsRecord
     ..cats = ListBuilder()
     ..foodMeter = 0.0
     ..serviceMeter = 0.0
-    ..cleanlinessMeter = 0.0;
+    ..cleanlinessMeter = 0.0
+    ..checkedInCount = 0
+    ..checkedIn = ListBuilder()
+    ..accessabilities = ListBuilder()
+    ..amenities = ListBuilder()
+    ..crowd = ListBuilder()
+    ..diningOptions = ListBuilder()
+    ..highlights = ListBuilder()
+    ..offerings = ListBuilder()
+    ..payments = ListBuilder()
+    ..planning = ListBuilder();
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('restaurants');
@@ -354,6 +386,19 @@ abstract class RestaurantsRecord
           ..foodMeter = snapshot.data['foodMeter']?.toDouble()
           ..serviceMeter = snapshot.data['serviceMeter']?.toDouble()
           ..cleanlinessMeter = snapshot.data['cleanlinessMeter']?.toDouble()
+          ..checkedInCount = snapshot.data['checkedInCount']?.round()
+          ..checkedIn = safeGet(() =>
+              ListBuilder(snapshot.data['checkedIn'].map((s) => toRef(s))))
+          ..accessabilities =
+              safeGet(() => ListBuilder(snapshot.data['accessabilities']))
+          ..amenities = safeGet(() => ListBuilder(snapshot.data['amenities']))
+          ..crowd = safeGet(() => ListBuilder(snapshot.data['crowd']))
+          ..diningOptions =
+              safeGet(() => ListBuilder(snapshot.data['diningOptions']))
+          ..highlights = safeGet(() => ListBuilder(snapshot.data['highlights']))
+          ..offerings = safeGet(() => ListBuilder(snapshot.data['offerings']))
+          ..payments = safeGet(() => ListBuilder(snapshot.data['payments']))
+          ..planning = safeGet(() => ListBuilder(snapshot.data['planning']))
           ..ffRef = RestaurantsRecord.collection.doc(snapshot.objectID),
       );
 
@@ -453,6 +498,7 @@ Map<String, dynamic> createRestaurantsRecordData({
   double? foodMeter,
   double? serviceMeter,
   double? cleanlinessMeter,
+  int? checkedInCount,
 }) {
   final firestoreData = serializers.toFirestore(
     RestaurantsRecord.serializer,
@@ -534,7 +580,17 @@ Map<String, dynamic> createRestaurantsRecordData({
         ..cats = null
         ..foodMeter = foodMeter
         ..serviceMeter = serviceMeter
-        ..cleanlinessMeter = cleanlinessMeter,
+        ..cleanlinessMeter = cleanlinessMeter
+        ..checkedInCount = checkedInCount
+        ..checkedIn = null
+        ..accessabilities = null
+        ..amenities = null
+        ..crowd = null
+        ..diningOptions = null
+        ..highlights = null
+        ..offerings = null
+        ..payments = null
+        ..planning = null,
     ),
   );
 

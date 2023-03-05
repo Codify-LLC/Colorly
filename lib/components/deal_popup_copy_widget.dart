@@ -1,14 +1,17 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '/auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'deal_popup_copy_model.dart';
+export 'deal_popup_copy_model.dart';
 
 class DealPopupCopyWidget extends StatefulWidget {
   const DealPopupCopyWidget({
@@ -23,8 +26,33 @@ class DealPopupCopyWidget extends StatefulWidget {
 }
 
 class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
+  late DealPopupCopyModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => DealPopupCopyModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Stack(
       children: [
         Column(
@@ -32,23 +60,23 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Align(
-              alignment: AlignmentDirectional(0, 0),
+              alignment: AlignmentDirectional(0.0, 0.0),
               child: Container(
-                width: 325,
-                height: 500,
+                width: 325.0,
+                height: 500.0,
                 decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).tertiaryColor,
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
                   boxShadow: [
                     BoxShadow(
-                      blurRadius: 6,
+                      blurRadius: 6.0,
                       color: Color(0x7D0F0F0F),
                     )
                   ],
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.0),
                 ),
-                alignment: AlignmentDirectional(0, 0),
+                alignment: AlignmentDirectional(0.0, 0.0),
                 child: Align(
-                  alignment: AlignmentDirectional(0, -1),
+                  alignment: AlignmentDirectional(0.0, -1.0),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -56,34 +84,34 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(24, 16, 24, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 16.0, 24.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                width: 100,
-                                height: 5,
+                                width: 100.0,
+                                height: 5.0,
                                 decoration: BoxDecoration(
-                                  color: Color(0xFF6E6E6E),
-                                  borderRadius: BorderRadius.circular(99),
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                  borderRadius: BorderRadius.circular(99.0),
                                 ),
                               ),
                             ],
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 30.0, 0.0, 0.0),
                           child: Container(
-                            width: 300,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).tertiaryColor,
-                            ),
+                            width: 300.0,
+                            height: 100.0,
+                            decoration: BoxDecoration(),
                             child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(24, 16, 24, 4),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  24.0, 16.0, 24.0, 4.0),
                               child: StreamBuilder<RestaurantsRecord>(
                                 stream: RestaurantsRecord.getDocument(
                                     widget.deal!.restRef!),
@@ -92,12 +120,12 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                                   if (!snapshot.hasData) {
                                     return Center(
                                       child: SizedBox(
-                                        width: 30,
-                                        height: 30,
+                                        width: 30.0,
+                                        height: 30.0,
                                         child: SpinKitThreeBounce(
                                           color: FlutterFlowTheme.of(context)
                                               .primaryColor,
-                                          size: 30,
+                                          size: 30.0,
                                         ),
                                       ),
                                     );
@@ -114,21 +142,22 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                                           logFirebaseEvent(
                                               'DEAL_POPUP_COPY_CircleImage_x0q6qnlz_ON_');
                                           logFirebaseEvent(
-                                              'CircleImage_Navigate-To');
+                                              'CircleImage_navigate_to');
 
                                           context.pushNamed(
                                             'restaurantDetails',
                                             queryParams: {
                                               'restaurant': serializeParam(
-                                                  descriptionTitleRestaurantsRecord
-                                                      .reference,
-                                                  ParamType.DocumentReference),
+                                                descriptionTitleRestaurantsRecord
+                                                    .reference,
+                                                ParamType.DocumentReference,
+                                              ),
                                             }.withoutNulls,
                                           );
                                         },
                                         child: Container(
-                                          width: 100,
-                                          height: 100,
+                                          width: 100.0,
+                                          height: 100.0,
                                           clipBehavior: Clip.antiAlias,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
@@ -141,12 +170,9 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                                         ),
                                       ),
                                       Container(
-                                        width: 150,
-                                        height: 150,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .tertiaryColor,
-                                        ),
+                                        width: 150.0,
+                                        height: 150.0,
+                                        decoration: BoxDecoration(),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment:
@@ -162,8 +188,11 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                                                     .bodyText2
                                                     .override(
                                                       fontFamily: 'Lexend Deca',
-                                                      color: Color(0xFF57636C),
-                                                      fontSize: 16,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      fontSize: 16.0,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                     ),
@@ -179,22 +208,28 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                                                           fontFamily: 'Poppins',
                                                           color: FlutterFlowTheme
                                                                   .of(context)
-                                                              .primaryDark,
-                                                          fontSize: 22,
+                                                              .primaryText,
+                                                          fontSize: 22.0,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                         ),
                                               ),
                                             ),
                                             Text(
-                                              'Until ${dateTimeFormat('MMMEd', widget.deal!.expiry)}',
+                                              'Until ${dateTimeFormat(
+                                                'MMMEd',
+                                                widget.deal!.expiry,
+                                                locale:
+                                                    FFLocalizations.of(context)
+                                                        .languageCode,
+                                              )}',
                                               style: FlutterFlowTheme.of(
                                                       context)
                                                   .bodyText2
                                                   .override(
                                                     fontFamily: 'Lexend Deca',
                                                     color: Color(0xFF57636C),
-                                                    fontSize: 12,
+                                                    fontSize: 12.0,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                             ),
@@ -209,7 +244,8 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 4.0, 24.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -217,7 +253,7 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                               Expanded(
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 20, 0, 20),
+                                      0.0, 20.0, 0.0, 20.0),
                                   child: Text(
                                     widget.deal!.details!,
                                     textAlign: TextAlign.center,
@@ -225,8 +261,9 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                                         .subtitle2
                                         .override(
                                           fontFamily: 'Lexend Deca',
-                                          color: Color(0xFF151B1E),
-                                          fontSize: 12,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          fontSize: 12.0,
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
@@ -236,7 +273,8 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 4.0, 24.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -250,7 +288,7 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                                     .override(
                                       fontFamily: 'Lexend Deca',
                                       color: Color(0xFF8B97A2),
-                                      fontSize: 14,
+                                      fontSize: 14.0,
                                       fontWeight: FontWeight.normal,
                                     ),
                               ),
@@ -258,8 +296,8 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(24, 4, 24, 24),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 4.0, 24.0, 24.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -271,8 +309,9 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                                       .title1
                                       .override(
                                         fontFamily: 'Lexend Deca',
-                                        color: Color(0xFF090F13),
-                                        fontSize: 12,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        fontSize: 12.0,
                                         fontWeight: FontWeight.bold,
                                       ),
                                 ),
@@ -281,7 +320,8 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 4.0, 24.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -295,13 +335,13 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                                     .override(
                                       fontFamily: 'Lexend Deca',
                                       color: Color(0xFF8B97A2),
-                                      fontSize: 14,
+                                      fontSize: 14.0,
                                       fontWeight: FontWeight.normal,
                                     ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 0.0, 0.0, 0.0),
                                 child: Text(
                                   valueOrDefault<String>(
                                     widget.deal!.code,
@@ -312,8 +352,8 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                                       .override(
                                         fontFamily: 'Lexend Deca',
                                         color: FlutterFlowTheme.of(context)
-                                            .primaryDark,
-                                        fontSize: 14,
+                                            .primaryText,
+                                        fontSize: 14.0,
                                         fontWeight: FontWeight.bold,
                                       ),
                                 ),
@@ -330,21 +370,22 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
           ],
         ),
         Align(
-          alignment: AlignmentDirectional(0, 0.65),
+          alignment: AlignmentDirectional(0.0, 0.65),
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(24, 20, 24, 0),
+            padding: EdgeInsetsDirectional.fromSTEB(24.0, 20.0, 24.0, 0.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (widget.deal!.needsRedeemed ?? true)
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 30),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 30.0),
                     child: FFButtonWidget(
                       onPressed: () async {
                         logFirebaseEvent(
                             'DEAL_POPUP_COPY_COMP_REDEEM_BTN_ON_TAP');
-                        logFirebaseEvent('Button_Alert-Dialog');
+                        logFirebaseEvent('Button_alert_dialog');
                         var confirmDialogResponse = await showDialog<bool>(
                               context: context,
                               builder: (alertDialogContext) {
@@ -369,18 +410,18 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                             ) ??
                             false;
                         if (confirmDialogResponse) {
-                          logFirebaseEvent('Button_Navigate-To');
+                          logFirebaseEvent('Button_navigate_to');
 
                           context.pushNamed('userProfile');
                         }
-                        logFirebaseEvent('Button_Backend-Call');
+                        logFirebaseEvent('Button_backend_call');
 
                         final dealsUpdateData = {
                           'whoRedeemed':
                               FieldValue.arrayRemove([currentUserReference]),
                         };
                         await widget.deal!.reference.update(dealsUpdateData);
-                        logFirebaseEvent('Button_Backend-Call');
+                        logFirebaseEvent('Button_backend_call');
 
                         final usersUpdateData = {
                           'usedDeals':
@@ -395,11 +436,15 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                       ),
                       icon: Icon(
                         Icons.receipt,
-                        size: 15,
+                        size: 15.0,
                       ),
                       options: FFButtonOptions(
-                        width: 130,
-                        height: 40,
+                        width: 130.0,
+                        height: 40.0,
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        iconPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                         color: Color(0xFF43C643),
                         textStyle:
                             FlutterFlowTheme.of(context).subtitle2.override(
@@ -408,9 +453,9 @@ class _DealPopupCopyWidgetState extends State<DealPopupCopyWidget> {
                                 ),
                         borderSide: BorderSide(
                           color: Colors.transparent,
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
                   ),

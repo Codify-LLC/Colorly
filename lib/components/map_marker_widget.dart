@@ -1,15 +1,18 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../components/delivery_sheet_widget.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/delivery_sheet_widget.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'map_marker_model.dart';
+export 'map_marker_model.dart';
 
 class MapMarkerWidget extends StatefulWidget {
   const MapMarkerWidget({
@@ -28,32 +31,55 @@ class MapMarkerWidget extends StatefulWidget {
 }
 
 class _MapMarkerWidgetState extends State<MapMarkerWidget> {
+  late MapMarkerModel _model;
+
   LatLng? currentUserLocationValue;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => MapMarkerModel());
+
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
         .then((loc) => setState(() => currentUserLocationValue = loc));
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
     if (currentUserLocationValue == null) {
-      return Center(
-        child: SizedBox(
-          width: 30,
-          height: 30,
-          child: SpinKitThreeBounce(
-            color: FlutterFlowTheme.of(context).primaryColor,
-            size: 30,
+      return Container(
+        color: FlutterFlowTheme.of(context).primaryBackground,
+        child: Center(
+          child: SizedBox(
+            width: 30.0,
+            height: 30.0,
+            child: SpinKitThreeBounce(
+              color: FlutterFlowTheme.of(context).primaryColor,
+              size: 30.0,
+            ),
           ),
         ),
       );
     }
+
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 200,
+      width: MediaQuery.of(context).size.width * 1.0,
+      height: 200.0,
       decoration: BoxDecoration(
         color: Color(0x00960000),
       ),
@@ -67,13 +93,13 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
             children: [
               Material(
                 color: Colors.transparent,
-                elevation: 4,
+                elevation: 4.0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.0),
                 ),
                 child: Container(
-                  width: 350,
-                  height: 175,
+                  width: 350.0,
+                  height: 175.0,
                   decoration: BoxDecoration(
                     color: Color(0xFFEEEEEE),
                     image: DecorationImage(
@@ -85,7 +111,7 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                         ),
                       ).image,
                     ),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.0),
                   ),
                   child: Stack(
                     children: [
@@ -93,11 +119,11 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Container(
-                            width: 350,
-                            height: 175,
+                            width: 350.0,
+                            height: 175.0,
                             decoration: BoxDecoration(
                               color: Color(0xB30F0F0F),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                           ),
                         ],
@@ -106,14 +132,15 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                         onTap: () async {
                           logFirebaseEvent(
                               'MAP_MARKER_COMP_Row_gsag1nv3_ON_TAP');
-                          logFirebaseEvent('Row_Navigate-To');
+                          logFirebaseEvent('Row_navigate_to');
 
                           context.pushNamed(
                             'restaurantDetails',
                             queryParams: {
                               'restaurant': serializeParam(
-                                  widget.restaurant!.reference,
-                                  ParamType.DocumentReference),
+                                widget.restaurant!.reference,
+                                ParamType.DocumentReference,
+                              ),
                             }.withoutNulls,
                           );
                         },
@@ -121,17 +148,17 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 2),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 2.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 10, 0, 0),
+                                        10.0, 10.0, 0.0, 0.0),
                                     child: Material(
                                       color: Colors.transparent,
-                                      elevation: 4,
+                                      elevation: 4.0,
                                       shape: const CircleBorder(),
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -142,12 +169,12 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Stack(
-                                              alignment:
-                                                  AlignmentDirectional(0, 0),
+                                              alignment: AlignmentDirectional(
+                                                  0.0, 0.0),
                                               children: [
                                                 Container(
-                                                  width: 60,
-                                                  height: 60,
+                                                  width: 60.0,
+                                                  height: 60.0,
                                                   clipBehavior: Clip.antiAlias,
                                                   decoration: BoxDecoration(
                                                     shape: BoxShape.circle,
@@ -168,7 +195,7 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        5, 10, 0, 0),
+                                        5.0, 10.0, 0.0, 0.0),
                                     child: StreamBuilder<List<PostsRecord>>(
                                       stream: queryPostsRecord(
                                         queryBuilder: (postsRecord) =>
@@ -181,13 +208,13 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                         if (!snapshot.hasData) {
                                           return Center(
                                             child: SizedBox(
-                                              width: 30,
-                                              height: 30,
+                                              width: 30.0,
+                                              height: 30.0,
                                               child: SpinKitThreeBounce(
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .primaryColor,
-                                                size: 30,
+                                                size: 30.0,
                                               ),
                                             ),
                                           );
@@ -197,21 +224,21 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                             snapshot.data!;
                                         return Material(
                                           color: Colors.transparent,
-                                          elevation: 4,
+                                          elevation: 4.0,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(99),
+                                                BorderRadius.circular(99.0),
                                           ),
                                           child: Container(
-                                            width: 35,
-                                            height: 35,
+                                            width: 35.0,
+                                            height: 35.0,
                                             decoration: BoxDecoration(
                                               color: Color(0xFFEEEEEE),
                                               borderRadius:
-                                                  BorderRadius.circular(99),
+                                                  BorderRadius.circular(99.0),
                                             ),
                                             alignment:
-                                                AlignmentDirectional(0, 0),
+                                                AlignmentDirectional(0.0, 0.0),
                                             child: Text(
                                               valueOrDefault<String>(
                                                 functions.getAverageRating(
@@ -236,8 +263,8 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                               ),
                             ),
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(10, 20, 0, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  10.0, 20.0, 0.0, 0.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,7 +285,7 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .tertiaryColor,
-                                              fontSize: 26,
+                                              fontSize: 26.0,
                                               fontWeight: FontWeight.w600,
                                             ),
                                       ),
@@ -279,7 +306,7 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .tertiaryColor,
-                                              fontSize: 16,
+                                              fontSize: 16.0,
                                               fontWeight: FontWeight.normal,
                                             ),
                                       ),
@@ -298,7 +325,7 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .secondaryColor,
-                                              fontSize: 14,
+                                              fontSize: 14.0,
                                               fontWeight: FontWeight.normal,
                                             ),
                                       ),
@@ -311,7 +338,7 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 4, 0),
+                                            0.0, 0.0, 4.0, 0.0),
                                         child: Text(
                                           valueOrDefault<String>(
                                             widget.restaurant!.priceRange,
@@ -322,7 +349,7 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                               .override(
                                                 fontFamily: 'Lexend Deca',
                                                 color: Color(0xFF00FF00),
-                                                fontSize: 14,
+                                                fontSize: 14.0,
                                                 fontWeight: FontWeight.normal,
                                               ),
                                         ),
@@ -343,7 +370,7 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .tertiaryColor,
-                                              fontSize: 14,
+                                              fontSize: 14.0,
                                               fontWeight: FontWeight.normal,
                                             ),
                                       ),
@@ -362,7 +389,7 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .tertiaryColor,
-                                              fontSize: 14,
+                                              fontSize: 14.0,
                                               fontWeight: FontWeight.normal,
                                             ),
                                       ),
@@ -375,7 +402,8 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 120, 0, 10),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            0.0, 120.0, 0.0, 10.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -385,17 +413,17 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                               children: [
                                 FlutterFlowIconButton(
                                   borderColor: Colors.transparent,
-                                  borderRadius: 30,
-                                  buttonSize: 48,
+                                  borderRadius: 30.0,
+                                  buttonSize: 48.0,
                                   icon: Icon(
                                     Icons.phone_enabled,
                                     color: Colors.orange,
-                                    size: 30,
+                                    size: 30.0,
                                   ),
                                   onPressed: () async {
                                     logFirebaseEvent(
                                         'MAP_MARKER_COMP_phone_enabled_ICN_ON_TAP');
-                                    logFirebaseEvent('IconButton_Launch-U-R-L');
+                                    logFirebaseEvent('IconButton_launch_u_r_l');
                                     await launchURL(
                                         'tel:${widget.restaurant!.phoneNumber}');
                                   },
@@ -407,17 +435,17 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                               children: [
                                 FlutterFlowIconButton(
                                   borderColor: Colors.transparent,
-                                  borderRadius: 30,
-                                  buttonSize: 48,
+                                  borderRadius: 30.0,
+                                  buttonSize: 48.0,
                                   icon: FaIcon(
                                     FontAwesomeIcons.mapMarkedAlt,
                                     color: Colors.orange,
-                                    size: 30,
+                                    size: 30.0,
                                   ),
                                   onPressed: () async {
                                     logFirebaseEvent(
                                         'MAP_MARKER_COMP_mapMarkedAlt_ICN_ON_TAP');
-                                    logFirebaseEvent('IconButton_Launch-U-R-L');
+                                    logFirebaseEvent('IconButton_launch_u_r_l');
                                     await launchURL(functions.getMapUrl(
                                         widget.restaurant!.restLatLong));
                                   },
@@ -429,17 +457,17 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                               children: [
                                 FlutterFlowIconButton(
                                   borderColor: Colors.transparent,
-                                  borderRadius: 30,
-                                  buttonSize: 48,
+                                  borderRadius: 30.0,
+                                  buttonSize: 48.0,
                                   icon: FaIcon(
                                     FontAwesomeIcons.globe,
                                     color: Colors.orange,
-                                    size: 30,
+                                    size: 30.0,
                                   ),
                                   onPressed: () async {
                                     logFirebaseEvent(
                                         'MAP_MARKER_COMP_globe_ICN_ON_TAP');
-                                    logFirebaseEvent('IconButton_Launch-U-R-L');
+                                    logFirebaseEvent('IconButton_launch_u_r_l');
                                     await launchURL(
                                         'https://${widget.restaurant!.website}');
                                   },
@@ -452,18 +480,18 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                 children: [
                                   FlutterFlowIconButton(
                                     borderColor: Colors.transparent,
-                                    borderRadius: 30,
-                                    buttonSize: 48,
+                                    borderRadius: 30.0,
+                                    buttonSize: 48.0,
                                     icon: Icon(
                                       Icons.fastfood_rounded,
                                       color: Colors.orange,
-                                      size: 30,
+                                      size: 30.0,
                                     ),
                                     onPressed: () async {
                                       logFirebaseEvent(
                                           'MAP_MARKER_fastfood_rounded_ICN_ON_TAP');
                                       logFirebaseEvent(
-                                          'IconButton_Backend-Call');
+                                          'IconButton_backend_call');
 
                                       final restaurantsUpdateData = {
                                         'orderNowClicks':
@@ -472,7 +500,7 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                       await widget.restaurant!.reference
                                           .update(restaurantsUpdateData);
                                       logFirebaseEvent(
-                                          'IconButton_Bottom-Sheet');
+                                          'IconButton_bottom_sheet');
                                       await showModalBottomSheet(
                                         isScrollControlled: true,
                                         backgroundColor: Colors.transparent,
@@ -482,7 +510,7 @@ class _MapMarkerWidgetState extends State<MapMarkerWidget> {
                                             padding: MediaQuery.of(context)
                                                 .viewInsets,
                                             child: Container(
-                                              height: 400,
+                                              height: 400.0,
                                               child: DeliverySheetWidget(
                                                 restaurant: widget.restaurant,
                                               ),

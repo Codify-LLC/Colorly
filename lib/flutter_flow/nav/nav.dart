@@ -6,13 +6,15 @@ import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import '../flutter_flow_theme.dart';
 import '../../backend/backend.dart';
+
 import '../../auth/firebase_user_provider.dart';
-import '../../backend/push_notifications/push_notifications_handler.dart'
-    show PushNotificationsHandler;
+
 import '../../backend/firebase_dynamic_links/firebase_dynamic_links.dart'
     show DynamicLinksHandler;
 import '../../index.dart';
 import '../../main.dart';
+import '../lat_lng.dart';
+import '../place.dart';
 import 'serialization_util.dart';
 
 export 'package:go_router/go_router.dart';
@@ -23,8 +25,8 @@ export '../../backend/firebase_dynamic_links/firebase_dynamic_links.dart'
 const kTransitionInfoKey = '__transition_info__';
 
 class AppStateNotifier extends ChangeNotifier {
-  ColorlyAppFirebaseUser? initialUser;
-  ColorlyAppFirebaseUser? user;
+  ColorlyBackupFirebaseUser? initialUser;
+  ColorlyBackupFirebaseUser? user;
   bool showSplashImage = true;
   String? _redirectLocation;
 
@@ -49,7 +51,7 @@ class AppStateNotifier extends ChangeNotifier {
   /// to perform subsequent actions (such as navigation) afterwards.
   void updateNotifyOnAuthChange(bool notify) => notifyOnAuthChange = notify;
 
-  void update(ColorlyAppFirebaseUser newUser) {
+  void update(ColorlyBackupFirebaseUser newUser) {
     initialUser ??= newUser;
     user = newUser;
     // Refresh the app on auth change unless explicitly marked otherwise.
@@ -73,6 +75,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       errorBuilder: (context, _) =>
           appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
+      navigatorBuilder: (_, __, child) => DynamicLinksHandler(child: child),
       routes: [
         FFRoute(
           name: '_initialize',
@@ -91,24 +94,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => CreateAccountWidget(),
             ),
             FFRoute(
-              name: 'homePage',
-              path: 'homePage',
-              requireAuth: true,
-              asyncParams: {
-                'user': getDoc('users', UsersRecord.serializer),
-                'posts': getDoc('posts', PostsRecord.serializer),
-              },
-              builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'homePage')
-                  : HomePageWidget(
-                      numLikes: params.getParam('numLikes', ParamType.int),
-                      user: params.getParam('user', ParamType.Document),
-                      posts: params.getParam('posts', ParamType.Document),
-                      users: params.getParam(
-                          'users', ParamType.DocumentReference, 'users'),
-                    ),
-            ),
-            FFRoute(
               name: 'searchResults',
               path: 'searchResults',
               requireAuth: true,
@@ -118,13 +103,31 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
+              name: 'homePage',
+              path: 'homePage',
+              requireAuth: true,
+              asyncParams: {
+                'user': getDoc(['users'], UsersRecord.serializer),
+                'posts': getDoc(['posts'], PostsRecord.serializer),
+              },
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'homePage')
+                  : HomePageWidget(
+                      numLikes: params.getParam('numLikes', ParamType.int),
+                      user: params.getParam('user', ParamType.Document),
+                      posts: params.getParam('posts', ParamType.Document),
+                      users: params.getParam('users',
+                          ParamType.DocumentReference, false, ['users']),
+                    ),
+            ),
+            FFRoute(
               name: 'explore',
               path: 'explore',
               asyncParams: {
                 'restaurants':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'posts': getDoc('posts', PostsRecord.serializer),
-                'addNumber': getDoc('addNumber', AddNumberRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'posts': getDoc(['posts'], PostsRecord.serializer),
+                'addNumber': getDoc(['addNumber'], AddNumberRecord.serializer),
               },
               builder: (context, params) => params.isEmpty
                   ? NavBarPage(initialPage: 'explore')
@@ -135,17 +138,31 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       addNumber:
                           params.getParam('addNumber', ParamType.Document),
                       addNumberRef: params.getParam('addNumberRef',
-                          ParamType.DocumentReference, 'addNumber'),
+                          ParamType.DocumentReference, false, ['addNumber']),
                     ),
+            ),
+            FFRoute(
+              name: 'storySuccess',
+              path: 'storySuccess',
+              requireAuth: true,
+              asyncParams: {
+                'story': getDoc(['stories'], StoriesRecord.serializer),
+                'restaurant':
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+              },
+              builder: (context, params) => StorySuccessWidget(
+                story: params.getParam('story', ParamType.Document),
+                restaurant: params.getParam('restaurant', ParamType.Document),
+              ),
             ),
             FFRoute(
               name: 'addStoryPage',
               path: 'addStoryPage',
               requireAuth: true,
               asyncParams: {
-                'user': getDoc('users', UsersRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
               },
               builder: (context, params) => AddStoryPageWidget(
                 user: params.getParam('user', ParamType.Document),
@@ -153,52 +170,20 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'restaurantDetails',
-              path: 'restaurantDetails',
-              requireAuth: true,
-              asyncParams: {
-                'posts': getDoc('posts', PostsRecord.serializer),
-                'user': getDoc('users', UsersRecord.serializer),
-                'menuitems': getDoc('menuItem', MenuItemRecord.serializer),
-                'menuCourse': getDoc('menuCourse', MenuCourseRecord.serializer),
-                'restaurantrec':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-              },
-              builder: (context, params) => NavBarPage(
-                initialPage: '',
-                page: RestaurantDetailsWidget(
-                  restaurant: params.getParam(
-                      'restaurant', ParamType.DocumentReference, 'restaurants'),
-                  posts: params.getParam('posts', ParamType.Document),
-                  user: params.getParam('user', ParamType.Document),
-                  menuitems: params.getParam('menuitems', ParamType.Document),
-                  authUser: params.getParam(
-                      'authUser', ParamType.DocumentReference, 'users'),
-                  menuCourse: params.getParam('menuCourse', ParamType.Document),
-                  menuCourses: params.getParam(
-                      'menuCourses', ParamType.DocumentReference, 'menuCourse'),
-                  restaurantrec:
-                      params.getParam('restaurantrec', ParamType.Document),
-                  integer: params.getParam('integer', ParamType.int),
-                  initialIndex: params.getParam('initialIndex', ParamType.int),
-                ),
-              ),
-            ),
-            FFRoute(
               name: 'userProfile',
               path: 'userProfile',
               requireAuth: true,
               asyncParams: {
-                'user': getDoc('users', UsersRecord.serializer),
-                'friends': getDoc('friends', FriendsRecord.serializer),
-                'post': getDoc('posts', PostsRecord.serializer),
-                'likes': getDoc('likes', LikesRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
+                'friends': getDoc(['friends'], FriendsRecord.serializer),
+                'post': getDoc(['posts'], PostsRecord.serializer),
+                'likes': getDoc(['likes'], LikesRecord.serializer),
               },
               builder: (context, params) => params.isEmpty
                   ? NavBarPage(initialPage: 'userProfile')
                   : UserProfileWidget(
-                      posts: params.getParam(
-                          'posts', ParamType.DocumentReference, 'posts'),
+                      posts: params.getParam('posts',
+                          ParamType.DocumentReference, false, ['posts']),
                       user: params.getParam('user', ParamType.Document),
                       friends: params.getParam('friends', ParamType.Document),
                       post: params.getParam('post', ParamType.Document),
@@ -210,14 +195,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'viewProfileOther',
               requireAuth: true,
               asyncParams: {
-                'user': getDoc('users', UsersRecord.serializer),
-                'friends': getDoc('friends', FriendsRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
+                'friends': getDoc(['friends'], FriendsRecord.serializer),
               },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
                 page: ViewProfileOtherWidget(
-                  otherUser: params.getParam(
-                      'otherUser', ParamType.DocumentReference, 'users'),
+                  otherUser: params.getParam('otherUser',
+                      ParamType.DocumentReference, false, ['users']),
                   user: params.getParam('user', ParamType.Document),
                   friends: params.getParam('friends', ParamType.Document),
                 ),
@@ -227,14 +212,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'editProfile',
               path: 'editProfile',
               requireAuth: true,
-              asyncParams: {
-                'user': getDoc('users', UsersRecord.serializer),
-              },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
-                page: EditProfileWidget(
-                  user: params.getParam('user', ParamType.Document),
-                ),
+                page: EditProfileWidget(),
               ),
             ),
             FFRoute(
@@ -249,8 +229,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'user': getDoc('users', UsersRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
               },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
@@ -260,7 +240,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   restaurant: params.getParam('restaurant', ParamType.Document),
                   user: params.getParam('user', ParamType.Document),
                   post: params.getParam(
-                      'post', ParamType.DocumentReference, 'posts'),
+                      'post', ParamType.DocumentReference, false, ['posts']),
                 ),
               ),
             ),
@@ -276,9 +256,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'user': getDoc('users', UsersRecord.serializer),
-                'stories': getDoc('stories', StoriesRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
+                'stories': getDoc(['stories'], StoriesRecord.serializer),
               },
               builder: (context, params) => StoryDetailsWidget(
                 initialStoryIndex:
@@ -286,8 +266,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 restaurant: params.getParam('restaurant', ParamType.Document),
                 user: params.getParam('user', ParamType.Document),
                 stories: params.getParam('stories', ParamType.Document),
-                storyRef: params.getParam(
-                    'storyRef', ParamType.DocumentReference, 'stories'),
+                storyRef: params.getParam('storyRef',
+                    ParamType.DocumentReference, false, ['stories']),
               ),
             ),
             FFRoute(
@@ -295,12 +275,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'chatUser',
               requireAuth: true,
               asyncParams: {
-                'chatUser': getDoc('users', UsersRecord.serializer),
+                'chatUser': getDoc(['users'], UsersRecord.serializer),
               },
               builder: (context, params) => ChatUserWidget(
                 chatUser: params.getParam('chatUser', ParamType.Document),
                 chatRef: params.getParam(
-                    'chatRef', ParamType.DocumentReference, 'chats'),
+                    'chatRef', ParamType.DocumentReference, false, ['chats']),
               ),
             ),
             FFRoute(
@@ -308,7 +288,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'chatMain',
               requireAuth: true,
               asyncParams: {
-                'user': getDoc('users', UsersRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
               },
               builder: (context, params) => params.isEmpty
                   ? NavBarPage(initialPage: 'chatMain')
@@ -329,24 +309,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'following',
               requireAuth: true,
               asyncParams: {
-                'friends': getDoc('friends', FriendsRecord.serializer),
-                'user': getDoc('users', UsersRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
               },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
                 page: FollowingWidget(
-                  friends: params.getParam('friends', ParamType.Document),
                   user: params.getParam('user', ParamType.Document),
                 ),
-              ),
-            ),
-            FFRoute(
-              name: 'mapResultsPage',
-              path: 'mapResultsPage',
-              requireAuth: true,
-              builder: (context, params) => MapResultsPageWidget(
-                restaurant: params.getParam(
-                    'restaurant', ParamType.DocumentReference, 'restaurants'),
               ),
             ),
             FFRoute(
@@ -354,9 +323,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'editRestaurant',
               requireAuth: true,
               asyncParams: {
-                'user': getDoc('users', UsersRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
               },
               builder: (context, params) => EditRestaurantWidget(
                 user: params.getParam('user', ParamType.Document),
@@ -369,8 +338,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'user': getDoc('users', UsersRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
               },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
@@ -380,7 +349,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   restaurant: params.getParam('restaurant', ParamType.Document),
                   user: params.getParam('user', ParamType.Document),
                   post: params.getParam(
-                      'post', ParamType.DocumentReference, 'posts'),
+                      'post', ParamType.DocumentReference, false, ['posts']),
                   hgcvk: params.getParam('hgcvk', ParamType.String),
                   share: params.getParam('share', ParamType.String),
                 ),
@@ -391,13 +360,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'restProfilePageCopy',
               requireAuth: true,
               asyncParams: {
-                'user': getDoc('users', UsersRecord.serializer),
-                'story': getDoc('stories', StoriesRecord.serializer),
-                'menuItems': getDoc('menuItem', MenuItemRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
+                'story': getDoc(['stories'], StoriesRecord.serializer),
+                'menuItems': getDoc(['menuItem'], MenuItemRecord.serializer),
               },
               builder: (context, params) => RestProfilePageCopyWidget(
-                restaurant: params.getParam(
-                    'restaurant', ParamType.DocumentReference, 'restaurants'),
+                restaurant: params.getParam('restaurant',
+                    ParamType.DocumentReference, false, ['restaurants']),
                 user: params.getParam('user', ParamType.Document),
                 story: params.getParam('story', ParamType.Document),
                 menuItems: params.getParam('menuItems', ParamType.Document),
@@ -418,8 +387,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'blockedUsers',
               requireAuth: true,
               asyncParams: {
-                'friends': getDoc('friends', FriendsRecord.serializer),
-                'user': getDoc('users', UsersRecord.serializer),
+                'friends': getDoc(['friends'], FriendsRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
               },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
@@ -435,9 +404,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'user': getDoc('users', UsersRecord.serializer),
-                'stories': getDoc('stories', StoriesRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
+                'stories': getDoc(['stories'], StoriesRecord.serializer),
               },
               builder: (context, params) => StoryDetailsCopyWidget(
                 initialStoryIndex:
@@ -453,8 +422,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurants':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'user': getDoc('users', UsersRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
               },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
@@ -470,7 +439,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'videoFind',
               requireAuth: true,
               asyncParams: {
-                'posts': getDoc('posts', PostsRecord.serializer),
+                'posts': getDoc(['posts'], PostsRecord.serializer),
               },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
@@ -485,31 +454,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'videoFindSearch',
               requireAuth: true,
               asyncParams: {
-                'posts': getDoc('posts', PostsRecord.serializer),
+                'posts': getDoc(['posts'], PostsRecord.serializer),
               },
               builder: (context, params) => VideoFindSearchWidget(
                 posts: params.getParam('posts', ParamType.Document),
-              ),
-            ),
-            FFRoute(
-              name: 'singleVideoPage',
-              path: 'singleVideoPage',
-              requireAuth: true,
-              asyncParams: {
-                'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'user': getDoc('users', UsersRecord.serializer),
-                'post': getDoc('posts', PostsRecord.serializer),
-              },
-              builder: (context, params) => NavBarPage(
-                initialPage: '',
-                page: SingleVideoPageWidget(
-                  initialStoryIndex:
-                      params.getParam('initialStoryIndex', ParamType.int),
-                  restaurant: params.getParam('restaurant', ParamType.Document),
-                  user: params.getParam('user', ParamType.Document),
-                  post: params.getParam('post', ParamType.Document),
-                ),
               ),
             ),
             FFRoute(
@@ -517,10 +465,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'menuItemsPage',
               requireAuth: true,
               asyncParams: {
-                'menuItem': getDoc('menuItem', MenuItemRecord.serializer),
+                'menuItem': getDoc(['menuItem'], MenuItemRecord.serializer),
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'menuCourse': getDoc('menuCourse', MenuCourseRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'menuCourse':
+                    getDoc(['menuCourse'], MenuCourseRecord.serializer),
               },
               builder: (context, params) => MenuItemsPageWidget(
                 menuItem: params.getParam('menuItem', ParamType.Document),
@@ -534,7 +483,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
               },
               builder: (context, params) => VideoTourWidget(
                 restaurant: params.getParam('restaurant', ParamType.Document),
@@ -546,7 +495,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
               },
               builder: (context, params) => SubmitReviewPageWidget(
                 restaurant: params.getParam('restaurant', ParamType.Document),
@@ -557,9 +506,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'singleItem',
               requireAuth: true,
               asyncParams: {
-                'menuItem': getDoc('menuItem', MenuItemRecord.serializer),
+                'menuItem': getDoc(['menuItem'], MenuItemRecord.serializer),
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
               },
               builder: (context, params) => SingleItemWidget(
                 menuItem: params.getParam('menuItem', ParamType.Document),
@@ -571,10 +520,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'reviewRating',
               requireAuth: true,
               asyncParams: {
-                'user': getDoc('users', UsersRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'menuItem': getDoc('menuItem', MenuItemRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'menuItem': getDoc(['menuItem'], MenuItemRecord.serializer),
               },
               builder: (context, params) => ReviewRatingWidget(
                 user: params.getParam('user', ParamType.Document),
@@ -587,7 +536,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'groupChatPage',
               requireAuth: true,
               asyncParams: {
-                'users': getDoc('users', UsersRecord.serializer),
+                'users': getDoc(['users'], UsersRecord.serializer),
               },
               builder: (context, params) => GroupChatPageWidget(
                 users: params.getParam('users', ParamType.Document),
@@ -598,7 +547,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'addChatUsers',
               requireAuth: true,
               asyncParams: {
-                'chat': getDoc('chats', ChatsRecord.serializer),
+                'chat': getDoc(['chats'], ChatsRecord.serializer),
               },
               builder: (context, params) => AddChatUsersWidget(
                 chat: params.getParam('chat', ParamType.Document),
@@ -610,7 +559,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
               },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
@@ -634,10 +583,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'menuItem': getDoc('menuItem', MenuItemRecord.serializer),
-                'modifiers': getDoc('modifiers', ModifiersRecord.serializer),
-                'menuCourse': getDoc('menuCourse', MenuCourseRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'menuItem': getDoc(['menuItem'], MenuItemRecord.serializer),
+                'modifiers': getDoc(['modifiers'], ModifiersRecord.serializer),
+                'menuCourse':
+                    getDoc(['menuCourse'], MenuCourseRecord.serializer),
               },
               builder: (context, params) => AddMenuItemWidget(
                 restaurant: params.getParam('restaurant', ParamType.Document),
@@ -651,9 +601,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'addModifier',
               requireAuth: true,
               asyncParams: {
-                'menuItem': getDoc('menuItem', MenuItemRecord.serializer),
+                'menuItem': getDoc(['menuItem'], MenuItemRecord.serializer),
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
               },
               builder: (context, params) => AddModifierWidget(
                 menuItem: params.getParam('menuItem', ParamType.Document),
@@ -665,9 +615,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'addOption',
               requireAuth: true,
               asyncParams: {
-                'menuItem': getDoc('menuItem', MenuItemRecord.serializer),
+                'menuItem': getDoc(['menuItem'], MenuItemRecord.serializer),
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
               },
               builder: (context, params) => AddOptionWidget(
                 menuItem: params.getParam('menuItem', ParamType.Document),
@@ -680,7 +630,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
               },
               builder: (context, params) => OrderWidget(
                 restaurant: params.getParam('restaurant', ParamType.Document),
@@ -701,23 +651,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
               },
               builder: (context, params) => RestDealPageWidget(
-                restaurant: params.getParam('restaurant', ParamType.Document),
-              ),
-            ),
-            FFRoute(
-              name: 'storySuccess',
-              path: 'storySuccess',
-              requireAuth: true,
-              asyncParams: {
-                'story': getDoc('stories', StoriesRecord.serializer),
-                'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-              },
-              builder: (context, params) => StorySuccessWidget(
-                story: params.getParam('story', ParamType.Document),
                 restaurant: params.getParam('restaurant', ParamType.Document),
               ),
             ),
@@ -727,9 +663,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'user': getDoc('users', UsersRecord.serializer),
-                'post': getDoc('posts', PostsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
+                'post': getDoc(['posts'], PostsRecord.serializer),
               },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
@@ -743,14 +679,24 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'adventurePage',
-              path: 'adventurePage',
+              name: 'singleVideoPage',
+              path: 'singleVideoPage',
               requireAuth: true,
               asyncParams: {
-                'adventure': getDoc('adventures', AdventuresRecord.serializer),
+                'restaurant':
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
+                'post': getDoc(['posts'], PostsRecord.serializer),
               },
-              builder: (context, params) => AdventurePageWidget(
-                adventure: params.getParam('adventure', ParamType.Document),
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: SingleVideoPageWidget(
+                  initialStoryIndex:
+                      params.getParam('initialStoryIndex', ParamType.int),
+                  restaurant: params.getParam('restaurant', ParamType.Document),
+                  user: params.getParam('user', ParamType.Document),
+                  post: params.getParam('post', ParamType.Document),
+                ),
               ),
             ),
             FFRoute(
@@ -758,10 +704,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'searchMenuItems',
               requireAuth: true,
               asyncParams: {
-                'menuItem': getDoc('menuItem', MenuItemRecord.serializer),
+                'menuItem': getDoc(['menuItem'], MenuItemRecord.serializer),
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'menuCourse': getDoc('menuCourse', MenuCourseRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'menuCourse':
+                    getDoc(['menuCourse'], MenuCourseRecord.serializer),
               },
               builder: (context, params) => SearchMenuItemsWidget(
                 menuItem: params.getParam('menuItem', ParamType.Document),
@@ -790,8 +737,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
-                'user': getDoc('users', UsersRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
               },
               builder: (context, params) => InAppStartOrderWidget(
                 restaurant: params.getParam('restaurant', ParamType.Document),
@@ -804,7 +751,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'curatedList':
-                    getDoc('curatedLists', CuratedListsRecord.serializer),
+                    getDoc(['curatedLists'], CuratedListsRecord.serializer),
               },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
@@ -812,15 +759,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   curatedList:
                       params.getParam('curatedList', ParamType.Document),
                 ),
-              ),
-            ),
-            FFRoute(
-              name: 'curatedListPage',
-              path: 'curatedListPage',
-              requireAuth: true,
-              builder: (context, params) => NavBarPage(
-                initialPage: '',
-                page: CuratedListPageWidget(),
               ),
             ),
             FFRoute(
@@ -833,22 +771,25 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
+              name: 'curatedListPage',
+              path: 'curatedListPage',
+              requireAuth: true,
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: CuratedListPageWidget(),
+              ),
+            ),
+            FFRoute(
               name: 'restaurantOrders',
               path: 'restaurantOrders',
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
               },
               builder: (context, params) => RestaurantOrdersWidget(
                 restaurant: params.getParam('restaurant', ParamType.Document),
               ),
-            ),
-            FFRoute(
-              name: 'draftVideos',
-              path: 'draftVideos',
-              requireAuth: true,
-              builder: (context, params) => DraftVideosWidget(),
             ),
             FFRoute(
               name: 'orderTransactions',
@@ -870,7 +811,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'orderStatus',
               requireAuth: true,
               asyncParams: {
-                'order': getDoc('order', OrderRecord.serializer),
+                'order': getDoc(['order'], OrderRecord.serializer),
               },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
@@ -895,28 +836,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'BroadcastPage',
-              path: 'broadcastPage',
-              requireAuth: true,
-              builder: (context, params) => BroadcastPageWidget(),
-            ),
-            FFRoute(
-              name: 'LiveVideoPage',
-              path: 'liveVideoPage',
-              requireAuth: true,
-              asyncParams: {
-                'stream': getDoc('streams', StreamsRecord.serializer),
-              },
-              builder: (context, params) => LiveVideoPageWidget(
-                stream: params.getParam('stream', ParamType.Document),
-              ),
-            ),
-            FFRoute(
               name: 'postCollage',
               path: 'postCollage',
               requireAuth: true,
               asyncParams: {
-                'user': getDoc('users', UsersRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
               },
               builder: (context, params) => NavBarPage(
                 initialPage: '',
@@ -931,13 +855,115 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               requireAuth: true,
               asyncParams: {
                 'restaurant':
-                    getDoc('restaurants', RestaurantsRecord.serializer),
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
               },
               builder: (context, params) => GalleryWidget(
                 restaurant: params.getParam('restaurant', ParamType.Document),
                 restaurantRef: params.getParam('restaurantRef',
-                    ParamType.DocumentReference, 'restaurants'),
+                    ParamType.DocumentReference, false, ['restaurants']),
               ),
+            ),
+            FFRoute(
+              name: 'homePageTest',
+              path: 'homePageTest',
+              requireAuth: true,
+              asyncParams: {
+                'user': getDoc(['users'], UsersRecord.serializer),
+                'posts': getDoc(['posts'], PostsRecord.serializer),
+              },
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'homePageTest')
+                  : HomePageTestWidget(
+                      numLikes: params.getParam('numLikes', ParamType.int),
+                      user: params.getParam('user', ParamType.Document),
+                      posts: params.getParam('posts', ParamType.Document),
+                      users: params.getParam('users',
+                          ParamType.DocumentReference, false, ['users']),
+                    ),
+            ),
+            FFRoute(
+              name: 'LiveVideoPage',
+              path: 'liveVideoPage',
+              requireAuth: true,
+              asyncParams: {
+                'stream': getDoc(['streams'], StreamsRecord.serializer),
+              },
+              builder: (context, params) => LiveVideoPageWidget(
+                stream: params.getParam('stream', ParamType.Document),
+              ),
+            ),
+            FFRoute(
+              name: 'restaurantDetails',
+              path: 'restaurantDetails',
+              requireAuth: true,
+              asyncParams: {
+                'posts': getDoc(['posts'], PostsRecord.serializer),
+                'user': getDoc(['users'], UsersRecord.serializer),
+                'menuitems': getDoc(['menuItem'], MenuItemRecord.serializer),
+                'menuCourse':
+                    getDoc(['menuCourse'], MenuCourseRecord.serializer),
+                'restaurantrec':
+                    getDoc(['restaurants'], RestaurantsRecord.serializer),
+              },
+              builder: (context, params) => NavBarPage(
+                initialPage: '',
+                page: RestaurantDetailsWidget(
+                  restaurant: params.getParam('restaurant',
+                      ParamType.DocumentReference, false, ['restaurants']),
+                  posts: params.getParam('posts', ParamType.Document),
+                  user: params.getParam('user', ParamType.Document),
+                  menuitems: params.getParam('menuitems', ParamType.Document),
+                  authUser: params.getParam('authUser',
+                      ParamType.DocumentReference, false, ['users']),
+                  menuCourse: params.getParam('menuCourse', ParamType.Document),
+                  menuCourses: params.getParam('menuCourses',
+                      ParamType.DocumentReference, false, ['menuCourse']),
+                  restaurantrec:
+                      params.getParam('restaurantrec', ParamType.Document),
+                  integer: params.getParam('integer', ParamType.int),
+                  initialIndex: params.getParam('initialIndex', ParamType.int),
+                ),
+              ),
+            ),
+            FFRoute(
+              name: 'draftVideos',
+              path: 'draftVideos',
+              requireAuth: true,
+              builder: (context, params) => DraftVideosWidget(),
+            ),
+            FFRoute(
+              name: 'profileHome',
+              path: 'profileHome',
+              requireAuth: true,
+              builder: (context, params) => ProfileHomeWidget(),
+            ),
+            FFRoute(
+              name: 'toggleNotifications',
+              path: 'toggleNotifications',
+              requireAuth: true,
+              builder: (context, params) => ToggleNotificationsWidget(),
+            ),
+            FFRoute(
+              name: 'homePageCopy',
+              path: 'homePageCopy',
+              requireAuth: true,
+              asyncParams: {
+                'user': getDoc(['users'], UsersRecord.serializer),
+                'posts': getDoc(['posts'], PostsRecord.serializer),
+              },
+              builder: (context, params) => HomePageCopyWidget(
+                numLikes: params.getParam('numLikes', ParamType.int),
+                user: params.getParam('user', ParamType.Document),
+                posts: params.getParam('posts', ParamType.Document),
+                users: params.getParam(
+                    'users', ParamType.DocumentReference, false, ['users']),
+              ),
+            ),
+            FFRoute(
+              name: 'indyOnly',
+              path: 'indyOnly',
+              requireAuth: true,
+              builder: (context, params) => IndyOnlyWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),
@@ -1046,10 +1072,11 @@ class FFParameters {
         ),
       ).onError((_, __) => [false]).then((v) => v.every((e) => e));
 
-  dynamic getParam(
+  dynamic getParam<T>(
     String paramName,
     ParamType type, [
-    String? collectionName,
+    bool isList = false,
+    List<String>? collectionNamePath,
   ]) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
@@ -1063,7 +1090,7 @@ class FFParameters {
       return param;
     }
     // Return serialized value.
-    return deserializeParam(param, type, collectionName);
+    return deserializeParam<T>(param, type, isList, collectionNamePath);
   }
 }
 
@@ -1116,8 +1143,7 @@ class FFRoute {
                     fit: BoxFit.cover,
                   ),
                 )
-              : PushNotificationsHandler(
-                  child: DynamicLinksHandler(child: page));
+              : page;
 
           final transitionInfo = state.transitionInfo;
           return transitionInfo.hasTransition
@@ -1154,7 +1180,7 @@ class TransitionInfo {
 
   static TransitionInfo appDefault() => TransitionInfo(
         hasTransition: true,
-        transitionType: PageTransitionType.rightToLeft,
+        transitionType: PageTransitionType.fade,
         duration: Duration(milliseconds: 300),
       );
 }

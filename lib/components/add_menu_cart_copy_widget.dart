@@ -1,16 +1,19 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../components/delivery_sheet_widget.dart';
-import '../components/emptycart_widget.dart';
-import '../components/no_menu_items_widget.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '/auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/delivery_sheet_widget.dart';
+import '/components/emptycart_widget.dart';
+import '/components/no_menu_items_widget.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'add_menu_cart_copy_model.dart';
+export 'add_menu_cart_copy_model.dart';
 
 class AddMenuCartCopyWidget extends StatefulWidget {
   const AddMenuCartCopyWidget({
@@ -27,31 +30,56 @@ class AddMenuCartCopyWidget extends StatefulWidget {
 }
 
 class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
+  late AddMenuCartCopyModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => AddMenuCartCopyModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 1,
+      width: MediaQuery.of(context).size.width * 1.0,
+      height: MediaQuery.of(context).size.height * 1.0,
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).primaryDark,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(0),
-          bottomRight: Radius.circular(0),
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
+          bottomLeft: Radius.circular(0.0),
+          bottomRight: Radius.circular(0.0),
+          topLeft: Radius.circular(16.0),
+          topRight: Radius.circular(16.0),
         ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+            padding: EdgeInsetsDirectional.fromSTEB(16.0, 8.0, 16.0, 0.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                   child: Text(
                     FFLocalizations.of(context).getText(
                       'hmqwz39f' /* Items in video */,
@@ -59,31 +87,31 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                     style: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Lexend Deca',
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: 16.0,
                           fontWeight: FontWeight.w500,
                         ),
                   ),
                 ),
                 if (currentUserDocument!.shoppingBag != null)
                   AuthUserStreamWidget(
-                    child: InkWell(
+                    builder: (context) => InkWell(
                       onTap: () async {
                         logFirebaseEvent(
                             'ADD_MENU_CART_COPY_Container_tffa5207_ON');
-                        logFirebaseEvent('Container_Navigate-To');
+                        logFirebaseEvent('Container_navigate_to');
 
                         context.pushNamed('shoppingCart');
                       },
                       child: Container(
-                        width: 59,
+                        width: 59.0,
                         decoration: BoxDecoration(),
                         child: Stack(
-                          alignment: AlignmentDirectional(0, 0),
+                          alignment: AlignmentDirectional(0.0, 0.0),
                           children: [
                             Icon(
                               Icons.shopping_bag,
                               color: FlutterFlowTheme.of(context).tertiaryColor,
-                              size: 34,
+                              size: 34.0,
                             ),
                           ],
                         ),
@@ -94,15 +122,15 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
             ),
           ),
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 7),
+            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 7.0),
             child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 270,
+              width: MediaQuery.of(context).size.width * 1.0,
+              height: 270.0,
               decoration: BoxDecoration(
                 color: Color(0x00960000),
               ),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                 child: Builder(
                   builder: (context) {
                     final menuItems = widget.stream!.menuItems!.toList();
@@ -124,12 +152,12 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                               if (!snapshot.hasData) {
                                 return Center(
                                   child: SizedBox(
-                                    width: 30,
-                                    height: 30,
+                                    width: 30.0,
+                                    height: 30.0,
                                     child: SpinKitThreeBounce(
                                       color: FlutterFlowTheme.of(context)
                                           .primaryColor,
-                                      size: 30,
+                                      size: 30.0,
                                     ),
                                   ),
                                 );
@@ -141,7 +169,7 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        16, 0, 0, 0),
+                                        16.0, 0.0, 0.0, 0.0),
                                     child: StreamBuilder<MenuItemRecord>(
                                       stream: MenuItemRecord.getDocument(
                                           menuItemsItem),
@@ -150,13 +178,13 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                         if (!snapshot.hasData) {
                                           return Center(
                                             child: SizedBox(
-                                              width: 30,
-                                              height: 30,
+                                              width: 30.0,
+                                              height: 30.0,
                                               child: SpinKitThreeBounce(
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .primaryColor,
-                                                size: 30,
+                                                size: 30.0,
                                               ),
                                             ),
                                           );
@@ -168,17 +196,19 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                             logFirebaseEvent(
                                                 'ADD_MENU_CART_COPY_COMP_eventCard_ON_TAP');
                                             logFirebaseEvent(
-                                                'eventCard_Navigate-To');
+                                                'eventCard_navigate_to');
 
                                             context.pushNamed(
                                               'singleItem',
                                               queryParams: {
                                                 'menuItem': serializeParam(
-                                                    eventCardMenuItemRecord,
-                                                    ParamType.Document),
+                                                  eventCardMenuItemRecord,
+                                                  ParamType.Document,
+                                                ),
                                                 'restaurant': serializeParam(
-                                                    columnRestaurantsRecord,
-                                                    ParamType.Document),
+                                                  columnRestaurantsRecord,
+                                                  ParamType.Document,
+                                                ),
                                               }.withoutNulls,
                                               extra: <String, dynamic>{
                                                 'menuItem':
@@ -189,37 +219,38 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                             );
                                           },
                                           child: Container(
-                                            width: 250,
-                                            height: 210,
+                                            width: 250.0,
+                                            height: 210.0,
                                             decoration: BoxDecoration(
                                               color: Color(0x00FFFFFF),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  blurRadius: 3,
+                                                  blurRadius: 3.0,
                                                   color: Color(0x64000000),
-                                                  offset: Offset(0, 2),
+                                                  offset: Offset(0.0, 2.0),
                                                 )
                                               ],
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(8.0),
                                             ),
                                             child: Material(
                                               color: Colors.transparent,
-                                              elevation: 4,
+                                              elevation: 4.0,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(16),
+                                                    BorderRadius.circular(16.0),
                                               ),
                                               child: Container(
-                                                width: 250,
-                                                height: 210,
+                                                width: 250.0,
+                                                height: 210.0,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEEEEEE),
                                                   borderRadius:
-                                                      BorderRadius.circular(16),
+                                                      BorderRadius.circular(
+                                                          16.0),
                                                 ),
-                                                alignment:
-                                                    AlignmentDirectional(0, 0),
+                                                alignment: AlignmentDirectional(
+                                                    0.0, 0.0),
                                                 child: Column(
                                                   mainAxisSize:
                                                       MainAxisSize.max,
@@ -233,18 +264,21 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                                         Padding(
                                                           padding:
                                                               EdgeInsetsDirectional
-                                                                  .fromSTEB(6,
-                                                                      6, 0, 0),
+                                                                  .fromSTEB(
+                                                                      6.0,
+                                                                      6.0,
+                                                                      0.0,
+                                                                      0.0),
                                                           child: Material(
                                                             color: Colors
                                                                 .transparent,
-                                                            elevation: 2,
+                                                            elevation: 2.0,
                                                             shape:
                                                                 RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          16),
+                                                                          16.0),
                                                             ),
                                                             child: Container(
                                                               decoration:
@@ -254,14 +288,14 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                                                 borderRadius:
                                                                     BorderRadius
                                                                         .circular(
-                                                                            16),
+                                                                            16.0),
                                                               ),
                                                               child: Stack(
                                                                 children: [
                                                                   ClipRRect(
                                                                     borderRadius:
                                                                         BorderRadius.circular(
-                                                                            16),
+                                                                            16.0),
                                                                     child:
                                                                         CachedNetworkImage(
                                                                       imageUrl:
@@ -272,9 +306,9 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                                                         'https://cdn.vox-cdn.com/thumbor/9qN-DmdwZE__GqwuoJIinjUXzmk=/0x0:960x646/1200x900/filters:focal(404x247:556x399)/cdn.vox-cdn.com/uploads/chorus_image/image/63084260/foodlife_2.0.jpg',
                                                                       ),
                                                                       width:
-                                                                          238,
+                                                                          238.0,
                                                                       height:
-                                                                          125,
+                                                                          125.0,
                                                                       fit: BoxFit
                                                                           .cover,
                                                                     ),
@@ -290,7 +324,10 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  6, 6, 0, 0),
+                                                                  6.0,
+                                                                  6.0,
+                                                                  0.0,
+                                                                  0.0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -308,7 +345,8 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                                                 .override(
                                                                   fontFamily:
                                                                       'Lexend Deca',
-                                                                  fontSize: 18,
+                                                                  fontSize:
+                                                                      18.0,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w600,
@@ -321,7 +359,10 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  6, 0, 0, 0),
+                                                                  6.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -350,7 +391,10 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  6, 0, 0, 0),
+                                                                  6.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -375,7 +419,8 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                                                       'Lexend Deca',
                                                                   color: Color(
                                                                       0xFF43C643),
-                                                                  fontSize: 17,
+                                                                  fontSize:
+                                                                      17.0,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w500,
@@ -408,9 +453,9 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
           if (valueOrDefault<bool>(currentUserDocument?.isPremium, false) ==
               true)
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
               child: AuthUserStreamWidget(
-                child: StreamBuilder<RestaurantsRecord>(
+                builder: (context) => StreamBuilder<RestaurantsRecord>(
                   stream:
                       RestaurantsRecord.getDocument(widget.stream!.restaurant!),
                   builder: (context, snapshot) {
@@ -418,25 +463,25 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                     if (!snapshot.hasData) {
                       return Center(
                         child: SizedBox(
-                          width: 30,
-                          height: 30,
+                          width: 30.0,
+                          height: 30.0,
                           child: SpinKitThreeBounce(
                             color: FlutterFlowTheme.of(context).primaryColor,
-                            size: 30,
+                            size: 30.0,
                           ),
                         ),
                       );
                     }
                     final stackRestaurantsRecord = snapshot.data!;
                     return Stack(
-                      alignment: AlignmentDirectional(0, 0),
+                      alignment: AlignmentDirectional(0.0, 0.0),
                       children: [
                         FFButtonWidget(
                           onPressed: () async {
                             logFirebaseEvent(
                                 'ADD_MENU_CART_COPY_START_NEW_ORDER_BTN_O');
                             if (currentUserDocument!.shoppingBag != null) {
-                              logFirebaseEvent('Button_Bottom-Sheet');
+                              logFirebaseEvent('Button_bottom_sheet');
                               await showModalBottomSheet(
                                 isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
@@ -452,7 +497,7 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                 },
                               ).then((value) => setState(() {}));
                             } else {
-                              logFirebaseEvent('Button_Bottom-Sheet');
+                              logFirebaseEvent('Button_bottom_sheet');
                               await showModalBottomSheet(
                                 isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
@@ -461,7 +506,7 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                   return Padding(
                                     padding: MediaQuery.of(context).viewInsets,
                                     child: Container(
-                                      height: 400,
+                                      height: 400.0,
                                       child: DeliverySheetWidget(
                                         restaurant: stackRestaurantsRecord,
                                       ),
@@ -475,8 +520,12 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                             '3mmclc45' /* Start New Order */,
                           ),
                           options: FFButtonOptions(
-                            width: 160,
-                            height: 40,
+                            width: 160.0,
+                            height: 40.0,
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
                             color: FlutterFlowTheme.of(context).primaryColor,
                             textStyle:
                                 FlutterFlowTheme.of(context).subtitle2.override(
@@ -485,9 +534,9 @@ class _AddMenuCartCopyWidgetState extends State<AddMenuCartCopyWidget> {
                                     ),
                             borderSide: BorderSide(
                               color: Colors.transparent,
-                              width: 1,
+                              width: 1.0,
                             ),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12.0),
                           ),
                         ),
                       ],

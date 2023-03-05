@@ -1,13 +1,17 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '/auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'edit_deal_model.dart';
+export 'edit_deal_model.dart';
 
 class EditDealWidget extends StatefulWidget {
   const EditDealWidget({
@@ -24,49 +28,54 @@ class EditDealWidget extends StatefulWidget {
 }
 
 class _EditDealWidgetState extends State<EditDealWidget> {
-  DateTime? datePicked;
-  TextEditingController? textController1;
-  bool? switchListTileValue1;
-  TextEditingController? textController2;
-  TextEditingController? textController3;
-  TextEditingController? textController4;
-  bool? switchListTileValue2;
+  late EditDealModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
 
   @override
   void initState() {
     super.initState();
-    textController1 = TextEditingController(text: widget.deal!.title);
-    textController2 = TextEditingController(text: widget.deal!.details);
-    textController3 = TextEditingController(text: widget.deal!.conditions);
-    textController4 = TextEditingController(text: widget.deal!.code);
+    _model = createModel(context, () => EditDealModel());
+
+    _model.textController1 ??= TextEditingController(text: widget.deal!.title);
+    _model.textController2 ??=
+        TextEditingController(text: widget.deal!.details);
+    _model.textController3 ??=
+        TextEditingController(text: widget.deal!.conditions);
+    _model.textController4 ??= TextEditingController(text: widget.deal!.code);
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
-    textController1?.dispose();
-    textController2?.dispose();
-    textController3?.dispose();
-    textController4?.dispose();
+    _model.maybeDispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(16, 20, 16, 0),
+          padding: EdgeInsetsDirectional.fromSTEB(16.0, 20.0, 16.0, 0.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
                   child: TextFormField(
-                    controller: textController1,
+                    controller: _model.textController1,
                     obscureText: false,
                     decoration: InputDecoration(
                       labelText: FFLocalizations.of(context).getText(
@@ -78,58 +87,61 @@ class _EditDealWidgetState extends State<EditDealWidget> {
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: FlutterFlowTheme.of(context).tertiaryColor,
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).tertiaryColor,
-                          width: 1,
+                          color: Color(0x00000000),
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00000000),
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00000000),
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       filled: true,
                       fillColor: FlutterFlowTheme.of(context).tertiaryColor,
                     ),
                     style: FlutterFlowTheme.of(context).bodyText1,
+                    validator:
+                        _model.textController1Validator.asValidator(context),
                   ),
                 ),
               ),
               Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: SwitchListTile(
-                    value: switchListTileValue1 ??= widget.deal!.active!,
-                    onChanged: (newValue) =>
-                        setState(() => switchListTileValue1 = newValue),
-                    title: Text(
-                      FFLocalizations.of(context).getText(
-                        'om6y8bof' /* Active */,
-                      ),
-                      style: FlutterFlowTheme.of(context).title3.override(
-                            fontFamily: 'Lexend Deca',
-                            fontSize: 16,
-                          ),
+                child: SwitchListTile(
+                  value: _model.switchListTileValue1 ??= widget.deal!.active!,
+                  onChanged: (newValue) async {
+                    setState(() => _model.switchListTileValue1 = newValue!);
+                  },
+                  title: Text(
+                    FFLocalizations.of(context).getText(
+                      'om6y8bof' /* Active */,
                     ),
-                    tileColor: Color(0xFFF5F5F5),
-                    activeColor: FlutterFlowTheme.of(context).primaryColor,
-                    dense: false,
-                    controlAffinity: ListTileControlAffinity.trailing,
+                    style: FlutterFlowTheme.of(context).title3.override(
+                          fontFamily: 'Lexend Deca',
+                          fontSize: 16.0,
+                        ),
+                  ),
+                  tileColor: Color(0xFFF5F5F5),
+                  activeColor: FlutterFlowTheme.of(context).primaryColor,
+                  dense: false,
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
               ),
@@ -137,16 +149,16 @@ class _EditDealWidgetState extends State<EditDealWidget> {
           ),
         ),
         Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+          padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                   child: TextFormField(
-                    controller: textController2,
+                    controller: _model.textController2,
                     obscureText: false,
                     decoration: InputDecoration(
                       labelText: FFLocalizations.of(context).getText(
@@ -155,35 +167,37 @@ class _EditDealWidgetState extends State<EditDealWidget> {
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: FlutterFlowTheme.of(context).tertiaryColor,
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).tertiaryColor,
-                          width: 1,
+                          color: Color(0x00000000),
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00000000),
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00000000),
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       filled: true,
                       fillColor: FlutterFlowTheme.of(context).tertiaryColor,
                     ),
                     style: FlutterFlowTheme.of(context).bodyText1,
+                    validator:
+                        _model.textController2Validator.asValidator(context),
                   ),
                 ),
               ),
@@ -191,16 +205,16 @@ class _EditDealWidgetState extends State<EditDealWidget> {
           ),
         ),
         Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+          padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                   child: TextFormField(
-                    controller: textController3,
+                    controller: _model.textController3,
                     obscureText: false,
                     decoration: InputDecoration(
                       labelText: FFLocalizations.of(context).getText(
@@ -212,35 +226,37 @@ class _EditDealWidgetState extends State<EditDealWidget> {
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: FlutterFlowTheme.of(context).tertiaryColor,
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).tertiaryColor,
-                          width: 1,
+                          color: Color(0x00000000),
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00000000),
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00000000),
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       filled: true,
                       fillColor: FlutterFlowTheme.of(context).tertiaryColor,
                     ),
                     style: FlutterFlowTheme.of(context).bodyText1,
+                    validator:
+                        _model.textController3Validator.asValidator(context),
                   ),
                 ),
               ),
@@ -248,16 +264,16 @@ class _EditDealWidgetState extends State<EditDealWidget> {
           ),
         ),
         Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+          padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                   child: TextFormField(
-                    controller: textController4,
+                    controller: _model.textController4,
                     obscureText: false,
                     decoration: InputDecoration(
                       labelText: FFLocalizations.of(context).getText(
@@ -269,35 +285,37 @@ class _EditDealWidgetState extends State<EditDealWidget> {
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: FlutterFlowTheme.of(context).tertiaryColor,
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).tertiaryColor,
-                          width: 1,
+                          color: Color(0x00000000),
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00000000),
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0x00000000),
-                          width: 1,
+                          width: 1.0,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       filled: true,
                       fillColor: FlutterFlowTheme.of(context).tertiaryColor,
                     ),
                     style: FlutterFlowTheme.of(context).bodyText1,
+                    validator:
+                        _model.textController4Validator.asValidator(context),
                   ),
                 ),
               ),
@@ -305,7 +323,7 @@ class _EditDealWidgetState extends State<EditDealWidget> {
           ),
         ),
         Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(16, 10, 16, 0),
+          padding: EdgeInsetsDirectional.fromSTEB(16.0, 10.0, 16.0, 0.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -313,55 +331,82 @@ class _EditDealWidgetState extends State<EditDealWidget> {
               InkWell(
                 onTap: () async {
                   logFirebaseEvent('EDIT_DEAL_COMP_Container_df5pn0zt_ON_TAP');
-                  logFirebaseEvent('Container_Date-Time-Picker');
-                  await DatePicker.showDatePicker(
-                    context,
-                    showTitleActions: true,
-                    onConfirm: (date) {
-                      setState(() => datePicked = date);
-                    },
-                    currentTime: getCurrentTimestamp,
-                    minTime: getCurrentTimestamp,
-                    locale: LocaleType.values.firstWhere(
-                      (l) => l.name == FFLocalizations.of(context).languageCode,
-                      orElse: () => LocaleType.en,
-                    ),
-                  );
+                  logFirebaseEvent('Container_date_time_picker');
+                  if (kIsWeb) {
+                    final _datePickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: getCurrentTimestamp,
+                      firstDate: getCurrentTimestamp,
+                      lastDate: DateTime(2050),
+                    );
+
+                    if (_datePickedDate != null) {
+                      setState(() {
+                        _model.datePicked = DateTime(
+                          _datePickedDate.year,
+                          _datePickedDate.month,
+                          _datePickedDate.day,
+                        );
+                      });
+                    }
+                  } else {
+                    await DatePicker.showDatePicker(
+                      context,
+                      showTitleActions: true,
+                      onConfirm: (date) {
+                        setState(() {
+                          _model.datePicked = date;
+                        });
+                      },
+                      currentTime: getCurrentTimestamp,
+                      minTime: getCurrentTimestamp,
+                      locale: LocaleType.values.firstWhere(
+                        (l) =>
+                            l.name == FFLocalizations.of(context).languageCode,
+                        orElse: () => LocaleType.en,
+                      ),
+                    );
+                  }
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.44,
-                  height: 50,
+                  height: 50.0,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8.0),
                     border: Border.all(
                       color: Color(0xFFCFD4DB),
-                      width: 1,
+                      width: 1.0,
                     ),
                   ),
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(12, 5, 12, 5),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(12.0, 5.0, 12.0, 5.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           valueOrDefault<String>(
-                            dateTimeFormat('yMMMd', widget.deal!.expiry),
+                            dateTimeFormat(
+                              'yMMMd',
+                              widget.deal!.expiry,
+                              locale: FFLocalizations.of(context).languageCode,
+                            ),
                             'Expiry Date',
                           ),
                           style:
                               FlutterFlowTheme.of(context).subtitle2.override(
                                     fontFamily: 'Lexend Deca',
                                     color: Color(0xFF57636C),
-                                    fontSize: 16,
+                                    fontSize: 16.0,
                                     fontWeight: FontWeight.normal,
                                   ),
                         ),
                         Icon(
                           Icons.date_range_outlined,
                           color: Color(0xFF57636C),
-                          size: 24,
+                          size: 24.0,
                         ),
                       ],
                     ),
@@ -372,34 +417,35 @@ class _EditDealWidgetState extends State<EditDealWidget> {
           ),
         ),
         Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+          padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: SwitchListTile(
-                      value: switchListTileValue2 ??=
-                          widget.deal!.needsRedeemed!,
-                      onChanged: (newValue) =>
-                          setState(() => switchListTileValue2 = newValue),
-                      title: Text(
-                        FFLocalizations.of(context).getText(
-                          'tbtwjamf' /* Needs Redeemed */,
-                        ),
-                        style: FlutterFlowTheme.of(context).title3.override(
-                              fontFamily: 'Lexend Deca',
-                              fontSize: 16,
-                            ),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                  child: SwitchListTile(
+                    value: _model.switchListTileValue2 ??=
+                        widget.deal!.needsRedeemed!,
+                    onChanged: (newValue) async {
+                      setState(() => _model.switchListTileValue2 = newValue!);
+                    },
+                    title: Text(
+                      FFLocalizations.of(context).getText(
+                        'tbtwjamf' /* Needs Redeemed */,
                       ),
-                      tileColor: Color(0xFFF5F5F5),
-                      activeColor: FlutterFlowTheme.of(context).primaryColor,
-                      dense: false,
-                      controlAffinity: ListTileControlAffinity.trailing,
+                      style: FlutterFlowTheme.of(context).title3.override(
+                            fontFamily: 'Lexend Deca',
+                            fontSize: 16.0,
+                          ),
+                    ),
+                    tileColor: Color(0xFFF5F5F5),
+                    activeColor: FlutterFlowTheme.of(context).primaryColor,
+                    dense: false,
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
                 ),
@@ -408,19 +454,19 @@ class _EditDealWidgetState extends State<EditDealWidget> {
           ),
         ),
         Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+          padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                 child: FFButtonWidget(
                   onPressed: () async {
                     logFirebaseEvent('EDIT_DEAL_COMP_DELETE_BTN_ON_TAP');
-                    logFirebaseEvent('Button_Backend-Call');
+                    logFirebaseEvent('Button_backend_call');
                     await widget.deal!.reference.delete();
-                    logFirebaseEvent('Button_Alert-Dialog');
+                    logFirebaseEvent('Button_alert_dialog');
                     await showDialog(
                       context: context,
                       builder: (alertDialogContext) {
@@ -436,15 +482,18 @@ class _EditDealWidgetState extends State<EditDealWidget> {
                         );
                       },
                     );
-                    logFirebaseEvent('Button_Navigate-Back');
+                    logFirebaseEvent('Button_navigate_back');
                     context.pop();
                   },
                   text: FFLocalizations.of(context).getText(
                     'ggvdt7ws' /* Delete */,
                   ),
                   options: FFButtonOptions(
-                    width: 120,
-                    height: 40,
+                    width: 120.0,
+                    height: 40.0,
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                     color: FlutterFlowTheme.of(context).primaryColor,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Lexend Deca',
@@ -452,29 +501,29 @@ class _EditDealWidgetState extends State<EditDealWidget> {
                         ),
                     borderSide: BorderSide(
                       color: Colors.transparent,
-                      width: 1,
+                      width: 1.0,
                     ),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20, 10, 0, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(20.0, 10.0, 0.0, 0.0),
                 child: FFButtonWidget(
                   onPressed: () async {
                     logFirebaseEvent('EDIT_DEAL_COMP_EDIT_BTN_ON_TAP');
-                    logFirebaseEvent('Button_Backend-Call');
+                    logFirebaseEvent('Button_backend_call');
 
                     final dealsCreateData = createDealsRecordData(
-                      expiry: datePicked,
-                      active: switchListTileValue1,
+                      expiry: _model.datePicked,
+                      active: _model.switchListTileValue1,
                       location: widget.restaurant!.restLatLong,
-                      details: textController2!.text,
-                      code: textController4!.text,
-                      title: textController1!.text,
-                      conditions: textController3!.text,
+                      details: _model.textController2.text,
+                      code: _model.textController4.text,
+                      title: _model.textController1.text,
+                      conditions: _model.textController3.text,
                       dealClicks: 0,
-                      needsRedeemed: switchListTileValue2,
+                      needsRedeemed: _model.switchListTileValue2,
                     );
                     await DealsRecord.collection.doc().set(dealsCreateData);
                   },
@@ -483,11 +532,14 @@ class _EditDealWidgetState extends State<EditDealWidget> {
                   ),
                   icon: Icon(
                     Icons.add,
-                    size: 15,
+                    size: 15.0,
                   ),
                   options: FFButtonOptions(
-                    width: 130,
-                    height: 40,
+                    width: 130.0,
+                    height: 40.0,
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                     color: FlutterFlowTheme.of(context).primaryColor,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                           fontFamily: 'Lexend Deca',
@@ -495,9 +547,9 @@ class _EditDealWidgetState extends State<EditDealWidget> {
                         ),
                     borderSide: BorderSide(
                       color: Colors.transparent,
-                      width: 1,
+                      width: 1.0,
                     ),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
               ),

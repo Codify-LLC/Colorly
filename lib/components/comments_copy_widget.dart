@@ -1,15 +1,17 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../backend/push_notifications/push_notifications_util.dart';
-import '../components/no_comments_widget.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '/auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/no_comments_widget.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'comments_copy_model.dart';
+export 'comments_copy_model.dart';
 
 class CommentsCopyWidget extends StatefulWidget {
   const CommentsCopyWidget({
@@ -26,45 +28,58 @@ class CommentsCopyWidget extends StatefulWidget {
 }
 
 class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
-  TextEditingController? textController;
+  late CommentsCopyModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
 
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    _model = createModel(context, () => CommentsCopyModel());
+
+    _model.textController ??= TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
-    textController?.dispose();
+    _model.maybeDispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Container(
       width: double.infinity,
-      height: 525,
+      height: 525.0,
       decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).primaryDark,
+        color: FlutterFlowTheme.of(context).secondaryBackground,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(2),
-          bottomRight: Radius.circular(2),
-          topLeft: Radius.circular(0),
-          topRight: Radius.circular(2),
+          bottomLeft: Radius.circular(2.0),
+          bottomRight: Radius.circular(2.0),
+          topLeft: Radius.circular(0.0),
+          topRight: Radius.circular(2.0),
         ),
       ),
       child: Stack(
-        alignment: AlignmentDirectional(0, 1),
+        alignment: AlignmentDirectional(0.0, 1.0),
         children: [
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 80),
+            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 80.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 80),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 80.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -76,12 +91,12 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                             if (!snapshot.hasData) {
                               return Center(
                                 child: SizedBox(
-                                  width: 30,
-                                  height: 30,
+                                  width: 30.0,
+                                  height: 30.0,
                                   child: SpinKitThreeBounce(
                                     color: FlutterFlowTheme.of(context)
                                         .primaryColor,
-                                    size: 30,
+                                    size: 30.0,
                                   ),
                                 ),
                               );
@@ -92,7 +107,7 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                               children: [
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      12, 12, 12, 12),
+                                      12.0, 12.0, 12.0, 12.0),
                                   child: SingleChildScrollView(
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
@@ -100,18 +115,18 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                           MainAxisAlignment.start,
                                       children: [
                                         Container(
-                                          width: 60,
-                                          height: 4,
+                                          width: 60.0,
+                                          height: 4.0,
                                           decoration: BoxDecoration(
                                             color: Color(0xABFFFFFF),
                                             borderRadius:
-                                                BorderRadius.circular(4),
+                                                BorderRadius.circular(4.0),
                                           ),
                                         ),
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0, 12, 0, 0),
+                                                  0.0, 12.0, 0.0, 0.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
@@ -128,7 +143,7 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                       color:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .tertiaryColor,
+                                                              .primaryText,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                     ),
@@ -137,13 +152,12 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                           ),
                                         ),
                                         Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 390,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryDark,
-                                          ),
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              1.0,
+                                          height: 390.0,
+                                          decoration: BoxDecoration(),
                                           child: StreamBuilder<
                                               List<PostCommentsRecord>>(
                                             stream: queryPostCommentsRecord(
@@ -163,14 +177,14 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                               if (!snapshot.hasData) {
                                                 return Center(
                                                   child: SizedBox(
-                                                    width: 30,
-                                                    height: 30,
+                                                    width: 30.0,
+                                                    height: 30.0,
                                                     child: SpinKitThreeBounce(
                                                       color:
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .primaryColor,
-                                                      size: 30,
+                                                      size: 30.0,
                                                     ),
                                                   ),
                                                 );
@@ -199,8 +213,8 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                   return Padding(
                                                     padding:
                                                         EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 12, 0, 0),
+                                                            .fromSTEB(0.0, 12.0,
+                                                                0.0, 0.0),
                                                     child: StreamBuilder<
                                                         UsersRecord>(
                                                       stream: UsersRecord
@@ -213,14 +227,14 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                         if (!snapshot.hasData) {
                                                           return Center(
                                                             child: SizedBox(
-                                                              width: 30,
-                                                              height: 30,
+                                                              width: 30.0,
+                                                              height: 30.0,
                                                               child:
                                                                   SpinKitThreeBounce(
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
                                                                     .primaryColor,
-                                                                size: 30,
+                                                                size: 30.0,
                                                               ),
                                                             ),
                                                           );
@@ -238,7 +252,7 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                                     ?.superAdmin,
                                                                 false)) {
                                                               logFirebaseEvent(
-                                                                  'comment_Alert-Dialog');
+                                                                  'comment_alert_dialog');
                                                               var confirmDialogResponse =
                                                                   await showDialog<
                                                                           bool>(
@@ -267,11 +281,11 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                                       false;
                                                               if (confirmDialogResponse) {
                                                                 logFirebaseEvent(
-                                                                    'comment_Navigate-Back');
+                                                                    'comment_navigate_back');
                                                                 context.pop();
                                                               }
                                                               logFirebaseEvent(
-                                                                  'comment_Backend-Call');
+                                                                  'comment_backend_call');
 
                                                               final postCommentsUpdateData =
                                                                   createPostCommentsRecordData(
@@ -284,24 +298,25 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                             }
                                                           },
                                                           child: Container(
-                                                            width: 100,
+                                                            width: 100.0,
                                                             decoration:
                                                                 BoxDecoration(
-                                                              color: Color(
-                                                                  0x45EEEEEE),
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .primaryBackground,
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          8),
+                                                                          8.0),
                                                             ),
                                                             child: Padding(
                                                               padding:
                                                                   EdgeInsetsDirectional
                                                                       .fromSTEB(
-                                                                          8,
-                                                                          12,
-                                                                          8,
-                                                                          12),
+                                                                          8.0,
+                                                                          12.0,
+                                                                          8.0,
+                                                                          12.0),
                                                               child: InkWell(
                                                                 onLongPress:
                                                                     () async {
@@ -313,7 +328,7 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                                           ?.superAdmin,
                                                                       false)) {
                                                                     logFirebaseEvent(
-                                                                        'Row_Alert-Dialog');
+                                                                        'Row_alert_dialog');
                                                                     var confirmDialogResponse =
                                                                         await showDialog<bool>(
                                                                               context: context,
@@ -337,14 +352,14 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                                             false;
                                                                     if (confirmDialogResponse) {
                                                                       logFirebaseEvent(
-                                                                          'Row_Navigate-Back');
+                                                                          'Row_navigate_back');
                                                                       context
                                                                           .pop();
                                                                     }
                                                                     logFirebaseEvent(
-                                                                        'Row_Backend-Call');
+                                                                        'Row_backend_call');
 
-                                                                    final postCommentsUpdateData =
+                                                                    final postCommentsUpdateData1 =
                                                                         createPostCommentsRecordData(
                                                                       deleted:
                                                                           true,
@@ -352,15 +367,15 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                                     await listViewPostCommentsRecord
                                                                         .reference
                                                                         .update(
-                                                                            postCommentsUpdateData);
+                                                                            postCommentsUpdateData1);
                                                                   }
                                                                   if (commentUsersRecord
                                                                           .reference ==
                                                                       currentUserReference) {
                                                                     logFirebaseEvent(
-                                                                        'Row_Backend-Call');
+                                                                        'Row_backend_call');
 
-                                                                    final postCommentsUpdateData =
+                                                                    final postCommentsUpdateData2 =
                                                                         createPostCommentsRecordData(
                                                                       deleted:
                                                                           true,
@@ -368,9 +383,9 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                                     await listViewPostCommentsRecord
                                                                         .reference
                                                                         .update(
-                                                                            postCommentsUpdateData);
+                                                                            postCommentsUpdateData2);
                                                                     logFirebaseEvent(
-                                                                        'Row_Backend-Call');
+                                                                        'Row_backend_call');
 
                                                                     final usersUpdateData =
                                                                         {
@@ -397,7 +412,7 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                                         logFirebaseEvent(
                                                                             'COMMENTS_COPY_CircleImage_tjkrclw7_ON_TA');
                                                                         logFirebaseEvent(
-                                                                            'CircleImage_Navigate-To');
+                                                                            'CircleImage_navigate_to');
 
                                                                         context
                                                                             .pushNamed(
@@ -405,16 +420,19 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                                           queryParams:
                                                                               {
                                                                             'otherUser':
-                                                                                serializeParam(commentUsersRecord.reference, ParamType.DocumentReference),
+                                                                                serializeParam(
+                                                                              commentUsersRecord.reference,
+                                                                              ParamType.DocumentReference,
+                                                                            ),
                                                                           }.withoutNulls,
                                                                         );
                                                                       },
                                                                       child:
                                                                           Container(
                                                                         width:
-                                                                            40,
+                                                                            40.0,
                                                                         height:
-                                                                            40,
+                                                                            40.0,
                                                                         clipBehavior:
                                                                             Clip.antiAlias,
                                                                         decoration:
@@ -438,10 +456,10 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                                       child:
                                                                           Padding(
                                                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            12,
-                                                                            0,
-                                                                            0,
-                                                                            0),
+                                                                            12.0,
+                                                                            0.0,
+                                                                            0.0,
+                                                                            0.0),
                                                                         child:
                                                                             Column(
                                                                           mainAxisSize:
@@ -453,26 +471,26 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                                               commentUsersRecord.displayName!,
                                                                               style: FlutterFlowTheme.of(context).subtitle2.override(
                                                                                     fontFamily: 'Lexend Deca',
-                                                                                    color: FlutterFlowTheme.of(context).tertiaryColor,
+                                                                                    color: FlutterFlowTheme.of(context).secondaryText,
                                                                                   ),
                                                                             ),
                                                                             Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                               child: Text(
                                                                                 listViewPostCommentsRecord.comment!,
                                                                                 style: FlutterFlowTheme.of(context).bodyText1.override(
                                                                                       fontFamily: 'Lexend Deca',
-                                                                                      color: FlutterFlowTheme.of(context).tertiaryColor,
+                                                                                      color: FlutterFlowTheme.of(context).primaryText,
                                                                                     ),
                                                                               ),
                                                                             ),
                                                                             Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                                                                               child: Row(
                                                                                 mainAxisSize: MainAxisSize.max,
                                                                                 children: [
                                                                                   Padding(
-                                                                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 4, 0),
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 4.0, 0.0),
                                                                                     child: Text(
                                                                                       FFLocalizations.of(context).getText(
                                                                                         '818x7txx' /* Posted */,
@@ -480,16 +498,20 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                                                                       style: FlutterFlowTheme.of(context).bodyText1.override(
                                                                                             fontFamily: 'Lexend Deca',
                                                                                             color: Color(0xFFA4A4A4),
-                                                                                            fontSize: 12,
+                                                                                            fontSize: 12.0,
                                                                                           ),
                                                                                     ),
                                                                                   ),
                                                                                   Text(
-                                                                                    dateTimeFormat('relative', listViewPostCommentsRecord.timePosted!),
+                                                                                    dateTimeFormat(
+                                                                                      'relative',
+                                                                                      listViewPostCommentsRecord.timePosted!,
+                                                                                      locale: FFLocalizations.of(context).languageCode,
+                                                                                    ),
                                                                                     style: FlutterFlowTheme.of(context).bodyText2.override(
                                                                                           fontFamily: 'Lexend Deca',
                                                                                           color: Color(0xFFA4A4A4),
-                                                                                          fontSize: 12,
+                                                                                          fontSize: 12.0,
                                                                                         ),
                                                                                   ),
                                                                                 ],
@@ -534,28 +556,29 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 20.0),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).tertiaryColor,
                     boxShadow: [
                       BoxShadow(
-                        blurRadius: 3,
+                        blurRadius: 3.0,
                         color: Color(0x3A000000),
-                        offset: Offset(0, 1),
+                        offset: Offset(0.0, 1.0),
                       )
                     ],
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.circular(40.0),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(16, 4, 0, 4),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              16.0, 4.0, 0.0, 4.0),
                           child: TextFormField(
-                            controller: textController,
+                            controller: _model.textController,
                             obscureText: false,
                             decoration: InputDecoration(
                               hintText: FFLocalizations.of(context).getText(
@@ -570,7 +593,7 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -580,7 +603,7 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -590,7 +613,7 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                               errorBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -600,7 +623,7 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                               focusedErrorBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 1,
+                                  width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(4.0),
@@ -616,20 +639,23 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                       FlutterFlowTheme.of(context).primaryDark,
                                 ),
                             keyboardType: TextInputType.multiline,
+                            validator: _model.textControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 4, 0),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 4.0, 0.0),
                         child: FFButtonWidget(
                           onPressed: () async {
                             logFirebaseEvent(
                                 'COMMENTS_COPY_COMP_POST_BTN_ON_TAP');
-                            logFirebaseEvent('Button_Backend-Call');
+                            logFirebaseEvent('Button_backend_call');
 
                             final postCommentsCreateData =
                                 createPostCommentsRecordData(
-                              comment: textController!.text,
+                              comment: _model.textController.text,
                               timePosted: getCurrentTimestamp,
                               deleted: false,
                               post: widget.post!.reference,
@@ -638,31 +664,18 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                             await PostCommentsRecord.collection
                                 .doc()
                                 .set(postCommentsCreateData);
-                            logFirebaseEvent('Button_Backend-Call');
+                            logFirebaseEvent('Button_backend_call');
 
                             final postsUpdateData = {
                               'num_comments': FieldValue.increment(1),
                             };
                             await widget.post!.reference
                                 .update(postsUpdateData);
-                            logFirebaseEvent(
-                                'Button_Trigger-Push-Notification');
-                            triggerPushNotification(
-                              notificationTitle: 'New Comment',
-                              notificationText:
-                                  '${currentUserDisplayName} commented on your video review',
-                              notificationImageUrl: currentUserPhoto,
-                              userRefs: [widget.post!.user!],
-                              initialPageName: 'singleVideoPage',
-                              parameterData: {
-                                'post': widget.post,
-                              },
-                            );
-                            logFirebaseEvent('Button_Clear-Text-Fields');
+                            logFirebaseEvent('Button_clear_text_fields');
                             setState(() {
-                              textController?.clear();
+                              _model.textController?.clear();
                             });
-                            logFirebaseEvent('Button_Backend-Call');
+                            logFirebaseEvent('Button_backend_call');
 
                             final usersUpdateData = {
                               'fizzzCoin': FieldValue.increment(2),
@@ -674,8 +687,12 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                             'jbfe5eab' /* Post */,
                           ),
                           options: FFButtonOptions(
-                            width: 70,
-                            height: 40,
+                            width: 70.0,
+                            height: 40.0,
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
                             color: FlutterFlowTheme.of(context).tertiaryColor,
                             textStyle: FlutterFlowTheme.of(context)
                                 .subtitle2
@@ -684,12 +701,12 @@ class _CommentsCopyWidgetState extends State<CommentsCopyWidget> {
                                   color:
                                       FlutterFlowTheme.of(context).primaryColor,
                                 ),
-                            elevation: 0,
+                            elevation: 0.0,
                             borderSide: BorderSide(
                               color: Colors.transparent,
-                              width: 1,
+                              width: 1.0,
                             ),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12.0),
                           ),
                         ),
                       ),
